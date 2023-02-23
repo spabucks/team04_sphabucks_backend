@@ -237,3 +237,4 @@ out/
 ### VS Code ###
 .vscode/
 
+build/tmp/compileJava/previous-compilation-data.bin
