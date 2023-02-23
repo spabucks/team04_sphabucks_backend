@@ -21,7 +21,7 @@ public class UserServiceImplement implements IUserService{
                 .userId(uuid.toString())
                 .name(requestUser.getName())
                 .email(requestUser.getEmail())
-                .password(requestUser.getPassword())
+                .pwd(requestUser.getPassword())
                 .build();
 
         User resUser = iUserRepository.save(user);
