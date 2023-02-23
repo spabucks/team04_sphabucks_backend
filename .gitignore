@@ -204,3 +204,4 @@ $RECYCLE.BIN/
 *.yml
 .gradle/
 build/
+.idea
