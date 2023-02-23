@@ -10,4 +10,5 @@ public class SpharosAcademyCloneApplication {
 		SpringApplication.run(SpharosAcademyCloneApplication.class, args);
 	}
 
+
 }
