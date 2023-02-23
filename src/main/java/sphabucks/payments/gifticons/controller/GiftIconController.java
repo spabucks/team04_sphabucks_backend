@@ -2,7 +2,6 @@ package sphabucks.payments.gifticons.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.payments.gifticons.model.GiftIcon;
 import sphabucks.payments.gifticons.service.IGiftIconService;
 import sphabucks.payments.gifticons.vo.RequestGiftIcon;
 import sphabucks.payments.gifticons.vo.ResponseGiftIcon;
