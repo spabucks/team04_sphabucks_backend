@@ -203,4 +203,4 @@ $RECYCLE.BIN/
 
 *.yml
 .gradle/
-.build/
+build/
