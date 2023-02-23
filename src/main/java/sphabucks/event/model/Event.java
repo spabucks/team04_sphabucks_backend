@@ -1,9 +1,6 @@
 package sphabucks.event.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -13,7 +10,9 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // AI 설정
     private Long id;
+    @Column(nullable = false)
     private String eventImage;
+    @Column(nullable = true)
     private String season;
 
 }

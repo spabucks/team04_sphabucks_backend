@@ -9,7 +9,8 @@ import sphabucks.event.repository.IEventImageRepository;
 import sphabucks.event.repository.IEventProductListRepository;
 import sphabucks.event.repository.IEventRepository;
 import sphabucks.event.vo.RequestEventImage;
-import sphabucks.products.model.Product;
+import sphabucks.event.vo.RequestEventProductList;
+import sphabucks.products.repository.IProductRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class EventServiceImpl implements IEventService {
     private final IEventRepository iEventRepository;
     private final IEventProductListRepository iEventProductListRepository;
     private final IEventImageRepository iEventImageRepository;
+    private final IProductRepository iProductRepository;
 
 
     @Override
@@ -31,12 +33,17 @@ public class EventServiceImpl implements IEventService {
 
 
     @Override
-    public EventProductList addEventProductList(EventProductList eventProductList) {
+    public EventProductList addEventProductList(RequestEventProductList requestEventProductList) {
+        EventProductList eventProductList = EventProductList.builder()
+                .product(iProductRepository.findById(requestEventProductList.getProductId()).get())
+                .event(iEventRepository.findById(requestEventProductList.getEventId()).get())
+                .build();
+
         return iEventProductListRepository.save(eventProductList);
     }
     @Override
     public EventProductList getEventProductList(Long id) {
-        return null;
+        return iEventProductListRepository.findById(id).get();
     }
 
 
@@ -53,7 +60,8 @@ public class EventServiceImpl implements IEventService {
 
     @Override
     public EventImage getEventImage(Long id) {
-        return null;
+
+        return iEventImageRepository.findById(id).get();
     }
 
 
