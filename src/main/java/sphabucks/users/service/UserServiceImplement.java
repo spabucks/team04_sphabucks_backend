@@ -38,7 +38,15 @@ public class UserServiceImplement implements IUserService{
 
     @Override
     public ResponseUser getUser(Long id) {
-//        return iUserRepository.findById(id).get();
-        return null;
+        User user = iUserRepository.findById(id).get();
+
+        ResponseUser responseUser = ResponseUser.builder()
+                .Id(user.getId())
+                .nickname(user.getNickname())
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+
+        return responseUser;
     }
 }
