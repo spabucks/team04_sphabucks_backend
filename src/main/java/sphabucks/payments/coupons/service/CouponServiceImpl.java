@@ -7,6 +7,8 @@ import sphabucks.payments.coupons.repository.ICouponRepo;
 import sphabucks.payments.coupons.vo.RequestCoupon;
 import sphabucks.payments.coupons.vo.ResponseCoupon;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class CouponServiceImpl implements ICouponService{
@@ -40,5 +42,10 @@ public class CouponServiceImpl implements ICouponService{
                 .content(coupon.getContent())
                 .build();
         return responseCoupon;
+    }
+
+    @Override
+    public List<Coupon> getAllCoupon() {
+        return iCouponRepo.findAll();
     }
 }
