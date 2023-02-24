@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductRepository;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ProductImplement implements IProductService{
@@ -18,5 +20,10 @@ public class ProductImplement implements IProductService{
     @Override
     public Product getProduct(Long id) {
         return iProductRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Product> getAll() {
+        return iProductRepository.findAll();
     }
 }

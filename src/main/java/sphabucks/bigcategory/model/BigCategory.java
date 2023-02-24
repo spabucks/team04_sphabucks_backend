@@ -7,5 +7,5 @@ import jakarta.persistence.Id;
 public class BigCategory {
     @Id
     private Long id;
-    private String big;
+    private String name;
 }
