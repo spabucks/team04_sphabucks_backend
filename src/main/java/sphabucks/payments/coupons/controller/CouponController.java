@@ -35,7 +35,7 @@ public class CouponController {
         return iCouponService.getAllCoupon();
     }
 
-    @PostMapping("add/user")    // 사용자id과 쿠폰id를 이용하여 쿠폰 리스트에 정보 추가
+    @PostMapping("/add/user")    // 사용자id과 쿠폰id를 이용하여 쿠폰 리스트에 정보 추가
     public CouponList addCoupon2User(@RequestBody RequestCouponList requestCouponList) {
         return iCouponListService.addCoupon2User(requestCouponList);
     }
