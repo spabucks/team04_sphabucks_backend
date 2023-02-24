@@ -1,26 +1,26 @@
-package sphabucks.event.model;
+package sphabucks.payments.gifticons.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sphabucks.products.model.Product;
+import sphabucks.users.model.User;
 
 @Entity
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class EventProductList {
+@AllArgsConstructor
+public class GiftIconList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Product product;
-    @ManyToOne
-    private Event event;
 
+    @ManyToOne
+    private User user;
 
+    @ManyToOne
+    private GiftIcon giftIcon;
 }

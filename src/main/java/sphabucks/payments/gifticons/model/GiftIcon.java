@@ -16,7 +16,7 @@ import java.util.Date;
 public class GiftIcon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;    // 쿠폰id
+    private Long id;    // 기프티콘 id
 
     @Column(nullable = false)
     private String name;    // 쿠폰명
