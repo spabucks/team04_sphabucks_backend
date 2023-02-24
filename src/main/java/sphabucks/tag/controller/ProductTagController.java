@@ -21,6 +21,6 @@ public class ProductTagController {
 
     @PostMapping("/get/{id}")
     public ProductTag getProductTag(@PathVariable Long id){
-        return iProductTagService.getProductTag(id);
+        return null;
     }
 }
