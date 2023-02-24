@@ -1,9 +1,9 @@
 package sphabucks.payments.coupons.vo;
 
-import sphabucks.payments.coupons.model.Coupon;
-import sphabucks.users.model.User;
+import lombok.Data;
 
+@Data
 public class RequestCouponList {
-    private String UUID;
-    private String couponNumber;
+    private Long userId;
+    private Long couponId;
 }
