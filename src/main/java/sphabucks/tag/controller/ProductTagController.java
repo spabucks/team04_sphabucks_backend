@@ -1,11 +1,12 @@
-package sphabucks.product_tag_list.controller;
+package sphabucks.tag.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.product_tag_list.model.ProductTag;
-import sphabucks.product_tag_list.service.IProductTagService;
+import sphabucks.tag.model.ProductTag;
+import sphabucks.tag.service.IProductTagService;
 import sphabucks.products.model.Product;
 import sphabucks.tag.model.Tag;
+import sphabucks.tag.vo.RequsetProductTag;
 
 @RestController
 @RequestMapping("/producttag")
@@ -14,8 +15,8 @@ public class ProductTagController {
     private IProductTagService iProductTagService;
 
     @PostMapping("/add")
-    public ProductTag addProductTag(@RequestBody ProductTag productTag, Product product, Tag tag){
-        return iProductTagService.addProductTag(productTag, product, tag);
+    public ProductTag addProductTag(@RequestBody RequsetProductTag requsetProductTag){
+        return iProductTagService.addProductTag(requsetProductTag);
     }
 
     @PostMapping("/get/{id}")

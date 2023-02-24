@@ -1,4 +1,4 @@
-package sphabucks.product_tag_list.model;
+package sphabucks.tag.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

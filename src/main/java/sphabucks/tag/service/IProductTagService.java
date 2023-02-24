@@ -1,12 +1,15 @@
-package sphabucks.product_tag_list.service;
+package sphabucks.tag.service;
 
-import sphabucks.product_tag_list.model.ProductTag;
+import sphabucks.tag.model.ProductTag;
 import sphabucks.products.model.Product;
 import sphabucks.tag.model.Tag;
+import sphabucks.tag.vo.RequsetProductTag;
+
+import java.util.List;
 
 
 public interface IProductTagService {
 
-    ProductTag addProductTag(ProductTag productTag, Product product, Tag tag);
-    ProductTag getProductTag(Long id);
+    ProductTag addProductTag(RequsetProductTag requsetProductTag);
+    List<ProductTag> getByProductId(Long productId);
 }

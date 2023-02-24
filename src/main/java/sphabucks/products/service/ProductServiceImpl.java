@@ -9,7 +9,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class ProductImplement implements IProductService{
+public class ProductServiceImpl implements IProductService{
 
     private final IProductRepository iProductRepository;
     @Override

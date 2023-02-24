@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import sphabucks.products.model.Product;
 import sphabucks.products.service.IProductService;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/v1/api/product")
 @RequiredArgsConstructor
 public class ProductController {
     private final IProductService iProductService;
@@ -16,8 +18,13 @@ public class ProductController {
         return iProductService.addProduct(product);
     }
 
-    @GetMapping("/get/{id}")
-    public Product getProduct(@PathVariable Long id) {
-        return iProductService.getProduct(id);
+    @GetMapping("/get/{productId}")
+    public Product getProduct(@PathVariable Long productId) {
+        return iProductService.getProduct(productId);
+    }
+
+    @GetMapping("/get/all")
+    public List<Product> getAll(){
+        return iProductService.getAll();
     }
 }

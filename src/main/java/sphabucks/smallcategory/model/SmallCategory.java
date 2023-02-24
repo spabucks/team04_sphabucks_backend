@@ -7,5 +7,4 @@ import lombok.Data;
 public class SmallCategory {
     @Id
     private Long id;
-
 }

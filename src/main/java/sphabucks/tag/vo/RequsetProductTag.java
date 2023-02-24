@@ -1,2 +1,10 @@
-package sphabucks.tag.vo;public class ResponseProductTag {
+package sphabucks.tag.vo;
+
+import lombok.Getter;
+
+@Getter
+public class RequsetProductTag {
+
+    Long tagId;
+    Long productId;
 }
