@@ -13,6 +13,7 @@ public class CardServiceImpl implements ICardService{
     private final ICardRepo iCardRepo;
     @Override
     public void addCard(Card card) {
+        card.setMoney(card.getDefaultMoney());
         iCardRepo.save(card);
     }
 
