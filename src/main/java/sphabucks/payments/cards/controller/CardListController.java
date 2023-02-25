@@ -20,7 +20,7 @@ public class CardListController {
         iCardListService.addCardList(requestCardList);
     }
 
-    @PostMapping("/get/{id}")
+    @GetMapping("/get/{id}")
     private List<CardList> getCardList(@PathVariable Long id) {
         return iCardListService.getCardList(id);
     }
