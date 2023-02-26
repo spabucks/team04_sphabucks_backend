@@ -15,9 +15,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserLikesServiceImpl implements IUserLikesService{
 
-    private IUserLikesRepo iUserLikesRepo;
-    private IUserRepository iUserRepository;
-    private IProductRepository iProductRepository;
+    private final IUserLikesRepo iUserLikesRepo;
+    private final IUserRepository iUserRepository;
+    private final IProductRepository iProductRepository;
     @Override
     public void addUserLikes(RequestUserLikes requestUserLikes) {
         iUserLikesRepo.save(UserLikes.builder()
