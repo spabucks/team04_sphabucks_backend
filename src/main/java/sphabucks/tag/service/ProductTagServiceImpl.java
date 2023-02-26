@@ -19,13 +19,16 @@ public class ProductTagServiceImpl implements IProductTagService {
     private final ITagRepository iTagRepository;
 
     @Override
-    public ProductTag addProductTag(RequsetProductTag requsetProductTag) {
-        return null;
+    public void addProductTag(RequsetProductTag requsetProductTag) {
+        iProductTagRepository.save(ProductTag.builder()
+                        .tag(iTagRepository.findById(requsetProductTag.getProductId()).get())
+                        .product(iProductRepository.findById(requsetProductTag.getProductId()).get())
+                .build());
     }
 
     @Override
     public List<ProductTag> getByProductId(Long productId) {
-        return null;
+        return iProductTagRepository.findAllByProductId(productId);
     }
 
 }
