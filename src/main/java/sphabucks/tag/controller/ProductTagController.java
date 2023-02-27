@@ -20,12 +20,7 @@ public class ProductTagController {
     }
 
     @PostMapping("/get/{id}")
-<<<<<<< HEAD
     public List<ProductTag> getByProductId(@PathVariable Long id){
         return iProductTagService.getByProductId(id);
-=======
-    public ProductTag getProductTag(@PathVariable Long id){
-        return null;
->>>>>>> 047c564c842bfef7bfa862dffd6d5b3fde56e34f
     }
 }
