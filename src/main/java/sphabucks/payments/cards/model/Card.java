@@ -1,9 +1,6 @@
 package sphabucks.payments.cards.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,8 +16,9 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(nullable = false)
     private String name;    // 카드 이름
+    @Column(updatable = false, nullable = false)
     private Integer defaultMoney;   // 카드 초기금액
     private String number;  // 카드 번호
     private String pin; // 핀번호(8자리)

@@ -1,9 +1,9 @@
 package sphabucks.payments.cards.service;
 
-import sphabucks.payments.cards.model.Card;
+import sphabucks.payments.cards.vo.RequestCard;
 import sphabucks.payments.cards.vo.ResponseCard;
 
 public interface ICardService {
-    void addCard(Card card);
+    void addCard(RequestCard requestCard);
     ResponseCard getCard(Long id);
 }
