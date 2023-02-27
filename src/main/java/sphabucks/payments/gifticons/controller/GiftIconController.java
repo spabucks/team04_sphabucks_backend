@@ -19,8 +19,8 @@ public class GiftIconController {
     private final IGiftIconListService iGiftIconListService;
 
     @PostMapping("/add")
-    public ResponseGiftIcon addGiftIcon(@RequestBody RequestGiftIcon requestGiftIcon) {
-        return iGiftIconService.addGiftIcon(requestGiftIcon);
+    public void addGiftIcon(@RequestBody RequestGiftIcon requestGiftIcon) {
+        iGiftIconService.addGiftIcon(requestGiftIcon);
     }
 
     @GetMapping("/get/{id}")
