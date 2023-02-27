@@ -1,13 +1,16 @@
 package sphabucks.event.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import sphabucks.event.model.Event;
 import sphabucks.event.model.EventImage;
 import sphabucks.event.model.EventProductList;
 import sphabucks.event.repository.IEventImageRepository;
 import sphabucks.event.repository.IEventProductListRepository;
 import sphabucks.event.repository.IEventRepository;
+import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
 import sphabucks.event.vo.RequestEventProductList;
 import sphabucks.products.repository.IProductRepository;
@@ -23,8 +26,11 @@ public class EventServiceImpl implements IEventService {
 
 
     @Override
-    public Event addEvent(Event user) {
-        return iEventRepository.save(user);
+    public void addEvent(RequestEvent requestEvent) {
+        ModelMapper modelMapper = new ModelMapper();
+        Event event = modelMapper.map(requestEvent, Event.class);
+
+        iEventRepository.save(event);
     }
     @Override
     public Event getEvent(Long id) {
@@ -34,6 +40,7 @@ public class EventServiceImpl implements IEventService {
 
     @Override
     public EventProductList addEventProductList(RequestEventProductList requestEventProductList) {
+
         EventProductList eventProductList = EventProductList.builder()
                 .product(iProductRepository.findById(requestEventProductList.getProductId()).get())
                 .event(iEventRepository.findById(requestEventProductList.getEventId()).get())

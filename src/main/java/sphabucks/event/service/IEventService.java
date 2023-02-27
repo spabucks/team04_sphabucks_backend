@@ -3,13 +3,15 @@ package sphabucks.event.service;
 import sphabucks.event.model.Event;
 import sphabucks.event.model.EventImage;
 import sphabucks.event.model.EventProductList;
+import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
 import sphabucks.event.vo.RequestEventProductList;
 import sphabucks.products.model.Product;
 
 public interface IEventService {
 
-    Event addEvent(Event event);
+    // 이벤트
+    void addEvent(RequestEvent requestEvent);
     Event getEvent(Long id);
 
     // 이벤트상품리스트

@@ -9,6 +9,7 @@ import sphabucks.event.model.EventProductList;
 import sphabucks.event.repository.IEventImageRepository;
 import sphabucks.event.repository.IEventProductListRepository;
 import sphabucks.event.service.IEventService;
+import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
 import sphabucks.event.vo.RequestEventProductList;
 
@@ -21,9 +22,9 @@ public class EventController {
     private final IEventService iEventService;
 
     @PostMapping("/add")
-    public Event addEvent(@RequestBody Event event){
+    public void addEvent(@RequestBody RequestEvent requestEvent){
 
-        return iEventService.addEvent(event);
+        iEventService.addEvent(requestEvent);
     }
 
     @GetMapping("/get/{id}")
