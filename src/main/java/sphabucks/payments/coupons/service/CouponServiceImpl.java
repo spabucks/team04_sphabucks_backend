@@ -1,6 +1,7 @@
 package sphabucks.payments.coupons.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.payments.coupons.model.Coupon;
 import sphabucks.payments.coupons.repository.ICouponRepo;
@@ -17,17 +18,8 @@ public class CouponServiceImpl implements ICouponService{
 
     @Override
     public Coupon addCoupon(RequestCoupon requestCoupon) {
-        Coupon coupon = Coupon.builder()
-                .name(requestCoupon.getName())
-                .startDate(requestCoupon.getStartDate())
-                .endDate(requestCoupon.getEndDate())
-                .image(requestCoupon.getImage())
-                .qrImage(requestCoupon.getQrImage())
-                .content(requestCoupon.getContent())
-                .number(requestCoupon.getNumber())
-                .alt(requestCoupon.getAlt())
-                .build();
-
+        ModelMapper modelMapper = new ModelMapper();
+        Coupon coupon = modelMapper.map(requestCoupon, Coupon.class);
         return iCouponRepo.save(coupon);
     }
 
