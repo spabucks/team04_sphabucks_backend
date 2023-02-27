@@ -1,9 +1,10 @@
 package sphabucks.tag.service;
 
 import sphabucks.tag.model.Tag;
+import sphabucks.tag.vo.RequestTag;
 
 public interface ITagService {
-    Tag addTag(Tag tag);
+    void addTag(RequestTag requestTag);
 
     Tag getTag(Long id);
 }
