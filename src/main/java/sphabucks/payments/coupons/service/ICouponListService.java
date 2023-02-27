@@ -6,6 +6,6 @@ import sphabucks.payments.coupons.vo.RequestCouponList;
 import java.util.List;
 
 public interface ICouponListService {
-    CouponList addCoupon2User(RequestCouponList requestCouponList);
+    void addCoupon2User(RequestCouponList requestCouponList);
     List<CouponList> getCoupon2User(Long id);
 }

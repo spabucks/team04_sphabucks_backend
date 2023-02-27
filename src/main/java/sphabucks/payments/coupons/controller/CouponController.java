@@ -21,8 +21,8 @@ public class CouponController {
     private final ICouponListService iCouponListService;
 
     @PostMapping("/add")    // DB에 쿠폰 추가
-    public Coupon addCoupon(@RequestBody RequestCoupon requestCoupon) {
-        return iCouponService.addCoupon(requestCoupon);
+    public void addCoupon(@RequestBody RequestCoupon requestCoupon) {
+        iCouponService.addCoupon(requestCoupon);
     }
 
     @GetMapping("/get/{id}")    // id(pk)로 쿠폰 정보 확인
