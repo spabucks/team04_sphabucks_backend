@@ -21,10 +21,6 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
     public PurchaseHistory addPurchaseHistory(RequestPurchaseHistory requestPurchaseHistory) {
         ModelMapper modelMapper = new ModelMapper();
         PurchaseHistory purchaseHistory = modelMapper.map(requestPurchaseHistory, PurchaseHistory.class);
-<<<<<<< HEAD
-=======
-
->>>>>>> 52ccd1d5869165ac038a690a5d11a3794d4fc28a
         return iPurchaseHistoryRepository.save(purchaseHistory);
     }
 
