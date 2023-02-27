@@ -3,23 +3,22 @@ package sphabucks.products.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.products.model.BigCategory;
-import sphabucks.products.model.Category;
 import sphabucks.products.service.IBigCategoryService;
-import sphabucks.products.service.ICategoryService;
+import sphabucks.products.vo.RequestBigCategory;
 
 import java.util.List;
 
 @RestController
 
-@RequestMapping("v1/api/bigCategory")
+@RequestMapping("/v1/api/bigCategory")
 @RequiredArgsConstructor
 public class BigCategoryController {
 
     private final IBigCategoryService iBigCategoryService;
 
     @PostMapping("/add")
-    public void addBigCategory(@RequestBody BigCategory bigCategory){
-        iBigCategoryService.addBigCategory(bigCategory);
+    public void addBigCategory(@RequestBody RequestBigCategory requestBigCategory){
+        iBigCategoryService.addBigCategory(requestBigCategory);
     }
 
     @GetMapping("/get/{bigCategoryId}")

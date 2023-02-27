@@ -1,23 +1,15 @@
-package sphabucks.products.model;
+package sphabucks.products.vo;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import sphabucks.utility.BaseTimeEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import lombok.Getter;
 
 import java.util.Date;
 
-@Entity
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Product extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;    // 상품 id
+@Getter
+public class RequestProduct {
+
     @Column(nullable = false)
     private Integer price;  // 가격
     @Column(nullable = false)
