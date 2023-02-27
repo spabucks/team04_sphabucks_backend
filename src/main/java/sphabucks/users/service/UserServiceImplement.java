@@ -15,25 +15,9 @@ public class UserServiceImplement implements IUserService{
 
     private final IUserRepository iUserRepository;
     @Override
-    public ResponseUser adduser(RequestUser requestUser) {
-        UUID uuid = UUID.randomUUID();
-        User user = User.builder()
-                .userId(uuid.toString())
-                .name(requestUser.getName())
-                .email(requestUser.getEmail())
-                .pwd(requestUser.getPassword())
-                .build();
-
-        User resUser = iUserRepository.save(user);
-
-        ResponseUser responseUser = ResponseUser.builder()
-                .Id(resUser.getId())
-                .name(resUser.getName())
-                .email(resUser.getEmail())
-                .nickname(resUser.getNickname())
-                .build();
-
-        return responseUser;
+    public void adduser(User user) {
+        user.setUserId(UUID.randomUUID().toString());
+        iUserRepository.save(user);
     }
 
     @Override

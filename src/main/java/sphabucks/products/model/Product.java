@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import sphabucks.utility.BaseTimeEntity;
 
+import java.util.Date;
+
 @Entity
 @Data
 @Builder
@@ -18,16 +20,15 @@ import sphabucks.utility.BaseTimeEntity;
 public class Product extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;    // 상품 id
 
-    private Integer price;
-//    private Long amount;
-//    private Long recommend;
-    private String name;
-    private String description;
-    private String thumbnail;
-//    private String status;
-//    private String size;
-//    private Boolean isNew;
-//    private Boolean isBest;
+    private Integer price;  // 가격
+    private Long amount;  // 잔여 개수
+    private Date date;  // 출시일
+    private String name;    // 상품 이름
+    private String description; // 설명
+    private String status;    // 상태(입고 구분)
+    private String size;  // 용량
+    private Boolean isBest;   // 베스트
+    private Boolean isNew;
 }

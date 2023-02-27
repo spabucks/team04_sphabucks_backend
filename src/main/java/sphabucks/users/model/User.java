@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import sphabucks.utility.BaseTimeEntity;
 
+import java.util.Date;
+
 @Entity
 @Data
 @Builder
@@ -26,6 +28,14 @@ public class User extends BaseTimeEntity {
     private String email;
     @Column(nullable = false)
     private String pwd;
-    @Column(nullable = true)
+
     private String nickname;
+    private String phoneNum;
+    private String address;
+    private Integer star;
+    private String carNum;
+    private Date birth;
+    private boolean sex;    // {true: M, false: F}
+    private String grade;
+
 }

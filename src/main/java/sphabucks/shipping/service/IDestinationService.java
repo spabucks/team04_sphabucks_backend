@@ -1,8 +1,9 @@
 package sphabucks.shipping.service;
 
 import sphabucks.shipping.model.Destination;
+import sphabucks.shipping.vo.RequestDestination;
 
 public interface IDestinationService {
-    Destination addPlace(Destination place);
-    Destination getPlace(Long id);
+    Destination addDestination(RequestDestination requestDestination);
+    Destination getDestination(Long id);
 }

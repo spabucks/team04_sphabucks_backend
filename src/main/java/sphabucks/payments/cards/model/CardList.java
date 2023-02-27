@@ -1,26 +1,31 @@
-package sphabucks.products.model;
+package sphabucks.payments.cards.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sphabucks.users.model.User;
+
+import java.util.Date;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductCategoryList {
+public class CardList {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private Product product;
-    @ManyToOne
-    private BigCategory bigCategory;
-    @ManyToOne
-    private SmallCategory smallCategory;
+    User user;
 
+    @ManyToOne
+    Card card;
+
+    private boolean isRepresent;
+    private Date startDate;
 }

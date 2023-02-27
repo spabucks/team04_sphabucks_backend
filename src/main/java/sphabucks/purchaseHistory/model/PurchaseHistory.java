@@ -1,4 +1,4 @@
-package sphabucks.shipping.model;
+package sphabucks.purchaseHistory.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,21 +12,28 @@ import sphabucks.users.model.User;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Destination {
+public class PurchaseHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
-    private String address;
+    private String category;
     @Column(nullable = false)
-    private String recipient;
+    private String product;
     @Column(nullable = false)
-    private String phoneNum;
+    private Long amount;
     @Column(nullable = false)
-    private String name;
-
+    private Long sum;
+    @Column(nullable = false)
+    private String payment_num;
     @ManyToOne
     private User userId;
+    @Column(nullable = false)
+    private Boolean type;
+    @Column(nullable = false)
+    private String sp_status;
+    @Column(nullable = false)
+    private String or_status;
+
 }
