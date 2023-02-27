@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.purchaseHistory.model.PurchaseHistory;
 import sphabucks.purchaseHistory.service.IPurchaseHistoryService;
+import sphabucks.purchaseHistory.vo.RequestPurchaseHistory;
 
 @RestController
 @RequestMapping("/purchaseHistory")
@@ -15,8 +16,8 @@ public class PurchaseHistoryController {
     private final IPurchaseHistoryService iPurchaseHistoryService;
 
     @PostMapping("/add")
-    public PurchaseHistory addPurchaseHistory(@RequestBody PurchaseHistory purchaseHistory){
-        return iPurchaseHistoryService.addPurchaseHistory(purchaseHistory);
+    public PurchaseHistory addPurchaseHistory(@RequestBody RequestPurchaseHistory requestPurchaseHistory){
+        return iPurchaseHistoryService.addPurchaseHistory(requestPurchaseHistory);
     }
 
     @GetMapping("/get/{id}")

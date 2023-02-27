@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ICardListRepo extends JpaRepository<CardList, Long> {
     List<CardList> findAllByUserUserId(String uuid);
+
+
 }

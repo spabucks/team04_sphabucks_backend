@@ -3,9 +3,7 @@ package sphabucks.products.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sphabucks.products.model.ProductCategoryList;
-import sphabucks.products.repository.ICategoryRepository;
-import sphabucks.products.repository.IProductCategoryListRepository;
-import sphabucks.products.repository.IProductRepository;
+import sphabucks.products.repository.*;
 import sphabucks.products.vo.RequestProductCategoryList;
 
 import java.util.List;
@@ -16,12 +14,14 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
 
     private final IProductCategoryListRepository iProductCategoryListRepository;
     private final IProductRepository iProductRepository;
-    private final ICategoryRepository iCategoryRepository;
+    private final IBigCategoryRepository iBigCategoryRepository;
+    private final ISmallCategoryRepository iSmallCategoryRepository;
 
     @Override
     public void addProductCategoryList(RequestProductCategoryList requestProductCategoryList) {
         iProductCategoryListRepository.save(ProductCategoryList.builder()
-                .category(iCategoryRepository.findById(requestProductCategoryList.getCategoryId()).get())
+                .bigCategory(iBigCategoryRepository.findById(requestProductCategoryList.getBigCategoryId()).get())
+                .smallCategory(iSmallCategoryRepository.findById(requestProductCategoryList.getSmallCategoryId()).get())
                 .product(iProductRepository.findById(requestProductCategoryList.getProductId()).get())
                 .build()
         );

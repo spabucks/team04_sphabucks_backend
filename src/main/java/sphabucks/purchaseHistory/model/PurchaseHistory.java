@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sphabucks.users.model.User;
 
 @Entity
 @Data
@@ -27,7 +28,7 @@ public class PurchaseHistory {
     @Column(nullable = false)
     private String payment_num;
     @ManyToOne
-    private Long userId;
+    private User userId;
     @Column(nullable = false)
     private Boolean type;
     @Column(nullable = false)

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sphabucks.users.model.User;
 
 @Entity
 @Data
@@ -27,5 +28,5 @@ public class Destination {
     private String name;
 
     @ManyToOne
-    private Long userId;
+    private User userId;
 }

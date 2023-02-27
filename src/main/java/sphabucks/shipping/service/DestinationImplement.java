@@ -5,12 +5,15 @@ import org.springframework.stereotype.Service;
 import sphabucks.shipping.model.Destination;
 import sphabucks.shipping.repository.IDestinationRepo;
 import sphabucks.shipping.vo.RequestDestination;
+import sphabucks.users.repository.IUserRepository;
 
 @RequiredArgsConstructor
 @Service
 public class DestinationImplement implements IDestinationService {
 
     private final IDestinationRepo iDestinationRepo;
+    private final IUserRepository iUserRepository;
+
     @Override
     public Destination addDestination(RequestDestination requestDestination) {
         Destination destination = Destination.builder()
@@ -18,7 +21,7 @@ public class DestinationImplement implements IDestinationService {
                 .address(requestDestination.getAddress())
                 .phoneNum(requestDestination.getPhoneNum())
                 .recipient(requestDestination.getRecipient())
-                .userId(requestDestination.getUserId())
+                .userId(iUserRepository.findById(requestDestination.getUserId()).get())
                 .build();
         return iDestinationRepo.save(destination);
     }

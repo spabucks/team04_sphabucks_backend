@@ -11,16 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductCategoryList {
+public class SmallCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    private Product product;
+    private Integer id;
+    @Column(nullable = false)
+    private String name;
     @ManyToOne
     private BigCategory bigCategory;
-    @ManyToOne
-    private SmallCategory smallCategory;
-
 }
