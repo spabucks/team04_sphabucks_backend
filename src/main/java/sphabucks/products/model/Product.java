@@ -29,4 +29,5 @@ public class Product {
     private String status;    // 상태(입고 구분)
     private String size;  // 용량
     private Boolean isBest;   // 베스트
+    private Boolean isNew;
 }
