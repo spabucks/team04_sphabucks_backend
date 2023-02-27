@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/product-tag")
 @RequiredArgsConstructor
 public class ProductTagController {
-    private IProductTagService iProductTagService;
+    private final IProductTagService iProductTagService;
 
     @PostMapping("/add")
     public void addProductTag(@RequestBody RequsetProductTag requsetProductTag){
