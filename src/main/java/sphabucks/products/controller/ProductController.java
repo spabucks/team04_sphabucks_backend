@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.products.model.Product;
 import sphabucks.products.service.IProductService;
+import sphabucks.products.vo.RequestProduct;
 
 import java.util.List;
 
@@ -14,8 +15,8 @@ public class ProductController {
     private final IProductService iProductService;
 
     @PostMapping("/add")
-    public Product addProduct(@RequestBody Product product) {
-        return iProductService.addProduct(product);
+    public void addProduct(@RequestBody RequestProduct requestProduct) {
+        iProductService.addProduct(requestProduct);
     }
 
     @GetMapping("/get/{productId}")
