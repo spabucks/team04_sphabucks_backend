@@ -1,6 +1,7 @@
 package sphabucks.users.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
@@ -14,9 +15,11 @@ import java.util.UUID;
 public class UserServiceImplement implements IUserService{
 
     private final IUserRepository iUserRepository;
+
     @Override
-    public void adduser(User user) {
-        user.setUserId(UUID.randomUUID().toString());
+    public void adduser(RequestUser requestUser) {
+        ModelMapper modelMapper = new ModelMapper();
+        User user = modelMapper.map(requestUser,User.class);
         iUserRepository.save(user);
     }
 

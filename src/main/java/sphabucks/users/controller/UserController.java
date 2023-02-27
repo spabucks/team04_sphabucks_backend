@@ -14,8 +14,9 @@ public class UserController {
     private final IUserService iUserService;
 
     @PostMapping("/add")
-    public void addUser(@RequestBody User user) {
-        iUserService.adduser(user);
+    public void addUser(@RequestBody RequestUser requestUser) {
+
+        iUserService.adduser(requestUser);
     }
 
     @GetMapping("/get/{id}")
