@@ -9,7 +9,6 @@ import java.util.List;
 
 
 public interface IProductTagService {
-
-    ProductTag addProductTag(RequsetProductTag requsetProductTag);
+    void addProductTag(RequsetProductTag requsetProductTag);
     List<ProductTag> getByProductId(Long productId);
 }

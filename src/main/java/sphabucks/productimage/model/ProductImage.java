@@ -1,4 +1,4 @@
-package sphabucks.carts.model;
+package sphabucks.productimage.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,22 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import sphabucks.products.model.Product;
-import sphabucks.users.model.User;
 
-@Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cart {
+@Entity
+public class ProductImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long amount;
+    private String image;
+    private String alt;
+    private boolean chk;
 
-    @ManyToOne
-    private User user;
     @ManyToOne
     private Product product;
 
