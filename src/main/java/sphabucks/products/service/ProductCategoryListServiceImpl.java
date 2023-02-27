@@ -1,6 +1,7 @@
 package sphabucks.products.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.products.model.ProductCategoryList;
 import sphabucks.products.repository.*;
@@ -13,18 +14,13 @@ import java.util.List;
 public class ProductCategoryListServiceImpl implements IProductCategoryListService{
 
     private final IProductCategoryListRepository iProductCategoryListRepository;
-    private final IProductRepository iProductRepository;
-    private final IBigCategoryRepository iBigCategoryRepository;
-    private final ISmallCategoryRepository iSmallCategoryRepository;
 
     @Override
     public void addProductCategoryList(RequestProductCategoryList requestProductCategoryList) {
-        iProductCategoryListRepository.save(ProductCategoryList.builder()
-                .bigCategory(iBigCategoryRepository.findById(requestProductCategoryList.getBigCategoryId()).get())
-                .smallCategory(iSmallCategoryRepository.findById(requestProductCategoryList.getSmallCategoryId()).get())
-                .product(iProductRepository.findById(requestProductCategoryList.getProductId()).get())
-                .build()
-        );
+        ModelMapper modelMapper = new ModelMapper();
+        ProductCategoryList productCategoryList = modelMapper.map(requestProductCategoryList, ProductCategoryList.class);
+        iProductCategoryListRepository.save(productCategoryList);
+
     }
 
     @Override

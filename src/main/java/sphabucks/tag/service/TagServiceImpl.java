@@ -8,7 +8,7 @@ import sphabucks.tag.repository.ITagRepository;
 @RequiredArgsConstructor
 @Service
 public class TagServiceImpl implements ITagService{
-    private ITagRepository iTagRepository;
+    private final ITagRepository iTagRepository;
 
 
     @Override

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.products.model.Category;
 import sphabucks.products.service.ICategoryService;
+import sphabucks.products.vo.RequestCategory;
 
 import java.util.List;
 
@@ -16,8 +17,8 @@ public class CategoryController {
     private final ICategoryService iCategoryService;
 
     @PostMapping("/add")
-    public void addCategory(@RequestBody Category category){
-        iCategoryService.addCategory(category);
+    public void addCategory(@RequestBody RequestCategory requestCategory){
+        iCategoryService.addCategory(requestCategory);
     }
 
     @GetMapping("/get/{categoryId}")
