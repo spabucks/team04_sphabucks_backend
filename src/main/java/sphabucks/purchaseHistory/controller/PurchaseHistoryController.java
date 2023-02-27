@@ -22,6 +22,6 @@ public class PurchaseHistoryController {
     @GetMapping("/get/{id}")
     public PurchaseHistory getPurchaseHistory(@PathVariable Long id) {
         return iPurchaseHistoryService.getPurchaseHistory(id);
-    }g
+    }
 
 }
