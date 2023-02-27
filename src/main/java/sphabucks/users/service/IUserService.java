@@ -7,5 +7,6 @@ import sphabucks.users.vo.ResponseUser;
 public interface IUserService {
 
     void adduser(RequestUser requestUser);
+
     ResponseUser getUser(Long id);
 }
