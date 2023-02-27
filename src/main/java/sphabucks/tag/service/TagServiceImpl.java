@@ -15,11 +15,9 @@ public class TagServiceImpl implements ITagService{
 
     @Override
     public void addTag(RequestTag requestTag) {
-
         ModelMapper modelMapper = new ModelMapper();
         Tag tag = modelMapper.map(requestTag, Tag.class);
         iTagRepository.save(tag);
-
     }
 
     @Override

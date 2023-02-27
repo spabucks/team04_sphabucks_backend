@@ -15,11 +15,11 @@ import java.util.UUID;
 public class UserServiceImplement implements IUserService{
 
     private final IUserRepository iUserRepository;
+
     @Override
     public void adduser(RequestUser requestUser) {
         ModelMapper modelMapper = new ModelMapper();
-        User user = modelMapper.map(requestUser, User.class);
-        user.setUserId(UUID.randomUUID().toString());
+        User user = modelMapper.map(requestUser,User.class);
         iUserRepository.save(user);
     }
 
