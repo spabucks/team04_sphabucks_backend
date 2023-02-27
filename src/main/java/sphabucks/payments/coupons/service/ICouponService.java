@@ -7,7 +7,7 @@ import sphabucks.payments.coupons.vo.ResponseCoupon;
 import java.util.List;
 
 public interface ICouponService {
-    Coupon addCoupon(RequestCoupon requestCoupon);
+    void addCoupon(RequestCoupon requestCoupon);
 
     ResponseCoupon getCoupon(Long id);
 

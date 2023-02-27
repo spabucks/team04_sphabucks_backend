@@ -17,10 +17,10 @@ public class CouponServiceImpl implements ICouponService{
     private final ICouponRepo iCouponRepo;
 
     @Override
-    public Coupon addCoupon(RequestCoupon requestCoupon) {
+    public void addCoupon(RequestCoupon requestCoupon) {
         ModelMapper modelMapper = new ModelMapper();
         Coupon coupon = modelMapper.map(requestCoupon, Coupon.class);
-        return iCouponRepo.save(coupon);
+        iCouponRepo.save(coupon);
     }
 
     @Override
