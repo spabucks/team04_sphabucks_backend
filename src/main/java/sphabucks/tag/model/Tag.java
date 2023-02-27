@@ -15,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 public class Tag {
+
     @Id
     private Long id;
     private String name;

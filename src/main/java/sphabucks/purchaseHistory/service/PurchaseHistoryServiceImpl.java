@@ -1,6 +1,7 @@
 package sphabucks.purchaseHistory.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.purchaseHistory.model.PurchaseHistory;
 import sphabucks.purchaseHistory.repository.IPurchaseHistoryRepository;
@@ -18,18 +19,8 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
 
     @Override
     public PurchaseHistory addPurchaseHistory(RequestPurchaseHistory requestPurchaseHistory) {
-        PurchaseHistory purchaseHistory = PurchaseHistory.builder()
-                .sum(requestPurchaseHistory.getSum())
-                .product(requestPurchaseHistory.getProduct())
-                .type(requestPurchaseHistory.getType())
-                .amount(requestPurchaseHistory.getAmount())
-                .userId(iUserRepository.getReferenceById(requestPurchaseHistory.getUserId()))
-                .or_status(requestPurchaseHistory.getOr_status())
-                .payment_num(requestPurchaseHistory.getPayment_num())
-                .sp_status(requestPurchaseHistory.getSp_status())
-                .category(requestPurchaseHistory.getCategory())
-                .build();
-
+        ModelMapper modelMapper = new ModelMapper();
+        PurchaseHistory purchaseHistory = modelMapper.map(requestPurchaseHistory, PurchaseHistory.class);
         return iPurchaseHistoryRepository.save(purchaseHistory);
     }
 

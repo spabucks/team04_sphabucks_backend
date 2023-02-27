@@ -18,8 +18,6 @@ import java.util.List;
 public class UserLikesServiceImpl implements IUserLikesService{
 
     private final IUserLikesRepo iUserLikesRepo;
-    private final IUserRepository iUserRepository;
-    private final IProductRepository iProductRepository;
     @Override
     public void addUserLikes(RequestUserLikes requestUserLikes) {
         ModelMapper modelMapper = new ModelMapper();
