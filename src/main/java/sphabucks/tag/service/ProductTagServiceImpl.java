@@ -1,6 +1,7 @@
 package sphabucks.tag.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.tag.model.ProductTag;
@@ -20,10 +21,9 @@ public class ProductTagServiceImpl implements IProductTagService {
 
     @Override
     public void addProductTag(RequsetProductTag requsetProductTag) {
-        iProductTagRepository.save(ProductTag.builder()
-                        .tag(iTagRepository.findById(requsetProductTag.getProductId()).get())
-                        .product(iProductRepository.findById(requsetProductTag.getProductId()).get())
-                .build());
+        ModelMapper modelMapper = new ModelMapper();
+        ProductTag productTag = modelMapper.map(requsetProductTag, ProductTag.class);
+        iProductTagRepository.save(productTag);
     }
 
     @Override

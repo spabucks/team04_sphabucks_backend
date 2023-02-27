@@ -1,11 +1,13 @@
 package sphabucks.productimage.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.productimage.model.ProductImage;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.productimage.vo.RequestProductImage;
 import sphabucks.products.repository.IProductRepository;
+import sphabucks.tag.model.ProductTag;
 import sphabucks.tag.repository.ITagRepository;
 
 import java.util.List;
@@ -19,12 +21,9 @@ public class ProductImageServiceImpl implements IProductImageService{
 
     @Override
     public void addProductImage(RequestProductImage requestProductImage) {
-        iProductImageRepo.save(ProductImage.builder()
-                        .product(iProductRepository.findById(requestProductImage.getProductId()).get())
-                        .alt(requestProductImage.getAlt())
-                        .chk(requestProductImage.isChk())
-                        .image(requestProductImage.getImage())
-                .build());
+        ModelMapper modelMapper = new ModelMapper();
+        ProductImage productImage = modelMapper.map(requestProductImage, ProductImage.class);
+        iProductImageRepo.save(productImage);
     }
 
     @Override

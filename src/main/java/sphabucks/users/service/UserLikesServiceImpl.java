@@ -1,7 +1,9 @@
 package sphabucks.users.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.users.model.UserLikes;
@@ -20,10 +22,9 @@ public class UserLikesServiceImpl implements IUserLikesService{
     private final IProductRepository iProductRepository;
     @Override
     public void addUserLikes(RequestUserLikes requestUserLikes) {
-        iUserLikesRepo.save(UserLikes.builder()
-                        .product(iProductRepository.findById(requestUserLikes.getProductId()).get())
-                        .user(iUserRepository.findById(requestUserLikes.getUserId()).get())
-                .build());
+        ModelMapper modelMapper = new ModelMapper();
+        UserLikes userLikes = modelMapper.map(requestUserLikes, UserLikes.class);
+        iUserLikesRepo.save(userLikes);
     }
 
     @Override

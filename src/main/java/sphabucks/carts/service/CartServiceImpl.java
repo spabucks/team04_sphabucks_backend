@@ -1,6 +1,7 @@
 package sphabucks.carts.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,10 +23,9 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     public void addCart(RequestCart requestCart) {
-        iCartRepo.save(Cart.builder()
-                        .user(iUserRepository.findById(requestCart.getUserId()).get())
-                        .product(iProductRepository.findById(requestCart.getProductId()).get())
-                .build());
+        ModelMapper modelMapper = new ModelMapper();
+        Cart cart = modelMapper.map(requestCart, Cart.class);
+        iCartRepo.save(cart);
     }
 
     @Override
