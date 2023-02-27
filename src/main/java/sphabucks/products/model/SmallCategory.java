@@ -16,7 +16,7 @@ public class SmallCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
-    private String name;
+    private String name; // 소분류 카테고리명
     @ManyToOne
     private BigCategory bigCategory;
 }

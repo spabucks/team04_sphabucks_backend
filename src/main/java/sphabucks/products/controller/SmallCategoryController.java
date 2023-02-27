@@ -3,9 +3,7 @@ package sphabucks.products.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.products.model.BigCategory;
-import sphabucks.products.model.Category;
 import sphabucks.products.model.SmallCategory;
-import sphabucks.products.service.IBigCategoryService;
 import sphabucks.products.service.ISmallCategoryService;
 import sphabucks.products.vo.RequestSmallCategory;
 

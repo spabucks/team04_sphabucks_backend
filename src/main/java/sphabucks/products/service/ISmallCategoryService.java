@@ -1,7 +1,6 @@
 package sphabucks.products.service;
 
 import sphabucks.products.model.BigCategory;
-import sphabucks.products.model.Category;
 import sphabucks.products.model.SmallCategory;
 import sphabucks.products.vo.RequestSmallCategory;
 

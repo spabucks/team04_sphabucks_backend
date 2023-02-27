@@ -9,6 +9,6 @@ public class BigCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false)
+    @Column(nullable = false) // 대분류 카테고리명
     private String name;
 }
