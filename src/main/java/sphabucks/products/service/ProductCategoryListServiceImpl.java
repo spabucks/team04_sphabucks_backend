@@ -14,11 +14,19 @@ import java.util.List;
 public class ProductCategoryListServiceImpl implements IProductCategoryListService{
 
     private final IProductCategoryListRepository iProductCategoryListRepository;
+    private final ISmallCategoryRepository iSmallCategoryRepository;
+    private final IBigCategoryRepository iBigCategoryRepository;
+    private final IProductRepository iProductRepository;
 
     @Override
     public void addProductCategoryList(RequestProductCategoryList requestProductCategoryList) {
-        ModelMapper modelMapper = new ModelMapper();
-        ProductCategoryList productCategoryList = modelMapper.map(requestProductCategoryList, ProductCategoryList.class);
+
+        ProductCategoryList productCategoryList = ProductCategoryList.builder()
+                .smallCategory(iSmallCategoryRepository.findById(requestProductCategoryList.getSmallCategoryId()).get())
+                .bigCategory(iBigCategoryRepository.findById(requestProductCategoryList.getBigCategoryId()).get())
+                .product(iProductRepository.findById(requestProductCategoryList.getProductId()).get())
+                .build();
+
         iProductCategoryListRepository.save(productCategoryList);
 
     }

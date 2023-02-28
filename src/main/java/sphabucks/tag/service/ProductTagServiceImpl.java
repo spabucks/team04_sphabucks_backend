@@ -21,10 +21,10 @@ public class ProductTagServiceImpl implements IProductTagService {
 
     @Override
     public void addProductTag(RequsetProductTag requsetProductTag) {
-        ProductTag productTag = ProductTag.builder()
-                .product(iProductRepository.findById(requsetProductTag.getProductId()).get())
-                .tag(iTagRepository.findById(requsetProductTag.getTagId()).get())
-                .build();
+            ProductTag productTag = ProductTag.builder()
+                    .product(iProductRepository.findById(requsetProductTag.getProductId()).get())
+                    .tag(iTagRepository.findById(requsetProductTag.getTagId()).get())
+                    .build();
 
         iProductTagRepository.save(productTag);
     }
