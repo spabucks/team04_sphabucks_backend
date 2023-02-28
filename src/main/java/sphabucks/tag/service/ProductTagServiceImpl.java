@@ -21,8 +21,11 @@ public class ProductTagServiceImpl implements IProductTagService {
 
     @Override
     public void addProductTag(RequsetProductTag requsetProductTag) {
-        ModelMapper modelMapper = new ModelMapper();
-        ProductTag productTag = modelMapper.map(requsetProductTag, ProductTag.class);
+        ProductTag productTag = ProductTag.builder()
+                .product(iProductRepository.findById(requsetProductTag.getProductId()).get())
+                .tag(iTagRepository.findById(requsetProductTag.getTagId()).get())
+                .build();
+
         iProductTagRepository.save(productTag);
     }
 
