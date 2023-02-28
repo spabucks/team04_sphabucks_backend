@@ -10,7 +10,7 @@ import sphabucks.tag.vo.RequestTag;
 @RequestMapping("/tag")
 @RequiredArgsConstructor
 public class TagController {
-    private ITagService iTagService;
+    private final ITagService iTagService;
 
     @PostMapping("/add")
     public void addTag(@RequestBody RequestTag requestTag) {
