@@ -3,7 +3,6 @@ package sphabucks.event.service;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import sphabucks.event.model.Event;
 import sphabucks.event.model.EventImage;
 import sphabucks.event.model.EventProductList;
@@ -12,7 +11,6 @@ import sphabucks.event.repository.IEventProductListRepository;
 import sphabucks.event.repository.IEventRepository;
 import sphabucks.event.vo.*;
 import sphabucks.productimage.repository.IProductImageRepo;
-import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductRepository;
 
 import java.util.ArrayList;
@@ -33,9 +31,9 @@ public class EventServiceImpl implements IEventService {
     public void addEvent(RequestEvent requestEvent) {
         ModelMapper modelMapper = new ModelMapper();
         Event event = modelMapper.map(requestEvent, Event.class);
-
         iEventRepository.save(event);
     }
+
     @Override
     public Event getEvent(Long id) {
         return iEventRepository.findById(id).get();
@@ -76,27 +74,35 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public List<ResponseEventProduct> recommandMD() {
-        List<ResponseEventProduct> responseEventProductList = new ArrayList<>();
-        for (long eventId=1L; eventId<4;eventId++) {
-            List<EventProductList> eventProductLists = iEventProductListRepository.findAllByEvent_Id(eventId);
-            List<ResponseRecommandMD> responseRecommandMDList = new ArrayList<>();
-            for (EventProductList eventProductList : eventProductLists)
-                responseRecommandMDList.add(ResponseRecommandMD.builder()
-                                .productId(eventProductList.getProduct().getId())
-                                .productName(iProductRepository.findById(eventProductList.getProduct().getId()).get().getName())
-                                .imgUrl(iProductImageRepo.findAllByProductId(eventProductList.getProduct().getId()).get(0).getImage())
-                                .productPrice(iProductRepository.findById(eventProductList.getProduct().getId()).get().getPrice())
-                                .isNew(iProductRepository.findById(eventProductList.getProduct().getId()).get().getIsNew())
-                        .build());
+    public List<ResponseEventProduct> recommendMD() {
+        List<ResponseEventProduct> responseEventProductList = new ArrayList<>();    // 최종 결과로 보내지는 리스트
 
-            ResponseEventProduct responseEventProduct = ResponseEventProduct.builder()
+        List<Event> recommendEvents = iEventRepository.findAllByIsRecommendIsTrue();    // 추천MD에 해당하는 이벤트 리스트
+        recommendEvents.forEach( event -> {
+            Long eventId = event.getId();
+            List<EventProductList> eventProductLists = iEventProductListRepository.findAllByEvent_Id(eventId);  // 이벤트Id로 연관된 상품을 모두 가져옴
+            List<ResponseRecommendMD> responseRecommendMDList = new ArrayList<>();  // 이벤트에 해당하는 상품 정보의 일부가 담길 리스트
+            eventProductLists.forEach( eventProductList -> {    // 이벤트와 연결된 모든 상품에 대해서
+                Long productId = eventProductList.getProduct().getId();
+                responseRecommendMDList.add(ResponseRecommendMD.builder()
+                        .productId(productId)   // 해당 상품의 id
+                        .productName(eventProductList.getProduct().getName())   // 해당 상품의 이름
+                        .imgUrl(iProductImageRepo.findByProductIdAndChkIsTrue(productId).getImage())    // 해당 상품의 썸네일(대표사진)
+                        .productPrice(eventProductList.getProduct().getPrice()) // 해당 상품의 가격
+                        .isNew(eventProductList.getProduct().getIsNew())    // 신상품 여부
+                        .build());
+            });
+            responseEventProductList.add(ResponseEventProduct.builder() // 하나의 이벤트에 대한 내용과 상품들이 모두 담길 response
                     .eventId(eventId)
                     .eventName(iEventRepository.findById(eventId).get().getSeason())
-                    .responseRecommandMDList(responseRecommandMDList)
-                    .build();
-            responseEventProductList.add(responseEventProduct);
-        }
+                    .responseRecommendMDList(responseRecommendMDList)
+                    .build());
+        });
         return responseEventProductList;
+    }
+
+    @Override
+    public List<Event> getRecommendEvent() {
+        return iEventRepository.findAllByIsRecommendIsTrue();
     }
 }

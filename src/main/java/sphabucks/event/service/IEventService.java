@@ -25,6 +25,7 @@ public interface IEventService {
     EventImage addEventImage(RequestEventImage requestEventImage);
     EventImage getEventImage(Long id);
 
-    List<ResponseEventProduct> recommandMD();
+    List<ResponseEventProduct> recommendMD();
 
+    List<Event> getRecommendEvent();
 }

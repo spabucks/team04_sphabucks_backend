@@ -60,8 +60,13 @@ public class EventController {
         return iEventService.getEventProductList(id);
     }
 
-    @GetMapping("/get/recommand-md")
-    public List<ResponseEventProduct> recommandMD() {
-        return iEventService.recommandMD();
+    @GetMapping("/get/recommend-md")
+    public List<ResponseEventProduct> recommendMD() {
+        return iEventService.recommendMD();
+    }
+
+    @GetMapping("/get/recommended-event")
+    public List<Event> getRecommendEvent() {
+        return iEventService.getRecommendEvent();
     }
 }
