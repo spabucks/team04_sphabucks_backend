@@ -20,8 +20,10 @@ public class CouponListServiceImpl implements ICouponListService{
 
     @Override
     public void addCoupon2User(RequestCouponList requestCouponList) {
-        ModelMapper modelMapper = new ModelMapper();
-        CouponList couponList = modelMapper.map(requestCouponList, CouponList.class);
+        CouponList couponList = CouponList.builder()
+                .coupon(iCouponRepo.findById(requestCouponList.getCouponId()).get())
+                .user(iUserRepository.findById(requestCouponList.getUserId()).get())
+                .build();
         iCouponListRepo.save(couponList);
     }
 

@@ -20,8 +20,10 @@ public class GiftIconListServiceImpl implements IGiftIconListService{
     private final IUserRepository iUserRepository;
     @Override
     public void addGiftIconList(RequestGiftIconList requestGiftIconList) {
-        ModelMapper modelMapper = new ModelMapper();
-        GiftIconList giftIconList = modelMapper.map(requestGiftIconList, GiftIconList.class);
+        GiftIconList giftIconList = GiftIconList.builder()
+                .giftIcon(iGiftIconRepository.findById(requestGiftIconList.getGiftIconId()).get())
+                .user(iUserRepository.findById(requestGiftIconList.getUserId()).get())
+                .build();
         iGiftIconListRepo.save(giftIconList);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sphabucks.payments.cards.model.CardList;
 import sphabucks.payments.cards.repository.ICardListRepo;
 import sphabucks.payments.cards.repository.ICardRepo;
+import sphabucks.payments.cards.vo.RequestCard;
 import sphabucks.payments.cards.vo.RequestCardList;
 import sphabucks.users.repository.IUserRepository;
 
@@ -21,10 +22,13 @@ public class CardListServiceImpl implements ICardListService{
 
     @Override
     public void addCardList(RequestCardList requestCardList) {
-        ModelMapper modelMapper = new ModelMapper();
-        CardList cardList = modelMapper.map(requestCardList, CardList.class);
-        cardList.setRepresent(false);
-        cardList.setStartDate(new Date());
+        CardList cardList = CardList.builder()
+                .card(iCardRepo.findById(requestCardList.getCardId()).get())
+                .user(iUserRepository.findById(requestCardList.getUserId()).get())
+                .isRepresent(iCardListRepo.findById(requestCardList.getUserId()).isPresent())
+                .startDate(iCardListRepo.findById(requestCardList.getUserId()).get().getStartDate())
+                .build();
+
         iCardListRepo.save(cardList);
     }
 
