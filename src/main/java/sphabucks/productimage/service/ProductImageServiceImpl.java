@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sphabucks.productimage.model.ProductImage;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.productimage.vo.RequestProductImage;
+import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.tag.model.ProductTag;
 import sphabucks.tag.repository.ITagRepository;
@@ -21,8 +22,12 @@ public class ProductImageServiceImpl implements IProductImageService{
 
     @Override
     public void addProductImage(RequestProductImage requestProductImage) {
-        ModelMapper modelMapper = new ModelMapper();
-        ProductImage productImage = modelMapper.map(requestProductImage, ProductImage.class);
+        ProductImage productImage = ProductImage.builder()
+                .product(iProductRepository.findById(requestProductImage.getProductId()).get())
+                .image(requestProductImage.getImage())
+                .alt(requestProductImage.getAlt())
+                .chk(requestProductImage.getChk())
+                .build();
         iProductImageRepo.save(productImage);
     }
 
