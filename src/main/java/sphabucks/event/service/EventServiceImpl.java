@@ -10,10 +10,13 @@ import sphabucks.event.model.EventProductList;
 import sphabucks.event.repository.IEventImageRepository;
 import sphabucks.event.repository.IEventProductListRepository;
 import sphabucks.event.repository.IEventRepository;
-import sphabucks.event.vo.RequestEvent;
-import sphabucks.event.vo.RequestEventImage;
-import sphabucks.event.vo.RequestEventProductList;
+import sphabucks.event.vo.*;
+import sphabucks.productimage.repository.IProductImageRepo;
+import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class EventServiceImpl implements IEventService {
     private final IEventProductListRepository iEventProductListRepository;
     private final IEventImageRepository iEventImageRepository;
     private final IProductRepository iProductRepository;
+    private final IProductImageRepo iProductImageRepo;
 
 
     @Override
@@ -71,5 +75,29 @@ public class EventServiceImpl implements IEventService {
         return iEventImageRepository.findById(id).get();
     }
 
+    @Override
+    public List<ResponseEventProduct> recommandMD() {
+        List<ResponseEventProduct> responseEventProductList = new ArrayList<>();
+//        for (long eventId=1L; eventId<4;eventId++) {
+        for (long eventId : new long[1, 2, 4]) {
+            List<EventProductList> eventProductLists = iEventProductListRepository.findAllByEvent_Id(eventId);
+            List<ResponseRecommandMD> responseRecommandMDList = new ArrayList<>();
+            for (EventProductList eventProductList : eventProductLists)
+                responseRecommandMDList.add(ResponseRecommandMD.builder()
+                                .productId(eventProductList.getProduct().getId())
+                                .productName(iProductRepository.findById(eventProductList.getProduct().getId()).get().getName())
+                                .imgUrl(iProductImageRepo.findAllByProductId(eventProductList.getProduct().getId()).get(0).getImage())
+                                .productPrice(iProductRepository.findById(eventProductList.getProduct().getId()).get().getPrice())
+                                .isNew(iProductRepository.findById(eventProductList.getProduct().getId()).get().getIsNew())
+                        .build());
 
+            ResponseEventProduct responseEventProduct = ResponseEventProduct.builder()
+                    .eventId(eventId)
+                    .eventName(iEventRepository.findById(eventId).get().getSeason())
+                    .responseRecommandMDList(responseRecommandMDList)
+                    .build();
+            responseEventProductList.add(responseEventProduct);
+        }
+        return responseEventProductList;
+    }
 }

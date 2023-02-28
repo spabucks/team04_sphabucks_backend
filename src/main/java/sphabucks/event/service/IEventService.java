@@ -6,7 +6,10 @@ import sphabucks.event.model.EventProductList;
 import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
 import sphabucks.event.vo.RequestEventProductList;
+import sphabucks.event.vo.ResponseEventProduct;
 import sphabucks.products.model.Product;
+
+import java.util.List;
 
 public interface IEventService {
 
@@ -21,5 +24,7 @@ public interface IEventService {
     // 이벤트이미지
     EventImage addEventImage(RequestEventImage requestEventImage);
     EventImage getEventImage(Long id);
+
+    List<ResponseEventProduct> recommandMD();
 
 }
