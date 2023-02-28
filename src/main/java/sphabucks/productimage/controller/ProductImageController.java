@@ -11,7 +11,7 @@ import sphabucks.productimage.vo.RequestProductImage;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/api/productImage")
+@RequestMapping("/v1/api/productImage")
 @RequiredArgsConstructor
 public class ProductImageController {
     private final IProductImageService iProductImageService;

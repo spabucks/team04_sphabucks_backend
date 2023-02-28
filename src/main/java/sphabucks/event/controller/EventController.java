@@ -12,6 +12,9 @@ import sphabucks.event.service.IEventService;
 import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
 import sphabucks.event.vo.RequestEventProductList;
+import sphabucks.event.vo.ResponseEventProduct;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/event")
@@ -57,6 +60,8 @@ public class EventController {
         return iEventService.getEventProductList(id);
     }
 
-
-
+    @GetMapping("/get/recommand-md")
+    public List<ResponseEventProduct> recommandMD() {
+        return iEventService.recommandMD();
+    }
 }
