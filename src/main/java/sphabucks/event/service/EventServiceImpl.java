@@ -78,8 +78,7 @@ public class EventServiceImpl implements IEventService {
     @Override
     public List<ResponseEventProduct> recommandMD() {
         List<ResponseEventProduct> responseEventProductList = new ArrayList<>();
-//        for (long eventId=1L; eventId<4;eventId++) {
-        for (long eventId : new long[1, 2, 4]) {
+        for (long eventId=1L; eventId<4;eventId++) {
             List<EventProductList> eventProductLists = iEventProductListRepository.findAllByEvent_Id(eventId);
             List<ResponseRecommandMD> responseRecommandMDList = new ArrayList<>();
             for (EventProductList eventProductList : eventProductLists)
