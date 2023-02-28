@@ -35,5 +35,7 @@ public class PurchaseHistory {
     private String sp_status;
     @Column(nullable = false)
     private String or_status;
+    @Column(nullable = false)
+    private String image;
 
 }
