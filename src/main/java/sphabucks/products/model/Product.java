@@ -21,8 +21,6 @@ public class Product extends BaseTimeEntity {
     @Column(nullable = false)
     private Long amount;  // 잔여 개수
     @Column(nullable = false)
-    private Date date;  // 출시일
-    @Column(nullable = false)
     private String name;    // 상품 이름
     @Column(nullable = false)
     private String description; // 설명

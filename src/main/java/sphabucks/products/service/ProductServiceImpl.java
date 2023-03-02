@@ -10,6 +10,8 @@ import sphabucks.products.repository.IProductRepository;
 import sphabucks.products.vo.RequestProduct;
 import sphabucks.products.vo.ResponseProduct;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,15 +32,16 @@ public class ProductServiceImpl implements IProductService{
     public ResponseProduct getProduct(Long id) {
         Product product = iProductRepository.findById(id).get();
         List<ProductImage> productImages = iProductImageRepo.findAllByProductId(id);
-//        String thumbnail = productImages.get(1).getImage();
-//        ResponseProduct responseProduct = ResponseProduct.builder()
-//                .productId(id)
-//                .productThumbnailUrl(iProductImageRepo.findByProductIdAndChkIsTrue(id).getImage())
-//                .description(product.getDescription())
-//                .price(product.getPrice())
-//                .productDetailImgUrl(iProductImageRepo.)
-//                .build();
-        return null;
+        String thumbnail = productImages.get(0).getImage();
+        List<String> detailImages = new ArrayList<>();
+        for (int i=1; i<productImages.size(); i++) detailImages.add(productImages.get(i).getImage());
+        return ResponseProduct.builder()
+                .productId(id)
+                .productThumbnailUrl(thumbnail)
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .productDetailImgUrl(detailImages)
+                .build();
     }
 
     @Override
