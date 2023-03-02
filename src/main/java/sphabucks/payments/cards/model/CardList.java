@@ -1,20 +1,18 @@
 package sphabucks.payments.cards.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import sphabucks.users.model.User;
+import sphabucks.utility.BaseTimeEntity;
 
 import java.util.Date;
 
 @Entity
-@Data
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardList {
+public class CardList extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +24,6 @@ public class CardList {
     @ManyToOne
     Card card;
 
+    @Column(columnDefinition = "boolean default fault")
     private boolean isRepresent;
-    private Date startDate;
 }

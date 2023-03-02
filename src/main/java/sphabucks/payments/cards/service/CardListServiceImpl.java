@@ -25,8 +25,6 @@ public class CardListServiceImpl implements ICardListService{
         CardList cardList = CardList.builder()
                 .card(iCardRepo.findById(requestCardList.getCardId()).get())
                 .user(iUserRepository.findById(requestCardList.getUserId()).get())
-                .isRepresent(iCardListRepo.findById(requestCardList.getUserId()).isPresent())
-                .startDate(iCardListRepo.findById(requestCardList.getUserId()).get().getStartDate())
                 .build();
 
         iCardListRepo.save(cardList);
