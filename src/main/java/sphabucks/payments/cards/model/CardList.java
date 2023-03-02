@@ -24,6 +24,6 @@ public class CardList extends BaseTimeEntity {
     @ManyToOne
     Card card;
 
-    @Column(columnDefinition = "boolean default fault")
+    @Column(columnDefinition = "boolean default false")
     private boolean isRepresent;
 }

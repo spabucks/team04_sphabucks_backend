@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import sphabucks.products.model.Product;
 import sphabucks.products.service.IProductService;
 import sphabucks.products.vo.RequestProduct;
+import sphabucks.products.vo.ResponseProduct;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ProductController {
     }
 
     @GetMapping("/get/{productId}")
-    public Product getProduct(@PathVariable Long productId) {
+    public ResponseProduct getProduct(@PathVariable Long productId) {
         return iProductService.getProduct(productId);
     }
 
