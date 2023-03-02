@@ -18,11 +18,14 @@ import java.util.List;
 public class UserLikesServiceImpl implements IUserLikesService{
 
     private final IUserLikesRepo iUserLikesRepo;
+    private final IProductRepository iProductRepository;
+    private final IUserRepository iUserRepository;
     @Override
     public void addUserLikes(RequestUserLikes requestUserLikes) {
-        ModelMapper modelMapper = new ModelMapper();
-        UserLikes userLikes = modelMapper.map(requestUserLikes, UserLikes.class);
-        iUserLikesRepo.save(userLikes);
+        iUserLikesRepo.save(UserLikes.builder()
+                .product(iProductRepository.findById(requestUserLikes.getProductId()).get())
+                .user(iUserRepository.findById(requestUserLikes.getUserId()).get())
+                .build());
     }
 
     @Override
