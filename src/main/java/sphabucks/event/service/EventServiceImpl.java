@@ -87,7 +87,7 @@ public class EventServiceImpl implements IEventService {
                 responseRecommendMDList.add(ResponseRecommendMD.builder()
                         .productId(productId)   // 해당 상품의 id
                         .productName(eventProductList.getProduct().getName())   // 해당 상품의 이름
-                        .imgUrl(iProductImageRepo.findByProductIdAndChkIsTrue(productId).getImage())    // 해당 상품의 썸네일(대표사진)
+                        .imgUrl(iProductImageRepo.findAllByProductId(productId).get(0).getImage())    // 해당 상품의 썸네일(대표사진)
                         .productPrice(eventProductList.getProduct().getPrice()) // 해당 상품의 가격
                         .isNew(eventProductList.getProduct().getIsNew())    // 신상품 여부
                         .build());
