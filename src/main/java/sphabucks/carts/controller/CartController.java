@@ -21,7 +21,7 @@ public class CartController {
     }
 
     @GetMapping("/get/{userId}")
-    List<Cart> getCart(Long userId){
+    List<Cart> getCart(@PathVariable Long userId){
         return iCartService.getCart(userId);
     }
 }
