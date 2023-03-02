@@ -37,6 +37,7 @@ public class ProductServiceImpl implements IProductService{
         for (int i=1; i<productImages.size(); i++) detailImages.add(productImages.get(i).getImage());
         return ResponseProduct.builder()
                 .id(id)
+                .title(product.getName())
                 .imgUrl(thumbnail)
                 .description(product.getDescription())
                 .price(product.getPrice())

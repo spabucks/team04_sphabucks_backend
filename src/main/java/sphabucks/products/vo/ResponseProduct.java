@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 public class ResponseProduct {
     private Long id;
+    private String title;
     private String imgUrl;
     private String description;
     private Integer price;
