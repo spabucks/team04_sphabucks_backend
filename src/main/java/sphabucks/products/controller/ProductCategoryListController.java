@@ -11,7 +11,7 @@ import sphabucks.products.vo.RequestProductCategoryList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/api/product-category")
+@RequestMapping("/api/v1/product-category")
 @RequiredArgsConstructor
 public class ProductCategoryListController {
     private final IProductCategoryListService iProductCategoryListService;

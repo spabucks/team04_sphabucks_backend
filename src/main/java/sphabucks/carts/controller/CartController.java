@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/api/cart")
+@RequestMapping("/api/v1/cart")
 public class CartController {
 
     private final ICartService iCartService;

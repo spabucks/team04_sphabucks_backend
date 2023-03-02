@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 
-@RequestMapping("/v1/api/bigCategory")
+@RequestMapping("/api/v1/bigCategory")
 @RequiredArgsConstructor
 public class BigCategoryController {
 

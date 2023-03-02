@@ -12,7 +12,7 @@ import sphabucks.users.vo.RequestUserWishlist;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/api/userwishlist")
+@RequestMapping("/api/v1/userwishlist")
 @RequiredArgsConstructor
 public class UserWishlistController {
 

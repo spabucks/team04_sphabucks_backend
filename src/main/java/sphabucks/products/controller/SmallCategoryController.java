@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 
-@RequestMapping("/v1/api/smallCategory")
+@RequestMapping("/api/v1/smallCategory")
 @RequiredArgsConstructor
 public class SmallCategoryController {
 

@@ -9,7 +9,7 @@ import sphabucks.products.vo.RequestProduct;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/api/product")
+@RequestMapping("/api/v1/product")
 @RequiredArgsConstructor
 public class ProductController {
     private final IProductService iProductService;

@@ -10,7 +10,7 @@ import sphabucks.users.vo.RequestUserLikes;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/api/user-likes")
+@RequestMapping("/api/v1/user-likes")
 @RequiredArgsConstructor
 public class UserLikesController {
 
