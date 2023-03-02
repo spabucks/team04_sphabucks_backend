@@ -7,6 +7,8 @@ import sphabucks.users.service.IUserService;
 import sphabucks.users.vo.RequestUser;
 import sphabucks.users.vo.ResponseUser;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
@@ -22,5 +24,10 @@ public class UserController {
     @GetMapping("/get/{id}")
     public ResponseUser getUser(@PathVariable Long id) {
         return iUserService.getUser(id);
+    }
+
+    @GetMapping("get/all")
+    public List<User> getAll(){
+        return iUserService.getAll();
     }
 }
