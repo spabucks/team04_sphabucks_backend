@@ -1,16 +1,14 @@
 package sphabucks.products.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import sphabucks.utility.BaseTimeEntity;
 
 import java.util.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,8 +20,6 @@ public class Product extends BaseTimeEntity {
     private Integer price;  // 가격
     @Column(nullable = false)
     private Long amount;  // 잔여 개수
-    @Column(nullable = false)
-    private Date date;  // 출시일
     @Column(nullable = false)
     private String name;    // 상품 이름
     @Column(nullable = false)
