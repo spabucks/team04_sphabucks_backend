@@ -19,7 +19,7 @@ public class ProductTagController {
         iProductTagService.addProductTag(requsetProductTag);
     }
 
-    @PostMapping("/get/{id}")
+    @GetMapping("/get/{id}")
     public List<ProductTag> getByProductId(@PathVariable Long id){
         return iProductTagService.getByProductId(id);
     }
