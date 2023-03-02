@@ -60,7 +60,7 @@ public class EventController {
         return iEventService.getEventProductList(id);
     }
 
-    @GetMapping("/get/recommend-md")
+    @GetMapping("/get-recommend-md")
     public List<ResponseEventProduct> recommendMD() {
         return iEventService.recommendMD();
     }
