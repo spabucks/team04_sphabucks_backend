@@ -9,7 +9,7 @@ import sphabucks.tag.vo.RequsetProductTag;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product-tag")
+@RequestMapping("/api/v1/product-tag")
 @RequiredArgsConstructor
 public class ProductTagController {
     private final IProductTagService iProductTagService;

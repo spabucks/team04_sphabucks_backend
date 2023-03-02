@@ -13,7 +13,7 @@ import sphabucks.payments.coupons.vo.ResponseCoupon;
 import java.util.List;
 
 @RestController
-@RequestMapping("/coupon")
+@RequestMapping("/api/v1/coupon")
 @RequiredArgsConstructor
 public class CouponController {
 

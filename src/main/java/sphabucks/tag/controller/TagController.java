@@ -7,7 +7,7 @@ import sphabucks.tag.service.ITagService;
 import sphabucks.tag.vo.RequestTag;
 
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/api/v1/tag")
 @RequiredArgsConstructor
 public class TagController {
     private final ITagService iTagService;

@@ -17,7 +17,7 @@ import sphabucks.event.vo.ResponseEventProduct;
 import java.util.List;
 
 @RestController
-@RequestMapping("/event")
+@RequestMapping("/api/v1/event")
 @RequiredArgsConstructor
 @Slf4j
 public class EventController {

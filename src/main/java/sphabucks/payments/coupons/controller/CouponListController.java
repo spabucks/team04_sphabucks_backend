@@ -9,7 +9,7 @@ import sphabucks.payments.coupons.vo.RequestCouponList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/coupon-list")
+@RequestMapping("/api/v1/coupon-list")
 @RequiredArgsConstructor
 public class CouponListController {
     private final ICouponListService iCouponListService;

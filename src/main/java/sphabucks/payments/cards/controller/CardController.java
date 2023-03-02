@@ -8,7 +8,7 @@ import sphabucks.payments.cards.vo.RequestCard;
 import sphabucks.payments.cards.vo.ResponseCard;
 
 @RestController
-@RequestMapping("/card")
+@RequestMapping("/api/v1/card")
 @RequiredArgsConstructor
 public class CardController {
     private final ICardService iCardService;

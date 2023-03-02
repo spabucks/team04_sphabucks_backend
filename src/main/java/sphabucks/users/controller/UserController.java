@@ -8,7 +8,7 @@ import sphabucks.users.vo.RequestUser;
 import sphabucks.users.vo.ResponseUser;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
     private final IUserService iUserService;
