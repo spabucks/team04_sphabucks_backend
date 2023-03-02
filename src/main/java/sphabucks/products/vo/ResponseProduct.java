@@ -10,8 +10,8 @@ import java.util.List;
 @Setter
 @Builder
 public class ResponseProduct {
-    private Long productId;
-    private String productThumbnailUrl;
+    private Long id;
+    private String imgUrl;
     private String description;
     private Integer price;
     private List<String> productDetailImgUrl;
