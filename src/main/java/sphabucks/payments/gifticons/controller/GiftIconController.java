@@ -12,7 +12,7 @@ import sphabucks.payments.gifticons.vo.ResponseGiftIcon;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/gift-icons")
+@RequestMapping("/api/v1/gift-icon")
 @RequiredArgsConstructor
 public class GiftIconController {
     private final IGiftIconService iGiftIconService;
