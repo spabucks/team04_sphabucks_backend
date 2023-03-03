@@ -13,6 +13,7 @@ import java.util.List;
 
 @RequestMapping("/api/v1/smallCategory")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class SmallCategoryController {
 
     private final ISmallCategoryService iSmallCategoryService;
