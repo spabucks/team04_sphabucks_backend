@@ -10,4 +10,7 @@ public interface IProductCategoryListRepository extends JpaRepository<ProductCat
 
     // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)
     List<ProductCategoryList> findAllByBigCategoryId(Integer bigCategoryId);
+
+    // 소분류 카테고리별 조회
+    List<ProductCategoryList> findAllBySmallCategoryId(Integer sCategoryId);
 }

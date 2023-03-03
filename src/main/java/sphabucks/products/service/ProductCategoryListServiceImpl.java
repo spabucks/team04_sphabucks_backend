@@ -56,9 +56,11 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
             ResponseOtherProducts responseOtherProducts = ResponseOtherProducts.builder()
                     .id(otherProductId)
                     .name(otherProduct.getName())
-                    .imgUrl(iProductImageRepo.findAllByProductId(otherProductId))
+                    .imgUrl(iProductImageRepo.findAllByProductId(otherProductId).get(0).getImage())
+                    .price(otherProduct.getPrice())
                     .build();
+            return_value.add(responseOtherProducts);
         }
-        return null;
+        return return_value;
     }
 }
