@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ResponseEventProduct {
-    private Long eventId;
-    private String eventName;
-    private List<ResponseRecommendMD> responseRecommendMDList;
+    private Long id;
+    private String name;
+    private List<ResponseRecommendMD> data;
 }
