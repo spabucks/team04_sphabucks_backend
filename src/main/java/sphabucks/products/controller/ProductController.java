@@ -30,4 +30,14 @@ public class ProductController {
     public List<Product> getAll(){
         return iProductService.getAll();
     }
+
+    // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)
+    @GetMapping("/get-best/{bigCategoryId}")
+    public List<ResponseProduct> getBestBigCategory(@PathVariable Integer bigCategoryId) {
+
+        return iProductService.getBestBigCategory(bigCategoryId);
+    }
+
+    // 베스트 상품 조회 메서드 (소분류 카테고리별 조회)
+
 }
