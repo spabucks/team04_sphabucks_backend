@@ -7,12 +7,14 @@ import sphabucks.products.model.ProductCategoryList;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.products.service.IProductCategoryListService;
 import sphabucks.products.vo.RequestProductCategoryList;
+import sphabucks.products.vo.ResponseOtherProducts;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product-category")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class ProductCategoryListController {
     private final IProductCategoryListService iProductCategoryListService;
 
@@ -24,5 +26,10 @@ public class ProductCategoryListController {
     @GetMapping("/get/{productId}")
     public List<ProductCategoryList> getAllByProduct(@PathVariable Long productId){
         return iProductCategoryListService.getByProductId(productId);
+    }
+
+    @GetMapping("/get-others/{id}")
+    public List<ResponseOtherProducts> getOtherProducts(@PathVariable Long id) {
+        return iProductCategoryListService.getOtherProductByProductId(id);
     }
 }
