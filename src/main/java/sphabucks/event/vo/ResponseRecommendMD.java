@@ -8,9 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResponseRecommendMD {
-    private Long productId;
-    private String productName;
+    private Long id;
+    private String title;
     private String imgUrl;
-    private Integer productPrice;
+    private Integer price;
     private Boolean isNew;
 }

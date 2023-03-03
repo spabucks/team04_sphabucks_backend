@@ -85,17 +85,17 @@ public class EventServiceImpl implements IEventService {
             eventProductLists.forEach( eventProductList -> {    // 이벤트와 연결된 모든 상품에 대해서
                 Long productId = eventProductList.getProduct().getId();
                 responseRecommendMDList.add(ResponseRecommendMD.builder()
-                        .productId(productId)   // 해당 상품의 id
-                        .productName(eventProductList.getProduct().getName())   // 해당 상품의 이름
-                        .imgUrl(iProductImageRepo.findByProductIdAndChkIsTrue(productId).getImage())    // 해당 상품의 썸네일(대표사진)
-                        .productPrice(eventProductList.getProduct().getPrice()) // 해당 상품의 가격
+                        .id(productId)   // 해당 상품의 id
+                        .title(eventProductList.getProduct().getName())   // 해당 상품의 이름
+                        .imgUrl(iProductImageRepo.findAllByProductId(productId).get(0).getImage())    // 해당 상품의 썸네일(대표사진)
+                        .price(eventProductList.getProduct().getPrice()) // 해당 상품의 가격
                         .isNew(eventProductList.getProduct().getIsNew())    // 신상품 여부
                         .build());
             });
             responseEventProductList.add(ResponseEventProduct.builder() // 하나의 이벤트에 대한 내용과 상품들이 모두 담길 response
-                    .eventId(eventId)
-                    .eventName(iEventRepository.findById(eventId).get().getSeason())
-                    .responseRecommendMDList(responseRecommendMDList)
+                    .id(eventId)
+                    .name(iEventRepository.findById(eventId).get().getSeason())
+                    .data(responseRecommendMDList)
                     .build());
         });
         return responseEventProductList;
