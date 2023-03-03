@@ -2,6 +2,7 @@ package sphabucks.tag.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import sphabucks.tag.model.ProductTag;
+import sphabucks.tag.vo.ResponseExhibitionProduct;
 import sphabucks.tag.vo.ResponseProductTag;
 
 import java.util.List;
@@ -11,7 +12,12 @@ import java.util.List;
 
 public interface IProductTagRepository extends JpaRepository<ProductTag, Long> {
     List<ProductTag> findAllByProductId(Long productId);
-    List<ResponseProductTag> findAllByTagId(Long tagId);
-    ProductTag findByTagId(Long tagId);
+    //    List<ResponseExhibitionProduct> findAllByTagId(Long tagId);
+    List<ProductTag> findAllOrderByTagId(Long tagId);
+
+//    List<ProductTag> findByProductIdOrderByTagId(Long tagId);
+
+//    ProductTag findByTagId(Long tagId);
+
 
 }
