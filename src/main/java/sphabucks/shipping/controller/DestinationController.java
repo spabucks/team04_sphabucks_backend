@@ -7,7 +7,7 @@ import sphabucks.shipping.service.IDestinationService;
 import sphabucks.shipping.vo.RequestDestination;
 
 @RestController
-@RequestMapping("/shipping")
+@RequestMapping("/api/v1/shipping")
 @RequiredArgsConstructor
 public class DestinationController {
     private final IDestinationService iDestinationService;

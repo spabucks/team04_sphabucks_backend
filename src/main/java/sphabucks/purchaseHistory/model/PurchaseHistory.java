@@ -20,7 +20,7 @@ public class PurchaseHistory {
     @Column(nullable = false)
     private String category;
     @Column(nullable = false)
-    private String product;
+    private String productName;
     @Column(nullable = false)
     private Long amount;
     @Column(nullable = false)
@@ -28,12 +28,14 @@ public class PurchaseHistory {
     @Column(nullable = false)
     private String payment_num;
     @ManyToOne
-    private User userId;
+    private User user;
     @Column(nullable = false)
     private Boolean type;
     @Column(nullable = false)
     private String sp_status;
     @Column(nullable = false)
     private String or_status;
+    @Column(nullable = false)
+    private String image;
 
 }

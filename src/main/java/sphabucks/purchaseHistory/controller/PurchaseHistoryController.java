@@ -8,7 +8,7 @@ import sphabucks.purchaseHistory.service.IPurchaseHistoryService;
 import sphabucks.purchaseHistory.vo.RequestPurchaseHistory;
 
 @RestController
-@RequestMapping("/purchaseHistory")
+@RequestMapping("/api/v1/purchaseHistory")
 @RequiredArgsConstructor
 @Slf4j
 public class PurchaseHistoryController {

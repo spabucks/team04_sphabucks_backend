@@ -12,10 +12,14 @@ import sphabucks.event.service.IEventService;
 import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
 import sphabucks.event.vo.RequestEventProductList;
+import sphabucks.event.vo.ResponseEventProduct;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/event")
+@RequestMapping("/api/v1/event")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 @Slf4j
 public class EventController {
 
@@ -57,6 +61,13 @@ public class EventController {
         return iEventService.getEventProductList(id);
     }
 
+    @GetMapping("/get-recommend-md")
+    public List<ResponseEventProduct> recommendMD() {
+        return iEventService.recommendMD();
+    }
 
-
+    @GetMapping("/get/recommended-event")
+    public List<Event> getRecommendEvent() {
+        return iEventService.getRecommendEvent();
+    }
 }

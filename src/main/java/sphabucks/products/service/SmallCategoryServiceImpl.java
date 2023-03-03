@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import sphabucks.products.model.BigCategory;
-import sphabucks.products.model.Category;
 import sphabucks.products.model.SmallCategory;
 import sphabucks.products.repository.IBigCategoryRepository;
-import sphabucks.products.repository.ICategoryRepository;
 import sphabucks.products.repository.ISmallCategoryRepository;
 import sphabucks.products.vo.RequestSmallCategory;
 

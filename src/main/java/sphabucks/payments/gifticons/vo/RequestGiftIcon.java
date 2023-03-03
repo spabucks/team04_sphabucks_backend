@@ -14,4 +14,7 @@ public class RequestGiftIcon {
     private String content; // 내용
     private String number;  // 기프티콘번호
     private String alt; // 이미지 설명
+    private Date startDate;    // 발행일
+    private Date endDate;  // 만료일
+
 }

@@ -9,7 +9,7 @@ import sphabucks.payments.cards.vo.RequestCardList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/card-list")
+@RequestMapping("/api/v1/card-list")
 @RequiredArgsConstructor
 public class CardListController {
 

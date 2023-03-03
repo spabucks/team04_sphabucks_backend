@@ -1,6 +1,7 @@
 package sphabucks.payments.gifticons.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.payments.gifticons.model.GiftIconList;
 import sphabucks.payments.gifticons.repository.IGiftIconListRepo;
@@ -19,11 +20,11 @@ public class GiftIconListServiceImpl implements IGiftIconListService{
     private final IUserRepository iUserRepository;
     @Override
     public void addGiftIconList(RequestGiftIconList requestGiftIconList) {
-        iGiftIconListRepo.save(GiftIconList.builder()
-                        .user(iUserRepository.findById(requestGiftIconList.getUserId()).get())
-                        .giftIcon(iGiftIconRepository.findById(requestGiftIconList.getGiftIconId()).get())
-                        .build()
-        );
+        GiftIconList giftIconList = GiftIconList.builder()
+                .giftIcon(iGiftIconRepository.findById(requestGiftIconList.getGiftIconId()).get())
+                .user(iUserRepository.findById(requestGiftIconList.getUserId()).get())
+                .build();
+        iGiftIconListRepo.save(giftIconList);
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/api/cart")
+@RequestMapping("/api/v1/cart")
 public class CartController {
 
     private final ICartService iCartService;
@@ -21,7 +21,7 @@ public class CartController {
     }
 
     @GetMapping("/get/{userId}")
-    List<Cart> getCart(Long userId){
+    List<Cart> getCart(@PathVariable Long userId){
         return iCartService.getCart(userId);
     }
 }

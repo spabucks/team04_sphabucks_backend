@@ -1,6 +1,7 @@
 package sphabucks.payments.coupons.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.payments.coupons.model.CouponList;
 import sphabucks.payments.coupons.repository.ICouponListRepo;
@@ -18,11 +19,12 @@ public class CouponListServiceImpl implements ICouponListService{
     private final IUserRepository iUserRepository;
 
     @Override
-    public CouponList addCoupon2User(RequestCouponList requestCouponList) {
-        return iCouponListRepo.save(CouponList.builder()
-                        .user(iUserRepository.findById(requestCouponList.getUserId()).get())
-                        .coupon(iCouponRepo.findById(requestCouponList.getCouponId()).get())
-                        .build());
+    public void addCoupon2User(RequestCouponList requestCouponList) {
+        CouponList couponList = CouponList.builder()
+                .coupon(iCouponRepo.findById(requestCouponList.getCouponId()).get())
+                .user(iUserRepository.findById(requestCouponList.getUserId()).get())
+                .build();
+        iCouponListRepo.save(couponList);
     }
 
     @Override

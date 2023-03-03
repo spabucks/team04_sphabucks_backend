@@ -1,6 +1,7 @@
 package sphabucks.purchaseHistory.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.purchaseHistory.model.PurchaseHistory;
 import sphabucks.purchaseHistory.repository.IPurchaseHistoryRepository;
@@ -19,17 +20,18 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
     @Override
     public PurchaseHistory addPurchaseHistory(RequestPurchaseHistory requestPurchaseHistory) {
         PurchaseHistory purchaseHistory = PurchaseHistory.builder()
-                .sum(requestPurchaseHistory.getSum())
-                .product(requestPurchaseHistory.getProduct())
-                .type(requestPurchaseHistory.getType())
+                .user(iUserRepository.findById(requestPurchaseHistory.getUserId()).get())
+                .image(requestPurchaseHistory.getImage())
                 .amount(requestPurchaseHistory.getAmount())
-                .userId(iUserRepository.getReferenceById(requestPurchaseHistory.getUserId()))
-                .or_status(requestPurchaseHistory.getOr_status())
-                .payment_num(requestPurchaseHistory.getPayment_num())
-                .sp_status(requestPurchaseHistory.getSp_status())
                 .category(requestPurchaseHistory.getCategory())
+                .sum(requestPurchaseHistory.getSum())
+                .type(requestPurchaseHistory.getType())
+                .payment_num(requestPurchaseHistory.getPayment_num())
+                .type(requestPurchaseHistory.getType())
+                .sp_status(requestPurchaseHistory.getSp_status())
+                .or_status(requestPurchaseHistory.getOr_status())
+                .productName(requestPurchaseHistory.getProductName())
                 .build();
-
         return iPurchaseHistoryRepository.save(purchaseHistory);
     }
 

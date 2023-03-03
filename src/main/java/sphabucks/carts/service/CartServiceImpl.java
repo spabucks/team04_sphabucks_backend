@@ -23,9 +23,11 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     public void addCart(RequestCart requestCart) {
-        ModelMapper modelMapper = new ModelMapper();
-        Cart cart = modelMapper.map(requestCart, Cart.class);
-        iCartRepo.save(cart);
+        iCartRepo.save(Cart.builder()
+                        .product(iProductRepository.findById(requestCart.getProductId()).get())
+                        .user(iUserRepository.findById(requestCart.getUserId()).get())
+                        .amount(requestCart.getAmount())
+                .build());
     }
 
     @Override

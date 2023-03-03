@@ -4,16 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.tag.model.Tag;
 import sphabucks.tag.service.ITagService;
+import sphabucks.tag.vo.RequestTag;
 
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/api/v1/tag")
 @RequiredArgsConstructor
 public class TagController {
-    private ITagService iTagService;
+    private final ITagService iTagService;
 
     @PostMapping("/add")
-    public Tag addTag(@RequestBody Tag tag) {
-        return iTagService.addTag(tag);
+    public void addTag(@RequestBody RequestTag requestTag) {
+        iTagService.addTag(requestTag);
+
     }
 
     @GetMapping("/get/{id}")
