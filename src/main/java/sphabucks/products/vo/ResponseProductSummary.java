@@ -7,9 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ResponseOtherProducts {
+public class ResponseProductSummary {
     private Long id;
-    private String name;
+    private String title;
     private String imgUrl;
     private Integer price;
+    private Boolean isNew;
 }

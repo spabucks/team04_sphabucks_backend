@@ -1,14 +1,19 @@
 package sphabucks.products.service;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import sphabucks.event.model.EventProductList;
+import sphabucks.event.repository.IEventProductListRepository;
+import sphabucks.event.repository.IEventRepository;
+import sphabucks.event.service.EventProductServiceImpl;
+import sphabucks.event.service.IEventProductService;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
 import sphabucks.products.model.ProductCategoryList;
 import sphabucks.products.repository.*;
 import sphabucks.products.vo.RequestProductCategoryList;
-import sphabucks.products.vo.ResponseOtherProducts;
+import sphabucks.products.vo.ResponseProductList;
+import sphabucks.products.vo.ResponseProductSummary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,9 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
     private final IBigCategoryRepository iBigCategoryRepository;
     private final IProductRepository iProductRepository;
     private final IProductImageRepo iProductImageRepo;
+    private final IEventProductListRepository iEventProductListRepository;
+    private final IEventRepository iEventRepository;
+    private final IEventProductService iEventProductService;
 
     @Override
     public void addProductCategoryList(RequestProductCategoryList requestProductCategoryList) {
@@ -42,25 +50,41 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
     }
 
     @Override
-    public List<ResponseOtherProducts> getOtherProductByProductId(Long productId) {
-        Integer currentSmallCategoryId = iProductCategoryListRepository.findAllByProductId(productId).get(0)
-                .getSmallCategory().getId();    // 현재 상품의 소분류 id
-        List<ProductCategoryList> productCategoryLists =
-                iProductCategoryListRepository.findAllBySmallCategoryId(currentSmallCategoryId);    // 소분류가 같은 제품들
-
-        List<ResponseOtherProducts> return_value = new ArrayList<>();
+    public List<ResponseProductSummary> getProductsBySmallCategoryId(Integer smallCategoryId) {
+        List<ResponseProductSummary> responseProductSummaries = new ArrayList<>();
+        List<ProductCategoryList> productCategoryLists = iProductCategoryListRepository.findAllBySmallCategoryId(smallCategoryId);
         for (ProductCategoryList productCategoryList : productCategoryLists) {
-            Long otherProductId = productCategoryList.getProduct().getId();
-            if (otherProductId.equals(productId)) continue;
-            Product otherProduct =  iProductRepository.findById(otherProductId).get();
-            ResponseOtherProducts responseOtherProducts = ResponseOtherProducts.builder()
-                    .id(otherProductId)
-                    .name(otherProduct.getName())
-                    .imgUrl(iProductImageRepo.findAllByProductId(otherProductId).get(0).getImage())
-                    .price(otherProduct.getPrice())
-                    .build();
-            return_value.add(responseOtherProducts);
+            Product product = iProductRepository.findById(productCategoryList.getProduct().getId()).get();
+            responseProductSummaries.add(ResponseProductSummary.builder()
+                            .id(product.getId())
+                            .title(product.getName())
+                            .price(product.getPrice())
+                            .isNew(product.getIsNew())
+                            .imgUrl(iProductImageRepo.findAllByProductId(product.getId()).get(0).getImage())
+                            .build());
         }
+        return responseProductSummaries;
+    }
+
+    @Override
+    public List<ResponseProductList> getOtherProductByProductId(Long productId) {
+        List<ResponseProductList> return_value = new ArrayList<>();
+        // 1. 현재 보고있는 상품과 동일한 이벤트 상품들을 검색
+        // 2. 현재 보고있는 상품과 동일한 소분류 카테고리 상품들을 검색
+
+        Long currentEventId = iEventProductListRepository.findByProductId(productId).getEvent().getId();
+        return_value.add(ResponseProductList.builder()
+                .id(1L)
+                .name(iEventRepository.findById(currentEventId).get().getSeason())
+                .data(iEventProductService.getProductsByEventId(currentEventId))
+                .build());
+
+        Integer currentSmallCategoryId = iProductCategoryListRepository.findById(productId).get().getSmallCategory().getId();
+        return_value.add(ResponseProductList.builder()
+                .id(2L)
+                .name("다른 고객이 함께 본 상품")
+                .data(getProductsBySmallCategoryId(currentSmallCategoryId))
+                .build());
         return return_value;
     }
 }
