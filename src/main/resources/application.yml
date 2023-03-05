@@ -1,1 +1,3 @@
-${{ secrets.APPLICATION_DEV }}
+spring:
+  profiles:
+    active: dev
