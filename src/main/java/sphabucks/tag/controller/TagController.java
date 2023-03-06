@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tag")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class TagController {
     private final ITagService iTagService;
 
@@ -26,7 +27,7 @@ public class TagController {
     }
 
     @GetMapping("/get/all")
-    public List<Tag> getAll(@RequestBody Tag tag){
+    public List<Tag> getAll(){
         return iTagService.getAll();
     }
 }
