@@ -81,7 +81,7 @@ public class ProductTagServiceImpl implements IProductTagService {
                         .tagId(tagId)
                         .name(eProduct.getName())
                         .isNew(eProduct.getIsNew())
-                        .best(eProduct.getIsBest())
+                        .isBest(eProduct.getIsBest())
                         .productId(eProduct.getId())
                         .productImage(exhibitionProductImage)
                         .build());
