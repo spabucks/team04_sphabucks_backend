@@ -41,16 +41,10 @@ public class ProductController {
     }
 
     // 상품 검색 메서드 (키워드 검색)
-    @GetMapping("/search/{keyword}")
-    public List<ResponseProduct> searchProductKeyword(@PathVariable String keyword){
-        log.info("keyword : {}", keyword);
+    @GetMapping("/search")
+    public List<ResponseProduct> searchProductKeyword(@RequestParam("keyword") String keyword){
+
         return iProductService.searchProductKeyword(keyword);
     }
-
-//    @GetMapping("/search")
-//    public List<ResponseProduct> searchProductKeyword(@RequestParam("keyword") String keyword){
-//
-//        return iProductService.searchProductKeyword(keyword);
-//    }
 
 }
