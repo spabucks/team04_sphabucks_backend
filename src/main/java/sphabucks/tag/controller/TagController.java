@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import sphabucks.tag.model.Tag;
 import sphabucks.tag.service.ITagService;
 import sphabucks.tag.vo.RequestTag;
+import sphabucks.tag.vo.ResponseRecommendTag;
 
 import java.util.List;
 
@@ -29,5 +30,10 @@ public class TagController {
     @GetMapping("/get/all")
     public List<Tag> getAll(){
         return iTagService.getAll();
+    }
+
+    @GetMapping("/get-recommendTag")
+    public List<ResponseRecommendTag> getRecommendTag() {
+        return iTagService.getRecommendTag();
     }
 }
