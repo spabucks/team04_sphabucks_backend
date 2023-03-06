@@ -20,4 +20,5 @@ public class ResponseExhibitionProduct {
     Integer price;
     ExhibitionProductImage productImage;    // 상품 사진
     boolean isNew;
+    boolean best;
 }

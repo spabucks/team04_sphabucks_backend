@@ -7,6 +7,8 @@ import sphabucks.tag.model.Tag;
 import sphabucks.tag.repository.ITagRepository;
 import sphabucks.tag.vo.RequestTag;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class TagServiceImpl implements ITagService{
@@ -23,5 +25,10 @@ public class TagServiceImpl implements ITagService{
     @Override
     public Tag getTag(Long id) {
         return iTagRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Tag> getAll() {
+        return iTagRepository.findAll();
     }
 }

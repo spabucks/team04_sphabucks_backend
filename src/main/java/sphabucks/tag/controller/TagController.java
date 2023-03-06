@@ -6,6 +6,8 @@ import sphabucks.tag.model.Tag;
 import sphabucks.tag.service.ITagService;
 import sphabucks.tag.vo.RequestTag;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/tag")
 @RequiredArgsConstructor
@@ -21,5 +23,10 @@ public class TagController {
     @GetMapping("/get/{id}")
     public Tag getTag(@PathVariable Long id){
         return iTagService.getTag(id);
+    }
+
+    @GetMapping("/get/all")
+    public List<Tag> getAll(@RequestBody Tag tag){
+        return iTagService.getAll();
     }
 }
