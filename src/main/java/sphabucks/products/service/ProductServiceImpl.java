@@ -12,6 +12,7 @@ import sphabucks.products.repository.IProductRepository;
 import sphabucks.products.vo.RequestProduct;
 import sphabucks.products.vo.ResponseProduct;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -79,4 +80,28 @@ public class ProductServiceImpl implements IProductService{
 
         return responseProductList;
     }
+
+    // 상품 검색 기능
+    public List<ResponseProduct> searchProductKeyword(String keyword) {
+
+        List<Product> productList = iProductRepository.findByNameContains(keyword);
+
+        List<ResponseProduct> responseProductList = new ArrayList<>();
+
+        productList.forEach(product -> {
+            ResponseProduct responseProduct = ResponseProduct.builder()
+                    .id(product.getId())
+                    .title(product.getName())
+                    .imgUrl(iProductImageRepo.findAllByProductId(product.getId()).get(0).getImage())
+                    .description(product.getDescription())
+                    .price(product.getPrice())
+                    .build();
+
+            responseProductList.add(responseProduct);
+        });
+
+        return responseProductList;
+    }
+
+
 }
