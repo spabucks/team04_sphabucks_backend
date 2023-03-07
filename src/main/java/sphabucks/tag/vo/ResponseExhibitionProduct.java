@@ -20,7 +20,7 @@ public class ResponseExhibitionProduct {
     Integer price;
 //    ExhibitionProductImage productImage;    // 상품 사진
     String imgUrl;
-    boolean isNew;
-    boolean isBest;
+    Boolean isNew;
+    Boolean isBest;
     Long amount;
 }
