@@ -28,6 +28,6 @@ jobs:
     - name: Docker build
       run: |
        docker build -t sphabucks .
-       docker network springboot-mysql-net
+       docker network connect springboot-mysql-net
        docker tag sphabucks nightsky0/sphabucks:latest
        docker push nightsky0/sphabucks:latest
