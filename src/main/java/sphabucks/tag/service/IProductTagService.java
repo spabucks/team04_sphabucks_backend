@@ -12,4 +12,6 @@ public interface IProductTagService {
     List<ProductTag> getProductId(Long productId);
 //    List<ResponseProductTag> getAllByTagId();
     List<ResponseProductTag> getAll();
+
+    List<ResponseProductTag> getTagId(Long tagId);
 }

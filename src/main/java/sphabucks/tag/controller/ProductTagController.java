@@ -30,4 +30,9 @@ public class ProductTagController {
     public List<ResponseProductTag> getAll(){
         return iProductTagService.getAll();
     }
+
+    @GetMapping("/exhibition/get/{tagId}")
+    public List<ResponseProductTag> getTagId(@PathVariable Long tagId){
+        return iProductTagService.getTagId(tagId);
+    }
 }

@@ -7,6 +7,7 @@ import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.tag.model.ProductTag;
+import sphabucks.tag.model.Tag;
 import sphabucks.tag.repository.IProductTagRepository;
 import sphabucks.tag.repository.ITagRepository;
 import sphabucks.tag.vo.ExhibitionProductImage;
@@ -48,18 +49,18 @@ public class ProductTagServiceImpl implements IProductTagService {
         List<ProductTag> productTagList = iProductTagRepository.findAll();
 
 
-        for(int i=0;i< iTagRepository.count();i++){
+        for (int i = 0; i < iTagRepository.count(); i++) {
             List<ResponseExhibitionProduct> responseExhibitionProducts = new ArrayList<>();
-            for(int j=0;j< productTagList.size();j++){
+            for (int j = 0; j < productTagList.size(); j++) {
                 Long productId = productTagList.get(j).getProduct().getId();
                 Long ptagId = productTagList.get(j).getTag().getId();
 
-                List<ProductImage> productImageList = iProductImageRepo.findAllByProductIdAndChk(productId,1);
+                List<ProductImage> productImageList = iProductImageRepo.findAllByProductIdAndChk(productId, 1);
 
                 ExhibitionProductImage exhibitionProductImage = new ExhibitionProductImage();
                 exhibitionProductImage.setImage(productImageList.get(0).getImage());
 
-                if((ptagId-1) == i){
+                if ((ptagId - 1) == i) {
                     Product product = iProductRepository.findById(productId).get();
                     responseExhibitionProducts.add(ResponseExhibitionProduct.builder()
                             .price(product.getPrice())
@@ -82,6 +83,46 @@ public class ProductTagServiceImpl implements IProductTagService {
         }
 
         return responseProductTags;
+    }
+
+    @Override
+    public List<ResponseProductTag> getTagId(Long tagId) {
+
+        List<ResponseProductTag> responseProductTagList = new ArrayList<>();
+        List<ProductTag> productTagList = iProductTagRepository.findAll();
+
+        List<ResponseExhibitionProduct> responseExhibitionProducts = new ArrayList<>();
+        for (int j = 0; j < productTagList.size(); j++) {
+            Long productId = productTagList.get(j).getProduct().getId();
+            Long ptagId = productTagList.get(j).getTag().getId();
+
+            List<ProductImage> productImageList = iProductImageRepo.findAllByProductIdAndChk(productId, 1);
+
+            ExhibitionProductImage exhibitionProductImage = new ExhibitionProductImage();
+            exhibitionProductImage.setImage(productImageList.get(0).getImage());
+
+            if (ptagId.equals(tagId)) {
+                Product product = iProductRepository.findById(productId).get();
+                responseExhibitionProducts.add(ResponseExhibitionProduct.builder()
+                        .price(product.getPrice())
+                        .name(product.getName())
+                        .isNew(product.getIsNew())
+                        .isBest(product.getIsBest())
+                        .productId(product.getId())
+                        .productImage(exhibitionProductImage)
+                        .build());
+            }
+        }
+
+        responseProductTagList.add(ResponseProductTag.builder()
+                .tagId(tagId)
+                .tagImage(iTagRepository.findAllById(tagId).getImage())
+                .tagName(iTagRepository.findAllById(tagId).getName())
+                .responseExhibitionProduct(responseExhibitionProducts)
+                .build());
+
+
+        return responseProductTagList;
     }
 
 
