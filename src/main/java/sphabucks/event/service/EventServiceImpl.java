@@ -41,6 +41,11 @@ public class EventServiceImpl implements IEventService {
         return iEventRepository.findById(id).get();
     }
 
+    @Override
+    public List<Event> getEventAll() {
+        return iEventRepository.findAll();
+    }
+
 
     @Override
     public EventProductList addEventProductList(RequestEventProductList requestEventProductList) {

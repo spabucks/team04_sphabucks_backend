@@ -15,6 +15,7 @@ public interface IEventService {
     // 이벤트
     void addEvent(RequestEvent requestEvent);
     Event getEvent(Long id);
+    List<Event> getEventAll();
 
     // 이벤트상품리스트
     EventProductList addEventProductList(RequestEventProductList requestEventProductList);
