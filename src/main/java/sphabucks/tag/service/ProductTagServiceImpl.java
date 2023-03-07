@@ -37,66 +37,49 @@ public class ProductTagServiceImpl implements IProductTagService {
     }
 
     @Override
-    public List<ProductTag> getByProductId(Long productId) {
+    public List<ProductTag> getProductId(Long productId) {
         return iProductTagRepository.findAllByProductId(productId);
     }
 
     @Override
-    public List<ResponseProductTag> getAllByTagId() {
+    public List<ResponseProductTag> getAll() {
 
         List<ResponseProductTag> responseProductTags = new ArrayList<>();                             // 최종 반환되는 객체
-        for(int i=0;i<iProductTagRepository.count();i++){
-            Long tagId = iTagRepository.findAll().get(i).getId();
+        List<ProductTag> productTagList = iProductTagRepository.findAll();
 
-            List<ResponseExhibitionProduct> responseExhibitionProducts = new ArrayList<>();            //  기획전 상품
-            List<Product> products = iProductRepository.findAllById(iProductTagRepository.findAllOrderByTagId(tagId).get(i).getProduct().getId());
-//            List<ProductImage> productImages = iProductImageRepo.findAllByProductId(products.get(i).getId());
 
-            List<ProductImage> pI = iProductImageRepo.findAllByProductId(products.get(i).getId());
-            ExhibitionProductImage exhibitionProductImage = null;
-            if(iProductImageRepo.findByProductId(products.get(i).getId()).getChk() == 1){
-                exhibitionProductImage.setProductId(products.get(i).getId());
-                exhibitionProductImage.setImage(pI.get(i).getImage());
-                exhibitionProductImage.setChk(pI.get(i).getChk());
-                exhibitionProductImage.setAlt(pI.get(i).getAlt());
+        for(int i=0;i< iTagRepository.count();i++){
+            List<ResponseExhibitionProduct> responseExhibitionProducts = new ArrayList<>();
+            for(int j=0;j< productTagList.size();j++){
+                Long productId = productTagList.get(j).getProduct().getId();
+                Long ptagId = productTagList.get(j).getTag().getId();
+
+                List<ProductImage> productImageList = iProductImageRepo.findAllByProductIdAndChk(productId,1);
+
+                ExhibitionProductImage exhibitionProductImage = new ExhibitionProductImage();
+                exhibitionProductImage.setImage(productImageList.get(0).getImage());
+
+                if((ptagId-1) == i){
+                    Product product = iProductRepository.findById(productId).get();
+                    responseExhibitionProducts.add(ResponseExhibitionProduct.builder()
+                            .price(product.getPrice())
+                            .name(product.getName())
+                            .isNew(product.getIsNew())
+                            .isBest(product.getIsBest())
+                            .productId(product.getId())
+                            .productImage(exhibitionProductImage)
+                            .build());
+                }
             }
-//            ExhibitionProductImage exhibitionProductImages = ExhibitionProductImage.builder()
-//                    .image(iProductImageRepo.findByProductId(products.get(i).getId()).getImage())
-//                    .alt(iProductImageRepo.findByProductId(products.get(i).getId()).getAlt())
-//                    .chk(iProductImageRepo.findByProductId(products.get(i).getId()).getChk())
-//                    .productId(products.get(i).getId())
-//                    .build();
 
-
-//            ExhibitionProductImage exhibitionProductImages = ExhibitionProductImage.builder()
-//                    .image(iProductImageRepo.findByProductId(products.get(i).getId()).getImage())
-//                    .alt(iProductImageRepo.findByProductId(products.get(i).getId()).getAlt())
-//                    .chk(iProductImageRepo.findByProductId(products.get(i).getId()).getChk())
-//                    .productId(products.get(i).getId())
-//                    .build();
-
-            products.forEach(eProduct ->{
-                responseExhibitionProducts.add(ResponseExhibitionProduct.builder()
-                        .price(eProduct.getPrice())
-                        .tagId(tagId)
-                        .name(eProduct.getName())
-                        .isNew(eProduct.getIsNew())
-                        .isBest(eProduct.getIsBest())
-                        .productId(eProduct.getId())
-                        .productImage(exhibitionProductImage)
-                        .build());
-            });
-
-
+            Long tagId = iTagRepository.findAll().get(i).getId();
             responseProductTags.add(ResponseProductTag.builder()
                     .tagId(tagId)
                     .tagImage(iTagRepository.findAll().get(i).getImage())
-                    .productTagId(iProductTagRepository.findAll().get(i).getProduct().getId())
+                    .tagName(iTagRepository.findAll().get(i).getName())
                     .responseExhibitionProduct(responseExhibitionProducts)
                     .build());
-
         }
-
 
         return responseProductTags;
     }

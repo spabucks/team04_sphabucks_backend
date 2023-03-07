@@ -23,11 +23,11 @@ public class ProductTagController {
 
     @GetMapping("/get/{id}")
     public List<ProductTag> getByProductId(@PathVariable Long id){
-        return iProductTagService.getByProductId(id);
+        return iProductTagService.getProductId(id);
     }
 
-    @GetMapping("/get/productTag/all")
-    public List<ResponseProductTag> getAllByTagId(){
-        return iProductTagService.getAllByTagId();
+    @GetMapping("/exhibition/get/all")
+    public List<ResponseProductTag> getAll(){
+        return iProductTagService.getAll();
     }
 }

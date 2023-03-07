@@ -13,7 +13,8 @@ import java.util.List;
 public interface IProductTagRepository extends JpaRepository<ProductTag, Long> {
     List<ProductTag> findAllByProductId(Long productId);
     //    List<ResponseExhibitionProduct> findAllByTagId(Long tagId);
-    List<ProductTag> findAllOrderByTagId(Long tagId);
+    List<ProductTag> findAllByTagId(Long tagId);
+
 
 //    List<ProductTag> findByProductIdOrderByTagId(Long tagId);
 

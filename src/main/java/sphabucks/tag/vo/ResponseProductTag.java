@@ -12,9 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 public class ResponseProductTag {
-
-    Long productTagId;
     Long tagId;
+    String tagName;
     String tagImage;        // 기획전 메인 사진
     List<ResponseExhibitionProduct> responseExhibitionProduct;
 

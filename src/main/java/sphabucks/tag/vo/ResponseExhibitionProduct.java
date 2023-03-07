@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ResponseExhibitionProduct {
 
-    Long tagId;
+//    Long tagId;
     Long productId;
     String name;            // 상품 이름
     Integer price;
