@@ -32,7 +32,7 @@ public class ProductTagController {
     }
 
     @GetMapping("/exhibition/get/{tagId}")
-    public List<ResponseProductTag> getTagId(@PathVariable Long tagId){
+    public ResponseProductTag getTagId(@PathVariable Long tagId){
         return iProductTagService.getTagId(tagId);
     }
 }

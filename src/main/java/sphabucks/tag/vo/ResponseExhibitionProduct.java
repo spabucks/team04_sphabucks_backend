@@ -15,10 +15,12 @@ import java.util.List;
 public class ResponseExhibitionProduct {
 
 //    Long tagId;
-    Long productId;
-    String name;            // 상품 이름
+    Long id;
+    String title;            // 상품 이름
     Integer price;
-    ExhibitionProductImage productImage;    // 상품 사진
+//    ExhibitionProductImage productImage;    // 상품 사진
+    String imgUrl;
     boolean isNew;
     boolean isBest;
+    Long amount;
 }

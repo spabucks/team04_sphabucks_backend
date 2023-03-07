@@ -1,16 +1,3 @@
-server:
-  port: 8081
-
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    url: jdbc:mysql://mysql-container:3306/sphabucks?useSSL=false&allowPublicKeyRetrieval=true
-    password: '1234'
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-        format_sql: 'true'
-    hibernate:
-      ddl-auto: update
+  profiles:
+    active: local

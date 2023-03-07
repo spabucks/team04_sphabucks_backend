@@ -64,21 +64,22 @@ public class ProductTagServiceImpl implements IProductTagService {
                     Product product = iProductRepository.findById(productId).get();
                     responseExhibitionProducts.add(ResponseExhibitionProduct.builder()
                             .price(product.getPrice())
-                            .name(product.getName())
+                            .title(product.getName())
                             .isNew(product.getIsNew())
                             .isBest(product.getIsBest())
-                            .productId(product.getId())
-                            .productImage(exhibitionProductImage)
+                            .id(product.getId())
+                            .amount(product.getAmount())
+                            .imgUrl(productImageList.get(0).getImage())
                             .build());
                 }
             }
 
             Long tagId = iTagRepository.findAll().get(i).getId();
             responseProductTags.add(ResponseProductTag.builder()
-                    .tagId(tagId)
-                    .tagImage(iTagRepository.findAll().get(i).getImage())
+                    .id(tagId)
+                    .imgUrl(iTagRepository.findAll().get(i).getImage())
                     .tagName(iTagRepository.findAll().get(i).getName())
-                    .responseExhibitionProduct(responseExhibitionProducts)
+                    .data(responseExhibitionProducts)
                     .build());
         }
 
@@ -86,9 +87,9 @@ public class ProductTagServiceImpl implements IProductTagService {
     }
 
     @Override
-    public List<ResponseProductTag> getTagId(Long tagId) {
+    public ResponseProductTag getTagId(Long tagId) {
 
-        List<ResponseProductTag> responseProductTagList = new ArrayList<>();
+        ResponseProductTag responseProductTagList = new ResponseProductTag();
         List<ProductTag> productTagList = iProductTagRepository.findAll();
 
         List<ResponseExhibitionProduct> responseExhibitionProducts = new ArrayList<>();
@@ -105,21 +106,23 @@ public class ProductTagServiceImpl implements IProductTagService {
                 Product product = iProductRepository.findById(productId).get();
                 responseExhibitionProducts.add(ResponseExhibitionProduct.builder()
                         .price(product.getPrice())
-                        .name(product.getName())
+                        .title(product.getName())
                         .isNew(product.getIsNew())
                         .isBest(product.getIsBest())
-                        .productId(product.getId())
-                        .productImage(exhibitionProductImage)
+                        .id(product.getId())
+                        .amount(product.getAmount())
+                        .imgUrl(productImageList.get(0).getImage())
                         .build());
             }
         }
 
-        responseProductTagList.add(ResponseProductTag.builder()
-                .tagId(tagId)
-                .tagImage(iTagRepository.findAllById(tagId).getImage())
+        responseProductTagList = ResponseProductTag.builder()
+                .id(tagId)
+                .imgUrl(iTagRepository.findAllById(tagId).getImage())
                 .tagName(iTagRepository.findAllById(tagId).getName())
-                .responseExhibitionProduct(responseExhibitionProducts)
-                .build());
+                .data(responseExhibitionProducts)
+                .build();
+
 
 
         return responseProductTagList;
