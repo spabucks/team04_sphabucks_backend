@@ -17,14 +17,16 @@ public class DestinationImplement implements IDestinationService {
 
     @Override
     public void addDestination(RequestDestination requestDestination) {
-        User user = iUserRepository.findByUserId(requestDestination.getUUID()).get();   // 유저의 정보
 
-        // 기본 배송지로 저장을 선택했거나 기존에 등록된 배송지가 없을 경우 기본 배송지 설정은 true
+        User user = iUserRepository.findByUserId(requestDestination.getUuid());   // 유저의 정보
+
+        // 기본 배송지로 저장을 선택했거나 기존에 등록된 배송지가 없을 경우 기본 배송지 설정은 true 그 외에는 false
         boolean newDefaultDestination =
                 (requestDestination.getDefaultDestination() || !iDestinationRepo.existsByUserUserId(user.getUserId()));
 
         // 새로운 배송지를 등록하는 경우
         if (newDefaultDestination) {
+            // 기존에 등록되어있던 기본 배송지를 false로 변경해주어야 함
             // 기존에 등록된 배송지가 없는데 수정할 경우 에러발생 >> 등록된 배송지들이 있는 경우에만 수정되도록 if문 작성
             if (iDestinationRepo.existsByUserUserId(user.getUserId())) {
                 Destination originalDefaultDestination =
@@ -34,12 +36,12 @@ public class DestinationImplement implements IDestinationService {
         }
 
         iDestinationRepo.save(Destination.builder()
-                        .user(iUserRepository.findByUserId(requestDestination.getUUID()).get())
+                        .user(iUserRepository.findByUserId(requestDestination.getUuid()))
                         .name(requestDestination.getName())
                         .recipient(requestDestination.getRecipient())
                         .zipCode(requestDestination.getZipCode())
-                        .DefaultAddress(requestDestination.getDefaultAddress())
-                        .DetailAddress(requestDestination.getDetailAddress())
+                        .defaultAddress(requestDestination.getDefaultAddress())
+                        .detailAddress(requestDestination.getDetailAddress())
                         .phoneNum(requestDestination.getPhoneNum())
                         .phoneNum2(requestDestination.getPhoneNum2())
                         .content(requestDestination.getContent())
