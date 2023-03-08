@@ -15,8 +15,7 @@ import sphabucks.products.repository.IProductRepository;
 import sphabucks.products.vo.ResponseProductList;
 import sphabucks.products.vo.ResponseProductSummary;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -83,5 +82,29 @@ public class EventServiceImpl implements IEventService {
     @Override
     public List<Event> getRecommendEvent() {
         return iEventRepository.findAllByIsRecommendIsTrue();
+    }
+
+    @Override
+    public List<ResponseEventBanner> getEventBanner() {
+        List<EventImage> eventImages = iEventImageRepository.findAll();
+        Collections.sort(eventImages, (o1, o2) -> (int) (o2.getEvent().getId() - o1.getEvent().getId()));
+
+        List<ResponseEventBanner> eventList = new ArrayList<>();
+
+        eventImages.forEach(eventImage -> {
+            if (eventImage.getEvent().getId() != 1) {
+                if (eventImage.getEvent().getIsRecommend() == false) {
+                    ResponseEventBanner responseEventBanner = ResponseEventBanner.builder()
+                            .eventId(eventImage.getEvent().getId())
+                            .name(eventImage.getEvent().getSeason())
+                            .imageUrl(eventImage.getImage())
+                            .build();
+
+                    eventList.add(responseEventBanner);
+                }
+            }
+        });
+
+        return eventList;
     }
 }
