@@ -35,6 +35,11 @@ public class EventController {
         return iEventService.getEvent(id);
     }
 
+    @GetMapping("/get/all")
+    public List<Event> getEventAll(){
+        return iEventService.getEventAll();
+    }
+
     @PostMapping("/addImage")
     public EventImage addEventImage(@RequestBody RequestEventImage requestEventImage) {
 
