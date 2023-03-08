@@ -49,7 +49,7 @@ public class AuthenticationService {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authenticationRequest.getEmail(),
-                            authenticationRequest.getPassword()
+                            authenticationRequest.getPwd()
                     )
             );
             var user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
