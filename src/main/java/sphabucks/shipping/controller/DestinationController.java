@@ -13,8 +13,8 @@ public class DestinationController {
     private final IDestinationService iDestinationService;
 
     @PostMapping("/add")
-    public Destination addDestination(@RequestBody RequestDestination requestDestination) {
-        return iDestinationService.addDestination(requestDestination);
+    public void addDestination(@RequestBody RequestDestination requestDestination) {
+        iDestinationService.addDestination(requestDestination);
     }
 
     @GetMapping("/get/{id}")

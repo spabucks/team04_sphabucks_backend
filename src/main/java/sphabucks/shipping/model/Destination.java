@@ -18,15 +18,22 @@ public class Destination {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;    // 주소 별칭
     @Column(nullable = false)
-    private String address;
+    private String recipient;   // 받는 분
     @Column(nullable = false)
-    private String recipient;
+    private String zipCode;     //우편 번호
     @Column(nullable = false)
-    private String phoneNum;
+    private String DefaultAddress;  // 기본 주소
     @Column(nullable = false)
-    private String name;
+    private String DetailAddress;   // 상세 주소
+    @Column(nullable = false)
+    private String phoneNum;    // 연락처 1
+    private String phoneNum2;   // 연락처 2
+    private String content;     // 배송 메모
+    @Column(columnDefinition = "boolean default false")
+    private boolean defaultDestination; // 기본(대표) 배송지
 
     @ManyToOne
-    private User userId;
+    private User user;
 }
