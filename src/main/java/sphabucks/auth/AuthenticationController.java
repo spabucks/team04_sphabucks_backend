@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sphabucks.users.vo.RequestUser;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -16,7 +17,7 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<AuthenticationResponse> signup(
-            @RequestBody SignupRequest signupRequest) {
+            @RequestBody RequestUser signupRequest) {
         return ResponseEntity.ok(authenticationService.signup(signupRequest));
     }
 

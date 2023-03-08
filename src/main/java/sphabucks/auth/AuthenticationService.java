@@ -9,6 +9,7 @@ import sphabucks.config.JwtService;
 import sphabucks.users.model.Role;
 import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
+import sphabucks.users.vo.RequestUser;
 
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class AuthenticationService {
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
-        public AuthenticationResponse signup(SignupRequest signupRequest) {
+        public AuthenticationResponse signup(RequestUser signupRequest) {
 
             var user = User.builder()
                     .userId(UUID.randomUUID().toString())
@@ -33,7 +34,7 @@ public class AuthenticationService {
                     .phoneNum(signupRequest.getPhoneNum())
                     .star(signupRequest.getStar())
                     .name(signupRequest.getName())
-                    .pwd(passwordEncoder.encode(signupRequest.getPassword()))
+                    .pwd(passwordEncoder.encode(signupRequest.getPwd()))
                     .email(signupRequest.getEmail())
                     .role(Role.USER)
                     .build();
