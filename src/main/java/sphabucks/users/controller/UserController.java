@@ -27,6 +27,11 @@ public class UserController {
         return iUserService.getUser(id);
     }
 
+    @GetMapping
+    public ResponseUser getUserByEmail(@RequestParam String email) {
+        return iUserService.getUserByEmail(email);
+    }
+
     @GetMapping("get/all")
     public List<User> getAll(){
         return iUserService.getAll();
