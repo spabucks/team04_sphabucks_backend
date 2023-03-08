@@ -24,6 +24,7 @@ public class AuthenticationService {
         public AuthenticationResponse signup(RequestUser signupRequest) {
 
             var user = User.builder()
+                    .loginId(signupRequest.getLoginId())
                     .userId(UUID.randomUUID().toString())
                     .address(signupRequest.getAddress())
                     .birth(signupRequest.getBirth())
@@ -48,11 +49,11 @@ public class AuthenticationService {
         public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            authenticationRequest.getEmail(),
+                            authenticationRequest.getLoginId(),
                             authenticationRequest.getPwd()
                     )
             );
-            var user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
+            var user = userRepository.findByLoginId(authenticationRequest.getLoginId()).orElseThrow();
             var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                     .token(jwtToken)

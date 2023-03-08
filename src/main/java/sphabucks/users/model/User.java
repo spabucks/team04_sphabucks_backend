@@ -19,10 +19,12 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // index
 
     @Column(nullable = false)
-    private String userId;
+    private String loginId; // 로그인할 때 사용하는 id
+    @Column(nullable = false)
+    private String userId; // uuid 값
     @Column(nullable = false, length = 45)
     private String name;
     @Column(nullable = false)
@@ -54,7 +56,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return loginId;
     }
 
     @Override

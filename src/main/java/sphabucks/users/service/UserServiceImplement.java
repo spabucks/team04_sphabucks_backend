@@ -61,4 +61,17 @@ public class UserServiceImplement implements IUserService{
 
         return responseUser;
     }
+
+    @Override
+    public ResponseUser getUserByLoginId(String loginId) {
+        Optional<User> user = iUserRepository.findByEmail(loginId);
+        ResponseUser responseUser = ResponseUser.builder()
+                .Id(user.get().getId())
+                .email(user.get().getEmail())
+                .name(user.get().getName())
+                .nickname(user.get().getNickname())
+                .build();
+
+        return responseUser;
+    }
 }
