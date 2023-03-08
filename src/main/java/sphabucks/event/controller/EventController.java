@@ -10,6 +10,7 @@ import sphabucks.event.service.IEventService;
 import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
 import sphabucks.event.vo.RequestEventProductList;
+import sphabucks.event.vo.ResponseEventBanner;
 import sphabucks.products.vo.ResponseProductList;
 
 import java.util.List;
@@ -67,4 +68,12 @@ public class EventController {
     public List<Event> getRecommendEvent() {
         return iEventService.getRecommendEvent();
     }
+
+    @GetMapping("/get/banner")
+    public List<ResponseEventBanner> getEventBanner() {
+        return iEventService.getEventBanner();
+    }
+
+
+
 }

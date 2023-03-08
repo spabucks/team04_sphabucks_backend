@@ -6,6 +6,7 @@ import sphabucks.event.model.EventProductList;
 import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
 import sphabucks.event.vo.RequestEventProductList;
+import sphabucks.event.vo.ResponseEventBanner;
 import sphabucks.products.vo.ResponseProductList;
 
 import java.util.List;
@@ -25,4 +26,8 @@ public interface IEventService {
     EventImage addEventImage(RequestEventImage requestEventImage);
     EventImage getEventImage(Long id);
     List<Event> getRecommendEvent();
+
+    // 이벤트 배너 이미지
+    List<ResponseEventBanner> getEventBanner();
+
 }
