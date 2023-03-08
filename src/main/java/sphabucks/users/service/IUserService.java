@@ -12,4 +12,5 @@ public interface IUserService {
 
     ResponseUser getUser(Long id);
     List<User> getAll();
+    ResponseUser getUserByEmail(String email);
 }
