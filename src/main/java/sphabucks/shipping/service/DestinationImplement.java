@@ -5,8 +5,12 @@ import org.springframework.stereotype.Service;
 import sphabucks.shipping.model.Destination;
 import sphabucks.shipping.repository.IDestinationRepo;
 import sphabucks.shipping.vo.RequestDestination;
+import sphabucks.shipping.vo.ResponseDestinationSummary;
 import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -50,7 +54,29 @@ public class DestinationImplement implements IDestinationService {
     }
 
     @Override
-    public Destination getDestination(Long id) {
+    public Destination getDestinations(Long id) {
         return iDestinationRepo.findById(id).get();
+    }
+
+    @Override
+    public List<ResponseDestinationSummary> getDestinationsByUUID(String uuid) {
+        List<ResponseDestinationSummary> return_value = new ArrayList<>();  // 최종 반환될 리스트
+        User user = iUserRepository.findByUserId(uuid); // 조회할 유저
+        List<Destination> destinationList = // 유저의 정보에 저장된 모든 배송지
+                iDestinationRepo.findAllByUserIdOrderByDefaultDestinationDescUpdateDateDesc(user.getId());
+
+        for (Destination destination : destinationList)
+            return_value.add(ResponseDestinationSummary.builder()
+                    .name(destination.getName())
+                    .recipient(destination.getRecipient())
+                    .zipCode(destination.getZipCode())
+                    .defaultAddress(destination.getDefaultAddress())
+                    .detailAddress(destination.getDetailAddress())
+                    .phoneNum(destination.getPhoneNum())
+                    .phoneNum2(destination.getPhoneNum2())
+                    .content(destination.getContent())
+                    .build());
+
+        return return_value;
     }
 }

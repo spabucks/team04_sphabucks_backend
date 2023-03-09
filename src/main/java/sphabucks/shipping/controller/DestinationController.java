@@ -2,9 +2,11 @@ package sphabucks.shipping.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.shipping.model.Destination;
 import sphabucks.shipping.service.IDestinationService;
 import sphabucks.shipping.vo.RequestDestination;
+import sphabucks.shipping.vo.ResponseDestinationSummary;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/shipping")
@@ -17,8 +19,8 @@ public class DestinationController {
         iDestinationService.addDestination(requestDestination);
     }
 
-    @GetMapping("/get/{id}")
-    public Destination getDestination(@PathVariable Long id) {
-        return iDestinationService.getDestination(id);
+    @GetMapping("/get")
+    public List<ResponseDestinationSummary> getDestinationsByUUID(@RequestBody String uuid) {
+        return iDestinationService.getDestinationsByUUID(uuid);
     }
 }
