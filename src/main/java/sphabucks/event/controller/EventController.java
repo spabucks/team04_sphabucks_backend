@@ -6,13 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import sphabucks.event.model.Event;
 import sphabucks.event.model.EventImage;
 import sphabucks.event.model.EventProductList;
-import sphabucks.event.repository.IEventImageRepository;
-import sphabucks.event.repository.IEventProductListRepository;
 import sphabucks.event.service.IEventService;
 import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
 import sphabucks.event.vo.RequestEventProductList;
-import sphabucks.event.vo.ResponseEventProduct;
+import sphabucks.event.vo.ResponseEventBanner;
+import sphabucks.products.vo.ResponseProductList;
 
 import java.util.List;
 
@@ -37,6 +36,11 @@ public class EventController {
         return iEventService.getEvent(id);
     }
 
+    @GetMapping("/get/all")
+    public List<Event> getEventAll(){
+        return iEventService.getEventAll();
+    }
+
     @PostMapping("/addImage")
     public EventImage addEventImage(@RequestBody RequestEventImage requestEventImage) {
 
@@ -57,17 +61,19 @@ public class EventController {
 
     @GetMapping("/getProductList/{id}")
     public EventProductList getEventProductList(@PathVariable Long id) {
-
         return iEventService.getEventProductList(id);
-    }
-
-    @GetMapping("/get-recommend-md")
-    public List<ResponseEventProduct> recommendMD() {
-        return iEventService.recommendMD();
     }
 
     @GetMapping("/get/recommended-event")
     public List<Event> getRecommendEvent() {
         return iEventService.getRecommendEvent();
     }
+
+    @GetMapping("/get/banner")
+    public List<ResponseEventBanner> getEventBanner() {
+        return iEventService.getEventBanner();
+    }
+
+
+
 }

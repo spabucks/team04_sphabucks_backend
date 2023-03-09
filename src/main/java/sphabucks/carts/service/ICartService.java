@@ -7,5 +7,11 @@ import java.util.List;
 
 public interface ICartService {
     void addCart(RequestCart requestCart);
-    List<Cart> getCart(Long id);
+    List<Cart> getCart(Long userId);
+
+    Cart updateCart(RequestCart requestCart);
+
+    void deleteCart(RequestCart requestCart);
+    void deleteAll(RequestCart requestCart);
+
 }

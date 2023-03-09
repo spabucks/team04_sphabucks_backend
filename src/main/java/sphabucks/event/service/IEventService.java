@@ -6,8 +6,8 @@ import sphabucks.event.model.EventProductList;
 import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
 import sphabucks.event.vo.RequestEventProductList;
-import sphabucks.event.vo.ResponseEventProduct;
-import sphabucks.products.model.Product;
+import sphabucks.event.vo.ResponseEventBanner;
+import sphabucks.products.vo.ResponseProductList;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ public interface IEventService {
     // 이벤트
     void addEvent(RequestEvent requestEvent);
     Event getEvent(Long id);
+    List<Event> getEventAll();
 
     // 이벤트상품리스트
     EventProductList addEventProductList(RequestEventProductList requestEventProductList);
@@ -24,8 +25,9 @@ public interface IEventService {
     // 이벤트이미지
     EventImage addEventImage(RequestEventImage requestEventImage);
     EventImage getEventImage(Long id);
-
-    List<ResponseEventProduct> recommendMD();
-
     List<Event> getRecommendEvent();
+
+    // 이벤트 배너 이미지
+    List<ResponseEventBanner> getEventBanner();
+
 }

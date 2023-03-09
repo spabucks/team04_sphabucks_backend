@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Getter
 public class RequestUser {
+    private String loginId;
     private String name;
     private String email;
     private String pwd;

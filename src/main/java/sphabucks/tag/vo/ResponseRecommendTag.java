@@ -1,16 +1,13 @@
-package sphabucks.event.vo;
+package sphabucks.tag.vo;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Builder
 @Getter
 @Setter
-public class ResponseEventProduct {
+public class ResponseRecommendTag {
     private Long id;
     private String name;
-    private List<ResponseRecommendMD> data;
 }

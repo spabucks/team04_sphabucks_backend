@@ -32,6 +32,7 @@ public class CouponServiceImpl implements ICouponService{
                 .name(coupon.getName())
                 .endDate(coupon.getEndDate())
                 .content(coupon.getContent())
+                .image(coupon.getImage())
                 .build();
         return responseCoupon;
     }

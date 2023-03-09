@@ -14,10 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 public class ResponseExhibitionProduct {
 
-    Long tagId;
-    Long productId;
-    String name;            // 상품 이름
+//    Long tagId;
+    Long id;
+    String title;            // 상품 이름
     Integer price;
-    ExhibitionProductImage productImage;    // 상품 사진
-    boolean isNew;
+//    ExhibitionProductImage productImage;    // 상품 사진
+    String imgUrl;
+    Boolean isNew;
+    Boolean isBest;
+    Long amount;
 }

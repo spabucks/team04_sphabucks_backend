@@ -1,6 +1,7 @@
 package sphabucks.carts.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.service.ICartService;
@@ -23,5 +24,20 @@ public class CartController {
     @GetMapping("/get/{userId}")
     List<Cart> getCart(@PathVariable Long userId){
         return iCartService.getCart(userId);
+    }
+
+    @GetMapping("/update")
+    Cart updateCart(@RequestBody RequestCart requestCart){
+        return iCartService.updateCart(requestCart);
+    }
+
+    @GetMapping("/delete")
+    void deleteCart(@RequestBody RequestCart requestCart){
+        iCartService.deleteCart(requestCart);
+    }
+
+    @GetMapping("/delete/all")
+    void deleteAll(@RequestBody RequestCart requestCart){
+        iCartService.deleteAll(requestCart);
     }
 }
