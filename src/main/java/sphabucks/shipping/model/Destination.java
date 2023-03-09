@@ -2,7 +2,6 @@ package sphabucks.shipping.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.DynamicUpdate;
 import sphabucks.users.model.User;
 import sphabucks.utility.BaseTimeEntity;
 
@@ -10,7 +9,6 @@ import sphabucks.utility.BaseTimeEntity;
 @Getter
 @Setter
 @Builder
-@DynamicUpdate
 @AllArgsConstructor
 @NoArgsConstructor
 public class Destination extends BaseTimeEntity {

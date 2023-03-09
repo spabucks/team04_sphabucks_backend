@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class RequestDestination {
 
+    private String uuid;    // User의 uuid
+
     private String name;    // 주소 별칭
     private String recipient;   // 받는 분
     private String zipCode;     //우편 번호
