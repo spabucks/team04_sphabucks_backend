@@ -1,5 +1,6 @@
 package sphabucks.shipping.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sphabucks.shipping.model.Destination;
@@ -20,9 +21,9 @@ public class DestinationImplement implements IDestinationService {
     private final IUserRepository iUserRepository;
 
     @Override
-    public void addDestination(RequestDestination requestDestination) {
+    public void addDestination(String uuid, RequestDestination requestDestination) {
 
-        User user = iUserRepository.findByUserId(requestDestination.getUuid());   // 유저의 정보
+        User user = iUserRepository.findByUserId(uuid);   // 유저의 정보
 
         // 기본 배송지로 저장을 선택했거나 기존에 등록된 배송지가 없을 경우 기본 배송지 설정은 true 그 외에는 false
         boolean newDefaultDestination =
@@ -40,22 +41,44 @@ public class DestinationImplement implements IDestinationService {
         }
 
         iDestinationRepo.save(Destination.builder()
-                        .user(iUserRepository.findByUserId(requestDestination.getUuid()))
-                        .name(requestDestination.getName())
-                        .recipient(requestDestination.getRecipient())
-                        .zipCode(requestDestination.getZipCode())
-                        .defaultAddress(requestDestination.getDefaultAddress())
-                        .detailAddress(requestDestination.getDetailAddress())
-                        .phoneNum(requestDestination.getPhoneNum())
-                        .phoneNum2(requestDestination.getPhoneNum2())
-                        .content(requestDestination.getContent())
-                        .defaultDestination(newDefaultDestination)
+                .user(user)
+                .name(requestDestination.getName())
+                .recipient(requestDestination.getRecipient())
+                .zipCode(requestDestination.getZipCode())
+                .defaultAddress(requestDestination.getDefaultAddress())
+                .detailAddress(requestDestination.getDetailAddress())
+                .phoneNum(requestDestination.getPhoneNum())
+                .phoneNum2(requestDestination.getPhoneNum2())
+                .content(requestDestination.getContent())
+                .defaultDestination(newDefaultDestination)
                 .build());
     }
 
     @Override
-    public Destination getDestinations(Long id) {
+    public Destination getDestination(Long id) {
         return iDestinationRepo.findById(id).get();
+    }
+
+    @Override
+    @Transactional
+    public void updateDestination(Long id, RequestDestination requestDestination) { // id : 배송지의 고유 id(인덱스번호)
+        Destination destination = iDestinationRepo.findById(id).get();
+
+        if (requestDestination.getDefaultDestination()) {   // 기본 배송지로 저장을 체크했을 경우 기존의 기본 배송지를 false로 변경
+            Destination originalDefaultDestination =
+                    iDestinationRepo.findByUserIdAndDefaultDestinationIsTrue(destination.getUser().getId());
+            originalDefaultDestination.setDefaultDestination(false);
+        }
+
+        destination.setName(requestDestination.getName());
+        destination.setRecipient(requestDestination.getRecipient());
+        destination.setZipCode(requestDestination.getZipCode());
+        destination.setDefaultAddress(requestDestination.getDefaultAddress());
+        destination.setDetailAddress(requestDestination.getDetailAddress());
+        destination.setPhoneNum(requestDestination.getPhoneNum());
+        destination.setPhoneNum2(requestDestination.getPhoneNum2());
+        destination.setContent(requestDestination.getContent());
+        destination.setDefaultDestination(requestDestination.getDefaultDestination());
     }
 
     @Override
