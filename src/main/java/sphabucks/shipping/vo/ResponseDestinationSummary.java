@@ -1,11 +1,13 @@
 package sphabucks.shipping.vo;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class RequestDestination {
-
-    private String uuid;    // User의 uuid
+@Builder
+@Getter
+@Setter
+public class ResponseDestinationSummary {
 
     private String name;    // 주소 별칭
     private String recipient;   // 받는 분
@@ -16,5 +18,4 @@ public class RequestDestination {
     private String phoneNum2;   // 연락처 2
     private String content;     // 배송 메모
 
-    private Boolean defaultDestination; // 기본 배송지로 저장합니다. 체크 유무
 }
