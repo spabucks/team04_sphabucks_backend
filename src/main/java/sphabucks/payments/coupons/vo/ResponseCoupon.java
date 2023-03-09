@@ -16,5 +16,6 @@ public class ResponseCoupon {
     private String name;
     private Date endDate;
     private String content;
+    private String image;
 
 }
