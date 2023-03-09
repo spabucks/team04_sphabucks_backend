@@ -9,12 +9,19 @@ import org.springframework.web.bind.annotation.*;
 public class EmailController {
 
     private final EmailService emailService;
+    private final RedisService redisService;
 
     @PostMapping("/send")
-    public String sendEmail(@RequestParam("email") String email) throws Exception{
-        emailService.sendSimpleMessage(email);
+    public String sendEmail(@RequestBody RequestEmail requestEmail) throws Exception{
 
-        return "전송 완료";
+        return emailService.sendSimpleMessage(requestEmail.getEmail());
     }
+
+    @PostMapping("/check")
+    public Boolean checkEmailCode(@RequestBody RequestEmailCheck requestEmailCheck) throws Exception{
+
+        return emailService.checkEmailCode(requestEmailCheck);
+    }
+
 
 }

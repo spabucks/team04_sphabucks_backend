@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import sphabucks.users.model.User;
+import sphabucks.users.repository.IUserRepository;
 
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -16,12 +18,13 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     public static final String ePw = createKey();
+    private final RedisService redisService;
+    private final IUserRepository iUserRepository;
 
     // 전송 메세지 생성
-    private MimeMessage createMessage(String to) throws Exception{
+    private MimeMessage createMessage(String to, String code) throws Exception{
 
         MimeMessage message = javaMailSender.createMimeMessage();
-        String code = createCode(ePw);
         message.addRecipients(Message.RecipientType.TO, to); // 받는 사람
         message.setSubject("Sphabucks 메일 인증"); // 제목
 
@@ -53,18 +56,43 @@ public class EmailService {
 
     // 인증 코드 만들기
     public String createCode(String ePw) {
-        return ePw.substring(0, 3) + "-" + ePw.substring(3, 6);
+        return ePw.substring(0, 3) + ePw.substring(3, 6);
     }
 
     // 메세지 전송
-    public void sendSimpleMessage(String to) throws Exception{
-        MimeMessage message = createMessage(to);
+    public String sendSimpleMessage(String to) throws Exception{
+        Optional<User> user = iUserRepository.findByEmail(to);
+        if (!user.isEmpty()) {
+            return "이메일 중복";
+        }
+
+        String code = createCode(ePw);
+        MimeMessage message= createMessage(to, code);
+        redisService.createEmailCertification(to, ePw);
+
         try {
             javaMailSender.send(message);
+            return "이메일 전송";
         } catch (MailException e) {
             e.printStackTrace();
             throw new IllegalArgumentException();
         }
     }
+
+    // 이메일 인증 코드 체크
+    public Boolean checkEmailCode(RequestEmailCheck requestEmailCheck){
+
+        if (redisService.hasKey(requestEmailCheck.getEmail())) {
+            String redisCode = redisService.getEmailCertification(requestEmailCheck.getEmail());
+            if (redisCode.equals(requestEmailCheck.getCode())) {
+                redisService.removeEmailCertification(requestEmailCheck.getEmail());
+
+                return true; // 인증 성공
+            }
+        }
+        return false; // 인증 실패
+    }
+
+
 
 }
