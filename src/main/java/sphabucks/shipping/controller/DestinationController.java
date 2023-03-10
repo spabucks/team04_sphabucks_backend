@@ -40,4 +40,9 @@ public class DestinationController {
 
         iDestinationService.updateDestination(id, requestDestination);
     }
+
+    @GetMapping("/delete/{id}")
+    public void deleteDestination(@PathVariable Long id) {
+        iDestinationService.deleteDestination(id);
+    }
 }
