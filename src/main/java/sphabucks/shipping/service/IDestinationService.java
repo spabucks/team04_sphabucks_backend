@@ -20,4 +20,6 @@ public interface IDestinationService {
     // 배송지 정보 업데이트
     void updateDestination(Long id, RequestDestination requestDestination);
 
+    // 배송지 삭제
+    void deleteDestination(Long id);
 }

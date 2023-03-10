@@ -31,7 +31,7 @@ public class DestinationImplement implements IDestinationService {
 
         // 새로운 배송지를 등록하는 경우
         if (newDefaultDestination) {
-            // 기존에 등록되어있던 기본 배송지를 false로 변경해주어야 함
+            // 기존에 등록되어있던 기본 배송지를 false 로 변경해주어야 함
             // 기존에 등록된 배송지가 없는데 수정할 경우 에러발생 >> 등록된 배송지들이 있는 경우에만 수정되도록 if문 작성
             if (iDestinationRepo.existsByUserUserId(user.getUserId())) {
                 Destination originalDefaultDestination =
@@ -56,15 +56,15 @@ public class DestinationImplement implements IDestinationService {
 
     @Override
     public Destination getDestination(Long id) {
-        return iDestinationRepo.findById(id).get();
+        return iDestinationRepo.findById(id).orElseThrow(RuntimeException::new);
     }
 
     @Override
     @Transactional
     public void updateDestination(Long id, RequestDestination requestDestination) { // id : 배송지의 고유 id(인덱스번호)
-        Destination destination = iDestinationRepo.findById(id).get();
+        Destination destination = iDestinationRepo.findById(id).orElseThrow(RuntimeException::new);
 
-        if (requestDestination.getDefaultDestination()) {   // 기본 배송지로 저장을 체크했을 경우 기존의 기본 배송지를 false로 변경
+        if (requestDestination.getDefaultDestination()) {   // 기본 배송지로 저장을 체크했을 경우 기존의 기본 배송지를 false 로 변경
             Destination originalDefaultDestination =
                     iDestinationRepo.findByUserIdAndDefaultDestinationIsTrue(destination.getUser().getId());
             originalDefaultDestination.setDefaultDestination(false);
@@ -79,6 +79,13 @@ public class DestinationImplement implements IDestinationService {
         destination.setPhoneNum2(requestDestination.getPhoneNum2());
         destination.setContent(requestDestination.getContent());
         destination.setDefaultDestination(requestDestination.getDefaultDestination());
+    }
+
+    @Override
+    public void deleteDestination(Long id) {
+        // 어차피 기본 배송지는 삭제가 불가능하므로 삭제하려는 배송지는 바로 삭제되어도 무관함
+        // 기본 배송지는 삭제 버튼이 표시 되지 않으므로 기본배송지가 삭제되는 경우는 발생하지 않음
+        iDestinationRepo.deleteById(id);
     }
 
     @Override
