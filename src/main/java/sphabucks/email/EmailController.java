@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 public class EmailController {
 
     private final EmailService emailService;
-    private final RedisService redisService;
 
     @PostMapping("/send")
     public String sendEmail(@RequestBody RequestEmail requestEmail) throws Exception{
