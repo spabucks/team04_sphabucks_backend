@@ -82,6 +82,13 @@ public class DestinationImplement implements IDestinationService {
     }
 
     @Override
+    public void deleteDestination(Long id) {
+        // 어차피 기본 배송지는 삭제가 불가능하므로 삭제하려는 배송지는 바로 삭제되어도 무관함
+        // 기본 배송지는 삭제 버튼이 표시 되지 않으므로 기본배송지가 삭제되는 경우는 발생하지 않음
+        iDestinationRepo.deleteById(id);
+    }
+
+    @Override
     public List<ResponseDestinationSummary> getDestinationsByUUID(String uuid) {
         List<ResponseDestinationSummary> return_value = new ArrayList<>();  // 최종 반환될 리스트
         User user = iUserRepository.findByUserId(uuid); // 조회할 유저
