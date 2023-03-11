@@ -50,9 +50,8 @@ public class CartServiceImpl implements ICartService{
     @Override
     public List<ResponseCart> getCart(String userId) {  // userId : user.uuid
 
-        User user = iUserRepository.findByUserId(userId);   // 장바구니를 조회한 user
-
-        List<Cart> cartList = iCartRepo.findAllByUserId(user.getId());
+        // 고객의 장바구니 속 isDelete = false 인 제품들만 가져옴
+        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
 
         List<ResponseCartSummary> cartProductFreeze = new ArrayList<>();    // 냉동 상품(케이크) 상품 정보를 담을 리스트
         List<ResponseCartSummary> cartProductGeneral = new ArrayList<>();    // 일반 상품 정보를 담을 리스트
@@ -106,7 +105,7 @@ public class CartServiceImpl implements ICartService{
     @Override
     @Transactional
     public void deleteCart(RequestCart requestCart) {
-        List<Cart> cartlist = iCartRepo.findAllByUserUserId(requestCart.getUserId());
+        List<Cart> cartlist = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(requestCart.getUserId());
         Cart cart = null;
         for(int i=0;i<cartlist.size();i++){
             if(cartlist.get(i).getProduct().getId().equals(requestCart.getProductId())){
@@ -121,7 +120,7 @@ public class CartServiceImpl implements ICartService{
     @Override
     @Transactional
     public void deleteAll(RequestCart requestCart) {
-        List<Cart> cartList = iCartRepo.findAllByUserUserId(requestCart.getUserId());
+        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(requestCart.getUserId());
         for(Cart cart:cartList){
             cart.setIsDelete(true);
         }
