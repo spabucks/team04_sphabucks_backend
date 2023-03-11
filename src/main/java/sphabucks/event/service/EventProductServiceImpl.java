@@ -6,6 +6,7 @@ import sphabucks.event.model.Event;
 import sphabucks.event.model.EventProductList;
 import sphabucks.event.repository.IEventProductListRepository;
 import sphabucks.event.repository.IEventRepository;
+import sphabucks.event.vo.RequestEventProductList;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
 import sphabucks.products.model.ProductCategoryList;
@@ -54,5 +55,20 @@ public class EventProductServiceImpl implements IEventProductService{
                     .build());
         });
         return responseProductLists;
+    }
+
+    @Override
+    public EventProductList addEventProductList(RequestEventProductList requestEventProductList) {
+
+        EventProductList eventProductList = EventProductList.builder()
+                .product(iProductRepository.findById(requestEventProductList.getProductId()).get())
+                .event(iEventRepository.findById(requestEventProductList.getEventId()).get())
+                .build();
+
+        return iEventProductListRepository.save(eventProductList);
+    }
+    @Override
+    public EventProductList getEventProductList(Long id) {
+        return iEventProductListRepository.findById(id).get();
     }
 }
