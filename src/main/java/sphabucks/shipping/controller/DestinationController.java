@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/shipping")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class DestinationController {
     private final IDestinationService iDestinationService;
 

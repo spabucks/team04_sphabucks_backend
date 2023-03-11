@@ -10,6 +10,7 @@ import sphabucks.payments.cards.vo.ResponseCard;
 @RestController
 @RequestMapping("/api/v1/card")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class CardController {
     private final ICardService iCardService;
 

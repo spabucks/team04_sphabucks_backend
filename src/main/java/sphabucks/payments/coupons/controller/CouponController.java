@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/coupon")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class CouponController {
 
     private final ICouponService iCouponService;

@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/userwishlist")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class UserWishlistController {
 
     private final IUserWishlistService iUserWishlistService;

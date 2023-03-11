@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/card-list")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class CardListController {
 
     private final ICardListService iCardListService;
