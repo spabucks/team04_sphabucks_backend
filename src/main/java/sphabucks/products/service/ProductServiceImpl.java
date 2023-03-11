@@ -1,6 +1,7 @@
 package sphabucks.products.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.event.model.Event;
@@ -11,17 +12,15 @@ import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.productimage.service.IProductImageService;
 import sphabucks.products.model.Product;
 import sphabucks.products.model.ProductCategoryList;
-import sphabucks.products.repository.IBigCategoryRepository;
 import sphabucks.products.repository.IProductCategoryListRepository;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.products.vo.*;
 import sphabucks.tag.repository.IProductTagRepository;
-import sphabucks.users.service.IUserService;
 
-import java.sql.Array;
 import java.util.*;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class ProductServiceImpl implements IProductService{
 
@@ -135,13 +134,12 @@ public class ProductServiceImpl implements IProductService{
         size.add("Tall");
         size.add("Grande");
         size.add("Venti");
-        for (int i = 0; i < size.size(); i++) {
+        for (String item : size) {
             ResponseMenu responseMenu4 = ResponseMenu.builder()
-                    .name(size.get(i))
+                    .name(item)
                     .build();
             responseMenu_size.add(responseMenu4);
         }
-
 
         List<ResponseMenu> responseMenu_price = new ArrayList<>();
         List<String> price = new ArrayList<>();
@@ -151,60 +149,75 @@ public class ProductServiceImpl implements IProductService{
         price.add("3만원대");
         price.add("4만원대");
         price.add("5만원이상");
-        for (int i = 0; i < price.size(); i++) {
+        for (String item : price) {
             ResponseMenu responseMenu5 = ResponseMenu.builder()
-                    .name(price.get(i))
+                    .name(item)
                     .build();
             responseMenu_price.add(responseMenu5);
         }
 
-        List<ResponseMenu> responseMenu_bigCategory = new ArrayList<>();
-        List<ResponseMenu> responseMenu_smallCategory = new ArrayList<>();
+        List<Map<String, String>> responseMenu_bigCategory = new ArrayList<>();
+        Map<String, String>  Map = new HashMap<>();
+        Map.put("index", "0");
+        Map.put("name", "전체");
+        responseMenu_bigCategory.add(Map);
+        List<Map<String, String>> responseMenu_smallCategory = new ArrayList<>();
+
 
         for (int i = 0; i < responseSearchProductList.size(); i++) {
-            ResponseMenu responseMenu1 = ResponseMenu.builder()
-                    .name(responseSearchProductList.get(i).getBigCategory())
-                    .build();
-            responseMenu_bigCategory.add(responseMenu1);
+            Map<String, String> tmpMap = new HashMap<>();
+            tmpMap.put("index", Long.toString(
+                    iProductCategoryListRepository.findAllByProductId(responseSearchProductList.get(i).getProductId()).get(0).getBigCategory().getId()
+            ));
+            tmpMap.put("name", responseSearchProductList.get(i).getBigCategory());
+            responseMenu_bigCategory.add(tmpMap);
 
-            ResponseMenu responseMenu2 = ResponseMenu.builder()
-                    .name(responseSearchProductList.get(i).getSmallCategory())
-                    .build();
-            responseMenu_smallCategory.add(responseMenu2);
+            Map<String, String> tmpMap2 = new HashMap<>();
+            tmpMap2.put("bigCategory", responseSearchProductList.get(i).getBigCategory());
+            tmpMap2.put("name", responseSearchProductList.get(i).getSmallCategory());
+
+            responseMenu_smallCategory.add(tmpMap2);
         }
 
-        HashSet tmpSet1 = new HashSet(responseMenu_bigCategory);
-        List tmpList1 = new ArrayList<>(tmpSet1);
-        responseMenu_bigCategory = tmpList1;
+        HashSet<Map<String, String>> tmpSet1 = new HashSet<>(responseMenu_bigCategory);
+        responseMenu_bigCategory = new ArrayList<>(tmpSet1);
+        responseMenu_bigCategory.sort((o1, o2) -> Integer.parseInt(o1.get("index")) - Integer.parseInt(o2.get("index")));
 
-        HashSet tmpSet2 = new HashSet(responseMenu_smallCategory);
-        List tmpList2 = new ArrayList<>(tmpSet2);
-        responseMenu_smallCategory = tmpList2;
+        HashSet<Map<String, String>> tmpSet2 = new HashSet<>(responseMenu_smallCategory);
+        responseMenu_smallCategory = new ArrayList<>(tmpSet2);
 
 
         List<ResponseMenu> responseMenu_season = new ArrayList<>();
         List<Event> eventList = iEventRepository.findAll();
-        for (int i = 0; i < eventList.size(); i++) {
-            if (!eventList.get(i).getSeason().equals("일반")) {
+        for (Event event : eventList) {
+            if (!event.getSeason().equals("일반")) {
                 ResponseMenu responseMenu3 = ResponseMenu.builder()
-                        .name(eventList.get(i).getSeason())
+                        .name(event.getSeason())
                         .build();
                 responseMenu_season.add(responseMenu3);
             }
         }
 
+        for (Map<String, String> map : responseMenu_bigCategory) {
+            int num = 0;
+            if (!map.get("name").equals("전체")) {
+                for (ResponseSearchProduct item : responseSearchProductList) {
+                    if (item.getBigCategory().equals(map.get("name"))) {
+                        num++;
+                    }
+                }
+                map.put("name", map.get("name")+"("+num+")") ;
+            }
 
-        ResponseSearchMenu responseSearchMenu = ResponseSearchMenu.builder()
+        }
+
+        return ResponseSearchMenu.builder()
                 .bigCategory(responseMenu_bigCategory)
                 .size(responseMenu_size)
                 .price(responseMenu_price)
                 .smallCategory(responseMenu_smallCategory)
                 .season(responseMenu_season)
                 .build();
-
-
-
-        return responseSearchMenu;
     }
 
 
