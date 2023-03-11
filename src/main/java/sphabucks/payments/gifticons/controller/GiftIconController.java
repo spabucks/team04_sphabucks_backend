@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api/v1/gift-icon")
 @RequiredArgsConstructor
 @Tag(name = "결제 수단")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class GiftIconController {
     private final IGiftIconService iGiftIconService;
     private final IGiftIconListService iGiftIconListService;

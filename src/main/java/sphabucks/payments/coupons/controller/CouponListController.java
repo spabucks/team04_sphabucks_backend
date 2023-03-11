@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/v1/coupon-list")
 @RequiredArgsConstructor
 @Tag(name = "결제 수단")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class CouponListController {
     private final ICouponListService iCouponListService;
 

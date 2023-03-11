@@ -15,6 +15,7 @@ import sphabucks.users.vo.RequestUser;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Tag(name = "회원 인증", description = "회원가입, 로그인, 로그아웃 등")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

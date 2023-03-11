@@ -12,6 +12,7 @@ import sphabucks.purchaseHistory.vo.RequestPurchaseHistory;
 @RestController
 @RequestMapping("/api/v1/purchaseHistory")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 @Slf4j
 @Tag(name = "구매 내역")
 public class PurchaseHistoryController {

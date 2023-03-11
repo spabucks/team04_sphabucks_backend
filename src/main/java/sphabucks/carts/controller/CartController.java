@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/cart")
 @Tag(name = "장바구니(카트)")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class CartController {
 
     private final ICartService iCartService;

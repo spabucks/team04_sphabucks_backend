@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api/v1/userwishlist")
 @RequiredArgsConstructor
 @Tag(name = "위시리스트", description = "온라인 스토어에는 없는기능 > 직접 구현해야함")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class UserWishlistController {
 
     private final IUserWishlistService iUserWishlistService;

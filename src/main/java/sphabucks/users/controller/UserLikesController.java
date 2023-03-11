@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/v1/user-likes")
 @RequiredArgsConstructor
 @Tag(name = "좋아요 기능")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class UserLikesController {
 
     private final IUserLikesService iUserLikesService;

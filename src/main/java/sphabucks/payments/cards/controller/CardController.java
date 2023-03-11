@@ -13,6 +13,7 @@ import sphabucks.payments.cards.vo.ResponseCard;
 @RequestMapping("/api/v1/card")
 @RequiredArgsConstructor
 @Tag(name = "결제 수단")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class CardController {
     private final ICardService iCardService;
 

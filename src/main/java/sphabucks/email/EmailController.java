@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/email")
 @Tag(name = "회원 인증", description = "회원가입, 로그인, 로그아웃 등")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class EmailController {
 
     private final EmailService emailService;

@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/v1/productImage")
 @RequiredArgsConstructor
 @Tag(name = "상품")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class ProductImageController {
     private final IProductImageService iProductImageService;
 

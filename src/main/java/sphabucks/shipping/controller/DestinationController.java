@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/v1/shipping")
 @RequiredArgsConstructor
 @Tag(name = "배송지")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class DestinationController {
     private final IDestinationService iDestinationService;
 
