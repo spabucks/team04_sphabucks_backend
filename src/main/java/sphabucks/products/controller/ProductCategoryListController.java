@@ -1,13 +1,12 @@
 package sphabucks.products.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.products.model.ProductCategoryList;
-import sphabucks.products.repository.IProductRepository;
 import sphabucks.products.service.IProductCategoryListService;
 import sphabucks.products.vo.RequestProductCategoryList;
-import sphabucks.products.vo.ResponseOtherProducts;
+import sphabucks.products.vo.ResponseProductList;
+import sphabucks.products.vo.ResponseProductSummary;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class ProductCategoryListController {
     }
 
     @GetMapping("/get-others/{id}")
-    public List<ResponseOtherProducts> getOtherProducts(@PathVariable Long id) {
+    public List<ResponseProductList> getOtherProducts(@PathVariable Long id) {
         return iProductCategoryListService.getOtherProductByProductId(id);
     }
 }

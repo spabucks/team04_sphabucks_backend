@@ -13,4 +13,5 @@ public interface IProductCategoryListRepository extends JpaRepository<ProductCat
 
     // 소분류 카테고리별 조회
     List<ProductCategoryList> findAllBySmallCategoryId(Integer sCategoryId);
+
 }

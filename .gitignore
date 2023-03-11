@@ -238,3 +238,5 @@ out/
 .vscode/
 
 build/tmp/compileJava/previous-compilation-data.bin
+
+*.properties

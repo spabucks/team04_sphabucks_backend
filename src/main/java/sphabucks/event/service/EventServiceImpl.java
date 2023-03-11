@@ -12,9 +12,10 @@ import sphabucks.event.repository.IEventRepository;
 import sphabucks.event.vo.*;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.repository.IProductRepository;
+import sphabucks.products.vo.ResponseProductList;
+import sphabucks.products.vo.ResponseProductSummary;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,11 @@ public class EventServiceImpl implements IEventService {
     @Override
     public Event getEvent(Long id) {
         return iEventRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Event> getEventAll() {
+        return iEventRepository.findAll();
     }
 
 
@@ -74,35 +80,31 @@ public class EventServiceImpl implements IEventService {
     }
 
     @Override
-    public List<ResponseEventProduct> recommendMD() {
-        List<ResponseEventProduct> responseEventProductList = new ArrayList<>();    // 최종 결과로 보내지는 리스트
-
-        List<Event> recommendEvents = iEventRepository.findAllByIsRecommendIsTrue();    // 추천MD에 해당하는 이벤트 리스트
-        recommendEvents.forEach( event -> {
-            Long eventId = event.getId();
-            List<EventProductList> eventProductLists = iEventProductListRepository.findAllByEvent_Id(eventId);  // 이벤트Id로 연관된 상품을 모두 가져옴
-            List<ResponseRecommendMD> responseRecommendMDList = new ArrayList<>();  // 이벤트에 해당하는 상품 정보의 일부가 담길 리스트
-            eventProductLists.forEach( eventProductList -> {    // 이벤트와 연결된 모든 상품에 대해서
-                Long productId = eventProductList.getProduct().getId();
-                responseRecommendMDList.add(ResponseRecommendMD.builder()
-                        .id(productId)   // 해당 상품의 id
-                        .title(eventProductList.getProduct().getName())   // 해당 상품의 이름
-                        .imgUrl(iProductImageRepo.findAllByProductId(productId).get(0).getImage())    // 해당 상품의 썸네일(대표사진)
-                        .price(eventProductList.getProduct().getPrice()) // 해당 상품의 가격
-                        .isNew(eventProductList.getProduct().getIsNew())    // 신상품 여부
-                        .build());
-            });
-            responseEventProductList.add(ResponseEventProduct.builder() // 하나의 이벤트에 대한 내용과 상품들이 모두 담길 response
-                    .id(eventId)
-                    .name(iEventRepository.findById(eventId).get().getSeason())
-                    .data(responseRecommendMDList)
-                    .build());
-        });
-        return responseEventProductList;
+    public List<Event> getRecommendEvent() {
+        return iEventRepository.findAllByIsRecommendIsTrue();
     }
 
     @Override
-    public List<Event> getRecommendEvent() {
-        return iEventRepository.findAllByIsRecommendIsTrue();
+    public List<ResponseEventBanner> getEventBanner() {
+        List<EventImage> eventImages = iEventImageRepository.findAll();
+        Collections.sort(eventImages, (o1, o2) -> (int) (o2.getEvent().getId() - o1.getEvent().getId()));
+
+        List<ResponseEventBanner> eventList = new ArrayList<>();
+
+        eventImages.forEach(eventImage -> {
+            if (eventImage.getEvent().getId() != 1) {
+                if (eventImage.getEvent().getIsRecommend() == false) {
+                    ResponseEventBanner responseEventBanner = ResponseEventBanner.builder()
+                            .eventId(eventImage.getEvent().getId())
+                            .name(eventImage.getEvent().getSeason())
+                            .imageUrl(eventImage.getImage())
+                            .build();
+
+                    eventList.add(responseEventBanner);
+                }
+            }
+        });
+
+        return eventList;
     }
 }

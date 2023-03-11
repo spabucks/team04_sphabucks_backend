@@ -6,9 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
+@Getter
 public class ExhibitionProductImage {
-    private Long productId;
     private String image;
-    private String alt;
-    private Integer chk;
 }

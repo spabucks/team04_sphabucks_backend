@@ -27,6 +27,16 @@ public class UserController {
         return iUserService.getUser(id);
     }
 
+    @GetMapping("/get/email/{email}")
+    public ResponseUser getUserByEmail(@RequestParam String email) {
+        return iUserService.getUserByEmail(email);
+    }
+
+    @GetMapping("/get/loginId/{loginId}")
+    public ResponseUser getUserByLoginId(@RequestParam String loginId) {
+        return iUserService.getUserByLoginId(loginId);
+    }
+
     @GetMapping("get/all")
     public List<User> getAll(){
         return iUserService.getAll();
