@@ -10,9 +10,9 @@ public interface ICartService {
     void addCart(RequestCart requestCart);
     List<ResponseCart> getCart(String userId);  // uuid 를 입력받음
 
-    Cart updateCart(RequestCart requestCart);
+    void updateCart(RequestCart requestCart);
 
-    void deleteCart(RequestCart requestCart);
-    void deleteAll(RequestCart requestCart);
+    void deleteCart(Long id);
+    void deleteAll(String userId);
 
 }

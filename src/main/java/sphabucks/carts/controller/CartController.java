@@ -28,18 +28,18 @@ public class CartController {
         return iCartService.getCart(userId);
     }
 
-    @GetMapping("/update")
-    Cart updateCart(@RequestBody RequestCart requestCart){
-        return iCartService.updateCart(requestCart);
+    @PostMapping("/update")
+    void updateCart(@RequestBody RequestCart requestCart){
+        iCartService.updateCart(requestCart);
     }
 
-    @GetMapping("/delete")
-    void deleteCart(@RequestBody RequestCart requestCart){
-        iCartService.deleteCart(requestCart);
+    @GetMapping("/delete/{cartId}")
+    void deleteCart(@PathVariable Long cartId){
+        iCartService.deleteCart(cartId);
     }
 
-    @GetMapping("/delete/all")
-    void deleteAll(@RequestBody RequestCart requestCart){
-        iCartService.deleteAll(requestCart);
+    @PostMapping("/delete/all")
+    void deleteAll(@RequestBody String userId){
+        iCartService.deleteAll(userId);
     }
 }

@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class ResponseCartSummary {
 
+    private Long id;    // 장바구니 id
+
     private Long productId;
     private String productName;
     private String imgUrl;

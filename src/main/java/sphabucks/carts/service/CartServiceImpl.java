@@ -66,6 +66,7 @@ public class CartServiceImpl implements ICartService{
             Long bigCategoryId = cart.getCategoryId();    // 카드에 담긴 상품의 대분류 카테고리 Id
             if (bigCategoryId == 1) {   // 현재 케이크가 id 1번
                 cartProductFreeze.add(ResponseCartSummary.builder()
+                                .id(cart.getId())
                                 .productId(cart.getProduct().getId())
                                 .productName(cart.getProduct().getName())
                                 .imgUrl(iProductImageRepo.findAllByProductIdAndChk(cart.getProduct().getId(), 1).get(0).getImage())
@@ -74,6 +75,7 @@ public class CartServiceImpl implements ICartService{
                         .build());
             } else {
                 cartProductGeneral.add(ResponseCartSummary.builder()
+                        .id(cart.getId())
                         .productId(cart.getProduct().getId())
                         .productName(cart.getProduct().getName())
                         .imgUrl(iProductImageRepo.findAllByProductIdAndChk(cart.getProduct().getId(), 1).get(0).getImage())
@@ -100,32 +102,26 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public Cart updateCart(RequestCart requestCart) {
+    public void updateCart(RequestCart requestCart) {
         Cart cart = iCartRepo.findByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId());
         cart.setAmount(requestCart.getAmount());
-        return cart;
     }
 
     @Override
     @Transactional
-    public void deleteCart(RequestCart requestCart) {
-        List<Cart> cartlist = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(requestCart.getUserId());
-        Cart cart = null;
-        for(int i=0;i<cartlist.size();i++){
-            if(cartlist.get(i).getProduct().getId().equals(requestCart.getProductId())){
-                cart = cartlist.get(i);
-            }
-        }
-        if (cart != null) {
-            cart.setIsDelete(true);
-        }
+    public void deleteCart(Long id) {
+        Cart cart = iCartRepo.findById(id).get();
+        cart.setAmount(0);
+        cart.setIsDelete(true);
     }
 
     @Override
     @Transactional
-    public void deleteAll(RequestCart requestCart) {
-        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(requestCart.getUserId());
+    public void deleteAll(String userId) {
+        // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
+        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId).getId());
         for(Cart cart:cartList){
+            cart.setAmount(0);
             cart.setIsDelete(true);
         }
     }
