@@ -39,6 +39,7 @@ public class UserServiceImplement implements IUserService{
                 .nickname(user.getNickname())
                 .name(user.getName())
                 .email(user.getEmail())
+                .userId(user.getUserId())
                 .build();
 
         return responseUser;
