@@ -9,6 +9,7 @@ import sphabucks.carts.vo.RequestCart;
 import sphabucks.carts.vo.ResponseCart;
 import sphabucks.carts.vo.ResponseCartSummary;
 import sphabucks.productimage.repository.IProductImageRepo;
+import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductCategoryListRepository;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.users.model.User;
@@ -27,24 +28,29 @@ public class CartServiceImpl implements ICartService{
     private final IProductImageRepo iProductImageRepo;
 
     @Override
+    @Transactional
     public void addCart(RequestCart requestCart) {
-        if(!iCartRepo.existsByProductId(requestCart.getProductId())){
+
+        // 해당 상품이 고객의 장바구니에 담겼던 이력이 있는지 없는지
+        if (iCartRepo.existsByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId())) {    // 장바구니에 저장되었던 이력이 있다면
+            // 해당하는 이력을 조회
+            Cart cart = iCartRepo.findByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId());
+            // 기존에 있던 개수 + 새로 담는 개수를 저장함
+            cart.setAmount(cart.getAmount() + requestCart.getAmount());
+            // 상품이 장바구니에 추가되었으므로 isDelete = false
+            cart.setIsDelete(false);
+        } else { // 한 번도 장바구니에 추가되었던 이력이 없는 제품이라면
+            Product product = iProductRepository.findById(requestCart.getProductId()).get();
             iCartRepo.save(Cart.builder()
-                    .product(iProductRepository.findById(requestCart.getProductId()).get())
+                    .product(product)
                     .user(iUserRepository.findByUserId(requestCart.getUserId()))
-                    .categoryId(iProductCategoryListRepository.findAllByProductId(requestCart.getProductId()).get(0).getBigCategory().getId())
+                    .categoryId(iProductCategoryListRepository.findByProductId(requestCart.getProductId()).getBigCategory().getId())
                     .amount(requestCart.getAmount())
-                    .price(iProductRepository.findById(requestCart.getProductId()).get().getPrice())
-                    .name(iProductRepository.findById(requestCart.getProductId()).get().getName())
+                    .price(product.getPrice())
+                    .name(product.getName())
                     .isDelete(false)
                     .build());
-        }else{
-            Cart cart = iCartRepo.findAllByProductId(requestCart.getProductId()).get(0);
-            cart.setAmount(cart.getAmount() + requestCart.getAmount());
-            cart.setIsDelete(false);
-            iCartRepo.save(cart);
         }
-
     }
 
     @Override
@@ -93,12 +99,10 @@ public class CartServiceImpl implements ICartService{
     }
 
     @Override
+    @Transactional
     public Cart updateCart(RequestCart requestCart) {
-        Long userIdx = iUserRepository.findByUserId(requestCart.getUserId()).getId();
-        Cart cart = iCartRepo.findAllByProductIdAndUserId(requestCart.getProductId(), userIdx).get(0);
+        Cart cart = iCartRepo.findByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId());
         cart.setAmount(requestCart.getAmount());
-        iCartRepo.save(cart);
-
         return cart;
     }
 

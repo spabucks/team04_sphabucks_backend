@@ -33,5 +33,4 @@ public class Cart {
     @ManyToOne
     private Product product;
 
-
 }
