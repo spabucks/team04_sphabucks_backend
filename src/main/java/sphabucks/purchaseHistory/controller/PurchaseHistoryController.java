@@ -10,6 +10,7 @@ import sphabucks.purchaseHistory.vo.RequestPurchaseHistory;
 @RestController
 @RequestMapping("/api/v1/purchaseHistory")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 @Slf4j
 public class PurchaseHistoryController {
 

@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/gift-icon")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class GiftIconController {
     private final IGiftIconService iGiftIconService;
     private final IGiftIconListService iGiftIconListService;
