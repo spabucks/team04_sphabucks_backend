@@ -34,7 +34,7 @@ public class CartServiceImpl implements ICartService{
         if(!iCartRepo.existsByProductId(requestCart.getProductId())){
             iCartRepo.save(Cart.builder()
                     .product(iProductRepository.findById(requestCart.getProductId()).get())
-                    .user(iUserRepository.findById(requestCart.getUserId()).get())
+                    .user(iUserRepository.findByUserId(requestCart.getUserId()))
                     .categoryId(iProductCategoryListRepository.findAllByProductId(requestCart.getProductId()).get(0).getBigCategory().getId())
                     .amount(requestCart.getAmount())
                     .price(iProductRepository.findById(requestCart.getProductId()).get().getPrice())
@@ -51,12 +51,13 @@ public class CartServiceImpl implements ICartService{
     }
 
     @Override
-    public List<Cart> getCart(Long userId) {
-        // userId 를 통해 카드에 들어잇는 상품들의 리스트를 받아온다.
-        List<Cart> cartList = iCartRepo.findAllByUserId(userId);
+    public List<Cart> getCart(String userId) {
+
+        // uuid 를 통해 찾은 userId 를 통해 카트에 들어잇는 상품들을 리스트로 받아온다.
+        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId).getId());
 
         // List 화 해서 가져와야한다.
-        List<ResponseCart> responseCartList = new ArrayList<>();
+        List<ResponseCart> responseCartList = new ArrayList<>(2);
 
         // 카테고리가 케이크인지 아닌지
         // product 별로 개수 출력
@@ -66,7 +67,8 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     public Cart updateCart(RequestCart requestCart) {
-        Cart cart = iCartRepo.findAllByProductIdAndUserId(requestCart.getProductId(), requestCart.getUserId()).get(0);
+        Long userIdx = iUserRepository.findByUserId(requestCart.getUserId()).getId();
+        Cart cart = iCartRepo.findAllByProductIdAndUserId(requestCart.getProductId(), userIdx).get(0);
         cart.setAmount(requestCart.getAmount());
         iCartRepo.save(cart);
 
@@ -76,7 +78,7 @@ public class CartServiceImpl implements ICartService{
     @Override
     @Transactional
     public void deleteCart(RequestCart requestCart) {
-        List<Cart> cartlist = iCartRepo.findAllByUserId(requestCart.getUserId());
+        List<Cart> cartlist = iCartRepo.findAllByUserUserId(requestCart.getUserId());
         Cart cart = null;
         for(int i=0;i<cartlist.size();i++){
             if(cartlist.get(i).getProduct().getId().equals(requestCart.getProductId())){
@@ -91,7 +93,7 @@ public class CartServiceImpl implements ICartService{
     @Override
     @Transactional
     public void deleteAll(RequestCart requestCart) {
-        List<Cart> cartList = iCartRepo.findAllByUserId(requestCart.getUserId());
+        List<Cart> cartList = iCartRepo.findAllByUserUserId(requestCart.getUserId());
         for(Cart cart:cartList){
             cart.setIsDelete(true);
         }

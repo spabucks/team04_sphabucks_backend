@@ -13,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 public class ResponseCart {
-    private Long categoryId;
+    private Long categoryId;    // 냉동(케이크), 일반(그 외)
     private List<Cart> cartList;
 }
