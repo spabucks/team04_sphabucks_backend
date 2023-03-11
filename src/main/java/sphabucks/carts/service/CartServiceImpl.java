@@ -2,17 +2,13 @@ package sphabucks.carts.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.repository.ICartRepo;
 import sphabucks.carts.vo.RequestCart;
 import sphabucks.carts.vo.ResponseCart;
-import sphabucks.carts.vo.ResponseCategoryList;
-import sphabucks.payments.cards.vo.ResponseCard;
-import sphabucks.products.model.Product;
+import sphabucks.carts.vo.ResponseCartSummary;
+import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.repository.IProductCategoryListRepository;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.users.model.User;
@@ -28,6 +24,7 @@ public class CartServiceImpl implements ICartService{
     private final IUserRepository iUserRepository;
     private final IProductRepository iProductRepository;
     private final IProductCategoryListRepository iProductCategoryListRepository;
+    private final IProductImageRepo iProductImageRepo;
 
     @Override
     public void addCart(RequestCart requestCart) {
@@ -51,18 +48,49 @@ public class CartServiceImpl implements ICartService{
     }
 
     @Override
-    public List<Cart> getCart(String userId) {
+    public List<ResponseCart> getCart(String userId) {  // userId : user.uuid
 
-        // uuid 를 통해 찾은 userId 를 통해 카트에 들어잇는 상품들을 리스트로 받아온다.
-        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId).getId());
+        User user = iUserRepository.findByUserId(userId);   // 장바구니를 조회한 user
 
-        // List 화 해서 가져와야한다.
-        List<ResponseCart> responseCartList = new ArrayList<>(2);
+        List<Cart> cartList = iCartRepo.findAllByUserId(user.getId());
 
-        // 카테고리가 케이크인지 아닌지
-        // product 별로 개수 출력
-        // isDelete가 true가 아닌 것들만 출력
-        return cartList;
+        List<ResponseCartSummary> cartProductFreeze = new ArrayList<>();    // 냉동 상품(케이크) 상품 정보를 담을 리스트
+        List<ResponseCartSummary> cartProductGeneral = new ArrayList<>();    // 일반 상품 정보를 담을 리스트
+
+        cartList.forEach(cart -> {
+            Long bigCategoryId = cart.getCategoryId();    // 카드에 담긴 상품의 대분류 카테고리 Id
+            if (bigCategoryId == 1) {   // 현재 케이크가 id 1번
+                cartProductFreeze.add(ResponseCartSummary.builder()
+                                .productId(cart.getProduct().getId())
+                                .productName(cart.getProduct().getName())
+                                .imgUrl(iProductImageRepo.findAllByProductIdAndChk(cart.getProduct().getId(), 1).get(0).getImage())
+                                .price(cart.getPrice())
+                                .count(cart.getAmount())
+                        .build());
+            } else {
+                cartProductGeneral.add(ResponseCartSummary.builder()
+                        .productId(cart.getProduct().getId())
+                        .productName(cart.getProduct().getName())
+                        .imgUrl(iProductImageRepo.findAllByProductIdAndChk(cart.getProduct().getId(), 1).get(0).getImage())
+                        .price(cart.getPrice())
+                        .count(cart.getAmount())
+                        .build());
+            }
+        });
+
+        List<ResponseCart> responseCartList = new ArrayList<>();
+
+        responseCartList.add(ResponseCart.builder()
+                .categoryName("cartProductFreeze")
+                .responseCartSummaryList(cartProductFreeze)
+                .build());
+
+        responseCartList.add(ResponseCart.builder()
+                .categoryName("cartProductGeneral")
+                .responseCartSummaryList(cartProductGeneral)
+                .build());
+
+        return responseCartList;
     }
 
     @Override
@@ -98,6 +126,4 @@ public class CartServiceImpl implements ICartService{
             cart.setIsDelete(true);
         }
     }
-
-
 }

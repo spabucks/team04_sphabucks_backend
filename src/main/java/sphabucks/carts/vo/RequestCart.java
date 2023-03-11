@@ -6,5 +6,5 @@ import lombok.Getter;
 public class RequestCart {
     private String userId;  // UUID
     private Long productId;
-    private Long amount;
+    private Integer amount;
 }

@@ -6,12 +6,14 @@ import org.springframework.web.bind.annotation.*;
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.service.ICartService;
 import sphabucks.carts.vo.RequestCart;
+import sphabucks.carts.vo.ResponseCart;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/cart")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class CartController {
 
     private final ICartService iCartService;
@@ -22,7 +24,7 @@ public class CartController {
     }
 
     @GetMapping("/get/{userId}")
-    List<Cart> getCart(@PathVariable String userId){
+    List<ResponseCart> getCart(@PathVariable String userId){
         return iCartService.getCart(userId);
     }
 

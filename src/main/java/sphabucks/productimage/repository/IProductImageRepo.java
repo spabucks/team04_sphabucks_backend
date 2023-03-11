@@ -14,4 +14,5 @@ public interface IProductImageRepo extends JpaRepository<ProductImage, Long> {
     List<ProductImage> findAllByProductIdAndChk(Long productId, Integer chk);
     ProductImage findByProductId(Long productId);
 //    List<ProductImage> findAllByOrderByChk(Long productId); // product image 구분
+
 }
