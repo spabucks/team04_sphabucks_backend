@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class RequestCart {
-    private Long userId;
+    private String userId;
     private Long productId;
     private Long amount;
 }

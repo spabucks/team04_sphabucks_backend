@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ICartService {
     void addCart(RequestCart requestCart);
-    List<Cart> getCart(Long userId);
+    List<Cart> getCart(String userId);
 
     Cart updateCart(RequestCart requestCart);
 

@@ -34,7 +34,7 @@ public class CartServiceImpl implements ICartService{
         if(!iCartRepo.existsByProductId(requestCart.getProductId())){
             iCartRepo.save(Cart.builder()
                     .product(iProductRepository.findById(requestCart.getProductId()).get())
-                    .user(iUserRepository.findById(requestCart.getUserId()).get())
+                    .user(iUserRepository.findByUserId(requestCart.getUserId()))
                     .categoryId(iProductCategoryListRepository.findAllByProductId(requestCart.getProductId()).get(0).getBigCategory().getId())
                     .amount(requestCart.getAmount())
                     .price(iProductRepository.findById(requestCart.getProductId()).get().getPrice())
@@ -51,9 +51,9 @@ public class CartServiceImpl implements ICartService{
     }
 
     @Override
-    public List<Cart> getCart(Long userId) {
+    public List<Cart> getCart(String userId) {
         // userId 를 통해 카드에 들어잇는 상품들의 리스트를 받아온다.
-        List<Cart> cartList = iCartRepo.findAllByUserId(userId);
+        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId).getId());
 
         // List 화 해서 가져와야한다.
         List<ResponseCart> responseCartList = new ArrayList<>();
@@ -76,7 +76,7 @@ public class CartServiceImpl implements ICartService{
     @Override
     @Transactional
     public void deleteCart(RequestCart requestCart) {
-        List<Cart> cartlist = iCartRepo.findAllByUserId(requestCart.getUserId());
+        List<Cart> cartlist = iCartRepo.findAllByUserId(iUserRepository.findByUserId(requestCart.getUserId()).getId());
         Cart cart = null;
         for(int i=0;i<cartlist.size();i++){
             if(cartlist.get(i).getProduct().getId().equals(requestCart.getProductId())){
@@ -91,7 +91,7 @@ public class CartServiceImpl implements ICartService{
     @Override
     @Transactional
     public void deleteAll(RequestCart requestCart) {
-        List<Cart> cartList = iCartRepo.findAllByUserId(requestCart.getUserId());
+        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(requestCart.getUserId()).getId());
         for(Cart cart:cartList){
             cart.setIsDelete(true);
         }
