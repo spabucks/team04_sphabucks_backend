@@ -1,13 +1,11 @@
 package sphabucks.carts.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.carts.model.Cart;
 import sphabucks.carts.service.ICartService;
 import sphabucks.carts.vo.RequestCart;
-import sphabucks.carts.vo.ResponseCart;
-import sphabucks.carts.vo.ResponseCartProduct;
+import sphabucks.carts.vo.ResponseGetCart;
+import sphabucks.carts.vo.ResponseGetCartProduct;
 
 import java.util.List;
 
@@ -25,12 +23,12 @@ public class CartController {
     }
 
     @GetMapping("/get/{userId}")
-    List<ResponseCart> getCart(@PathVariable String userId){
+    List<ResponseGetCart> getCart(@PathVariable String userId){
         return iCartService.getCart(userId);
     }
 
     @GetMapping("/get/product/{id}")
-    public ResponseCartProduct getCartProduct(@PathVariable Long id) {
+    public ResponseGetCartProduct getCartProduct(@PathVariable Long id) {
         return iCartService.getCartProduct(id);
     }
 

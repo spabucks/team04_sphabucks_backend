@@ -7,7 +7,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ResponseCartProduct {
+public class ResponseGetCartProduct {
     private String productName;
     private Integer price;
     private String imgUrl;

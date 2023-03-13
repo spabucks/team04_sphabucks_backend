@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.repository.ICartRepo;
 import sphabucks.carts.vo.RequestCart;
-import sphabucks.carts.vo.ResponseCart;
-import sphabucks.carts.vo.ResponseCartProduct;
+import sphabucks.carts.vo.ResponseGetCart;
+import sphabucks.carts.vo.ResponseGetCartProduct;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductCategoryListRepository;
@@ -53,27 +53,27 @@ public class CartServiceImpl implements ICartService{
     }
 
     @Override
-    public List<ResponseCart> getCart(String userId) {  // userId : user.uuid
+    public List<ResponseGetCart> getCart(String userId) {  // userId : user.uuid
 
-        List<ResponseCart> responseCartList = new ArrayList<>();
+        List<ResponseGetCart> responseGetCartList = new ArrayList<>();
         // 고객의 장바구니 속 isDelete = false 인 제품들만 가져옴
         List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
 
         cartList.forEach(cart -> {
-            responseCartList.add(ResponseCart.builder()
+            responseGetCartList.add(ResponseGetCart.builder()
                     .cartId(cart.getId())
                     .productId(cart.getProduct().getId())
                     .bigCategoryId(cart.getCategoryId())
                     .count(cart.getAmount())
                     .build());
         });
-        return responseCartList;
+        return responseGetCartList;
     }
 
     @Override
-    public ResponseCartProduct getCartProduct(Long productId) {
+    public ResponseGetCartProduct getCartProduct(Long productId) {
         Product product = iProductRepository.findById(productId).get();
-        return ResponseCartProduct.builder()
+        return ResponseGetCartProduct.builder()
                 .productName(product.getName())
                 .price(product.getPrice())
                 .imgUrl(iProductImageRepo.findAllByProductIdAndChk(productId, 1).get(0).getImage())
