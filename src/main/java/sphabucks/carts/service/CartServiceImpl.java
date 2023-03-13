@@ -28,16 +28,20 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public void addCart(RequestCart requestCart) {
+    public Integer addCart(RequestCart requestCart) {
 
         // 해당 상품이 고객의 장바구니에 담겼던 이력이 있는지 없는지
         if (iCartRepo.existsByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId())) {    // 장바구니에 저장되었던 이력이 있다면
             // 해당하는 이력을 조회
             Cart cart = iCartRepo.findByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId());
-            // 기존에 있던 개수 + 새로 담는 개수를 저장함
-            cart.setAmount(cart.getAmount() + requestCart.getAmount());
-            // 상품이 장바구니에 추가되었으므로 isDelete = false
-            cart.setIsDelete(false);
+            if (cart.getAmount() + requestCart.getAmount() <= 5) {  // 한 상품을 최대 5개 까지 담을 수 있음
+                // 기존에 있던 개수 + 새로 담는 개수를 저장함
+                cart.setAmount(cart.getAmount() + requestCart.getAmount());
+                // 상품이 장바구니에 추가되었으므로 isDelete = false
+                cart.setIsDelete(false);
+            } else {    // 기존에 담겨있던 개수 + 새로 담은 개수 > 5 인 경우
+                return (5 - cart.getAmount());  // 담을 수 있는 최대 개수를 반환 (5 - 현재 장바구니에 담긴 개수)
+            }
         } else { // 한 번도 장바구니에 추가되었던 이력이 없는 제품이라면
             Product product = iProductRepository.findById(requestCart.getProductId()).get();
             iCartRepo.save(Cart.builder()
@@ -50,6 +54,7 @@ public class CartServiceImpl implements ICartService{
                     .isDelete(false)
                     .build());
         }
+        return 200;
     }
 
     @Override
@@ -82,9 +87,8 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public void updateCart(RequestCart requestCart) {
-        Cart cart = iCartRepo.findByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId());
-        cart.setAmount(requestCart.getAmount());
+    public void updateCart(Long id, Integer amount) {
+        iCartRepo.findById(id).get().setAmount(amount);
     }
 
     @Override

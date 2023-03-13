@@ -7,11 +7,11 @@ import sphabucks.carts.vo.ResponseGetCartProduct;
 import java.util.List;
 
 public interface ICartService {
-    void addCart(RequestCart requestCart);
+    Integer addCart(RequestCart requestCart);
     List<ResponseGetCart> getCart(String userId);  // uuid 를 입력받음
     ResponseGetCartProduct getCartProduct(Long productId);    // 카트안의 상품 정보를 불러오는 api
 
-    void updateCart(RequestCart requestCart);
+    void updateCart(Long id, Integer amount);
 
     void deleteCart(Long id);
     void deleteAll(String userId);

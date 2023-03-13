@@ -18,8 +18,8 @@ public class CartController {
     private final ICartService iCartService;
 
     @PostMapping("/add")
-    void addCart(@RequestBody RequestCart requestCart){
-        iCartService.addCart(requestCart);
+    Integer addCart(@RequestBody RequestCart requestCart){
+        return iCartService.addCart(requestCart);
     }
 
     @GetMapping("/get/{userId}")
@@ -32,9 +32,9 @@ public class CartController {
         return iCartService.getCartProduct(id);
     }
 
-    @PostMapping("/update")
-    void updateCart(@RequestBody RequestCart requestCart){
-        iCartService.updateCart(requestCart);
+    @PutMapping("/update/{id}")
+    void updateCart(@PathVariable Long id, @RequestBody String amount){
+        iCartService.updateCart(id, Integer.parseInt(amount));
     }
 
     @GetMapping("/delete/{cartId}")
