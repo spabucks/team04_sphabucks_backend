@@ -10,6 +10,9 @@ import java.util.List;
 @Setter
 @Getter
 public class ResponseCart {
-    private String categoryName;    // 냉동(케이크), 일반(그 외)
-    private List<ResponseCartSummary> responseCartSummaryList;
+
+    private Long cartId;
+    private Long productId;
+    private Long bigCategoryId;
+    private Integer count;
 }

@@ -7,12 +7,11 @@ import sphabucks.carts.model.Cart;
 import sphabucks.carts.repository.ICartRepo;
 import sphabucks.carts.vo.RequestCart;
 import sphabucks.carts.vo.ResponseCart;
-import sphabucks.carts.vo.ResponseCartSummary;
+import sphabucks.carts.vo.ResponseCartProduct;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductCategoryListRepository;
 import sphabucks.products.repository.IProductRepository;
-import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
 
 import java.util.ArrayList;
@@ -56,48 +55,29 @@ public class CartServiceImpl implements ICartService{
     @Override
     public List<ResponseCart> getCart(String userId) {  // userId : user.uuid
 
+        List<ResponseCart> responseCartList = new ArrayList<>();
         // 고객의 장바구니 속 isDelete = false 인 제품들만 가져옴
         List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
 
-        List<ResponseCartSummary> cartProductFreeze = new ArrayList<>();    // 냉동 상품(케이크) 상품 정보를 담을 리스트
-        List<ResponseCartSummary> cartProductGeneral = new ArrayList<>();    // 일반 상품 정보를 담을 리스트
-
         cartList.forEach(cart -> {
-            Long bigCategoryId = cart.getCategoryId();    // 카드에 담긴 상품의 대분류 카테고리 Id
-            if (bigCategoryId == 1) {   // 현재 케이크가 id 1번
-                cartProductFreeze.add(ResponseCartSummary.builder()
-                                .id(cart.getId())
-                                .productId(cart.getProduct().getId())
-                                .productName(cart.getProduct().getName())
-                                .imgUrl(iProductImageRepo.findAllByProductIdAndChk(cart.getProduct().getId(), 1).get(0).getImage())
-                                .price(cart.getPrice())
-                                .count(cart.getAmount())
-                        .build());
-            } else {
-                cartProductGeneral.add(ResponseCartSummary.builder()
-                        .id(cart.getId())
-                        .productId(cart.getProduct().getId())
-                        .productName(cart.getProduct().getName())
-                        .imgUrl(iProductImageRepo.findAllByProductIdAndChk(cart.getProduct().getId(), 1).get(0).getImage())
-                        .price(cart.getPrice())
-                        .count(cart.getAmount())
-                        .build());
-            }
+            responseCartList.add(ResponseCart.builder()
+                    .cartId(cart.getId())
+                    .productId(cart.getProduct().getId())
+                    .bigCategoryId(cart.getCategoryId())
+                    .count(cart.getAmount())
+                    .build());
         });
-
-        List<ResponseCart> responseCartList = new ArrayList<>();
-
-        responseCartList.add(ResponseCart.builder()
-                .categoryName("cartProductFreeze")
-                .responseCartSummaryList(cartProductFreeze)
-                .build());
-
-        responseCartList.add(ResponseCart.builder()
-                .categoryName("cartProductGeneral")
-                .responseCartSummaryList(cartProductGeneral)
-                .build());
-
         return responseCartList;
+    }
+
+    @Override
+    public ResponseCartProduct getCartProduct(Long productId) {
+        Product product = iProductRepository.findById(productId).get();
+        return ResponseCartProduct.builder()
+                .productName(product.getName())
+                .price(product.getPrice())
+                .imgUrl(iProductImageRepo.findAllByProductIdAndChk(productId, 1).get(0).getImage())
+                .build();
     }
 
     @Override

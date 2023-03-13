@@ -7,6 +7,7 @@ import sphabucks.carts.model.Cart;
 import sphabucks.carts.service.ICartService;
 import sphabucks.carts.vo.RequestCart;
 import sphabucks.carts.vo.ResponseCart;
+import sphabucks.carts.vo.ResponseCartProduct;
 
 import java.util.List;
 
@@ -26,6 +27,11 @@ public class CartController {
     @GetMapping("/get/{userId}")
     List<ResponseCart> getCart(@PathVariable String userId){
         return iCartService.getCart(userId);
+    }
+
+    @GetMapping("/get/product/{id}")
+    public ResponseCartProduct getCartProduct(@PathVariable Long id) {
+        return iCartService.getCartProduct(id);
     }
 
     @PostMapping("/update")
