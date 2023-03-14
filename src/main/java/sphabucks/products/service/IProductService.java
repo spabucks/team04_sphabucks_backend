@@ -1,5 +1,6 @@
 package sphabucks.products.service;
 
+import org.springframework.data.domain.Pageable;
 import sphabucks.products.model.Product;
 import sphabucks.products.vo.RequestProduct;
 import sphabucks.products.vo.ResponseProduct;
@@ -17,9 +18,9 @@ public interface IProductService {
     List<ResponseProduct> getBestBigCategory(Integer bigCategoryId);
 
     // 상품 검색 메서드 (키워드 검색)
-    List<ResponseSearchProduct> searchProductKeyword(String keyword);
+    List<ResponseSearchProduct> searchProductKeyword(String keyword, Pageable pageable);
 
     // 상품 검색 상단 메뉴 호출 (키워드 검색)
-    ResponseSearchMenu searchProductKeywordMenu(String keyword);
+    ResponseSearchMenu searchProductKeywordMenu(String keyword, Pageable pageable);
 
 }
