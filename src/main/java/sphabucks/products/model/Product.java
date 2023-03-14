@@ -17,7 +17,7 @@ public class Product extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    // 상품 id
     @Column(nullable = false)
-    private Integer price;  // 가격
+    private Long price;  // 가격
     @Column(nullable = false)
     private Long amount;  // 잔여 개수
     @Column(nullable = false)

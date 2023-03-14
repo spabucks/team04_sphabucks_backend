@@ -45,7 +45,7 @@ public class ProductController {
     @GetMapping("/get-best/{bigCategoryId}")
     @Operation(summary = "베스트 상품 조회")
     @Tag(name = "검색")
-    public List<ResponseProduct> getBestBigCategory(@PathVariable Integer bigCategoryId) {
+    public List<ResponseProduct> getBestBigCategory(@PathVariable Long bigCategoryId) {
 
         return iProductService.getBestBigCategory(bigCategoryId);
     }

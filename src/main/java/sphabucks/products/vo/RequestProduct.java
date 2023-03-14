@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 public class RequestProduct {
 
-    private Integer price;  // 가격
+    private Long price;  // 가격
     private Long amount;  // 잔여 개수
     private Date date;  // 출시일
     private String name;    // 상품 이름

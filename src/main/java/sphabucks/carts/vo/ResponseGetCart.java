@@ -12,5 +12,5 @@ public class ResponseGetCart {
     private Long cartId;
     private Long productId;
     private Long bigCategoryId;
-    private Integer count;
+    private Long count;
 }

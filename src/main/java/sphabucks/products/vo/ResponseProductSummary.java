@@ -11,6 +11,6 @@ public class ResponseProductSummary {
     private Long id;
     private String title;
     private String imgUrl;
-    private Integer price;
+    private Long price;
     private Boolean isNew;
 }

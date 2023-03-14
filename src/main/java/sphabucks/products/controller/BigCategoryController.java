@@ -27,7 +27,7 @@ public class BigCategoryController {
 
     @GetMapping("/get/{bigCategoryId}")
     @Operation(summary = "대분류 조회", description = "상품 조회도 아닌 단순한 대분류 정보 조회 - 삭제 예정?")
-    public BigCategory getBigCategory(@PathVariable Integer bigCategoryId){
+    public BigCategory getBigCategory(@PathVariable Long bigCategoryId){
         return iBigCategoryService.getBigCategory(bigCategoryId);
     }
 

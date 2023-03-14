@@ -66,7 +66,7 @@ public class ProductServiceImpl implements IProductService{
 
     // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)
     @Override
-    public List<ResponseProduct> getBestBigCategory(Integer bigCategoryId) {
+    public List<ResponseProduct> getBestBigCategory(Long bigCategoryId) {
         List<ProductCategoryList> productCategoryLists = iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId);
         List<ResponseProduct> responseProductList = new ArrayList<>();
 

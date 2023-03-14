@@ -22,7 +22,7 @@ public class CartController {
 
     @PostMapping("/add")
     @Operation(summary = "장바구니 담기")
-    Integer addCart(@RequestBody RequestCart requestCart){
+    Long addCart(@RequestBody RequestCart requestCart){
         return iCartService.addCart(requestCart);
     }
 
@@ -40,7 +40,7 @@ public class CartController {
     @PutMapping("/update/{id}")
     @Operation(summary = "장바구니 수정")
     void updateCart(@PathVariable Long id, @RequestBody String amount){
-        iCartService.updateCart(id, Integer.parseInt(amount));
+        iCartService.updateCart(id, Long.parseLong(amount));
     }
 
     @GetMapping("/delete/{cartId}")

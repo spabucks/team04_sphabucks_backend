@@ -7,5 +7,5 @@ public class RequestProductImage {
     Long productId;
     String image;
     String alt;
-    Integer chk;
+    Long chk;
 }

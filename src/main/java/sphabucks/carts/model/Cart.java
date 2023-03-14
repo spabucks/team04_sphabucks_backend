@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import sphabucks.products.model.Product;
 import sphabucks.users.model.User;
+import sphabucks.utility.BaseTimeEntity;
 
 @Entity
 @Data
@@ -15,14 +16,14 @@ import sphabucks.users.model.User;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate
-public class Cart {
+public class Cart extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer amount;
+    private Long amount;
     private Long categoryId;
-    private Integer price;
+    private Long price;
     private String name;
 
     private Boolean isDelete;

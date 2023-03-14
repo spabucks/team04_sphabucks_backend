@@ -19,7 +19,7 @@ public class ProductImage {
     private Long id;
     private String image;
     private String alt;
-    private Integer chk;
+    private Long chk;
 
     @ManyToOne
     private Product product;
