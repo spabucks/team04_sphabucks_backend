@@ -56,6 +56,7 @@ public class ProductServiceImpl implements IProductService{
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .productDetailImgUrl(detailImages)
+                .likeCount(product.getLikeCount())
                 .build();
     }
 
@@ -84,6 +85,7 @@ public class ProductServiceImpl implements IProductService{
                     .description(productList.getProduct().getDescription())
                     .price(productList.getProduct().getPrice())
                     .productDetailImgUrl(productDetailImage)
+                    .likeCount(productList.getProduct().getLikeCount())
                     .build());
         });
 
@@ -120,6 +122,7 @@ public class ProductServiceImpl implements IProductService{
                     .amount(product.getAmount())
                     .isBest(product.getIsBest())
                     .isNew(product.getIsNew())
+                    .likeCount(product.getLikeCount())
                     .build();
 
             responseSearchProductList.add(responseProduct);

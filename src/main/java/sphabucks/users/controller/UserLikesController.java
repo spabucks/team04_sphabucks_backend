@@ -21,19 +21,19 @@ public class UserLikesController {
     private final IUserLikesService iUserLikesService;
 
     @PostMapping("/add")
-    @Operation(summary = "좋아요 클릭", description = "다시 한번 눌렀을 때는 구현 X")
+    @Operation(summary = "좋아요 클릭", description = "다시 한번 눌리면 좋아요 취소")
     void addUserLikes(@RequestBody RequestUserLikes requestUserLikes){
         iUserLikesService.addUserLikes(requestUserLikes);
     }
 
     @GetMapping("/get/{userId}")
-    @Operation(summary = "좋아요 클릭한 상품 조회?", description = "구현 X")
+    @Operation(summary = "좋아요 클릭한 상품 조회", description = "")
     List<UserLikes> getUserLikes(@PathVariable Long userId){
         return iUserLikesService.getUserLikes(userId);
     }
 
     @GetMapping("/get/all")
-    @Operation(summary = "모든 고객이 좋아요를 누른 상품 조회", description = "어드민 권한 - 삭제 예정?")
+    @Operation(summary = "고객이 좋아요를 누른 모든 상품 조회", description = "어드민 권한 - 삭제 예정?")
     List<UserLikes> getAll(){
         return iUserLikesService.getAll();
     }
