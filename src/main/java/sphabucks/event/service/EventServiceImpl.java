@@ -45,23 +45,6 @@ public class EventServiceImpl implements IEventService {
         return iEventRepository.findAll();
     }
 
-
-    @Override
-    public EventProductList addEventProductList(RequestEventProductList requestEventProductList) {
-
-        EventProductList eventProductList = EventProductList.builder()
-                .product(iProductRepository.findById(requestEventProductList.getProductId()).get())
-                .event(iEventRepository.findById(requestEventProductList.getEventId()).get())
-                .build();
-
-        return iEventProductListRepository.save(eventProductList);
-    }
-    @Override
-    public EventProductList getEventProductList(Long id) {
-        return iEventProductListRepository.findById(id).get();
-    }
-
-
     @Override
     public EventImage addEventImage(RequestEventImage requestEventImage) {
         EventImage eventImage = EventImage.builder()
