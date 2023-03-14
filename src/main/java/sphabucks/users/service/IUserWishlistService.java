@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IUserWishlistService {
 
-    void addUserWishlist(RequestUserWishlist requestUserWishlist);
+    // 위시리스트에 추가가 안되어 있을 때 추가하고 추가되어 있을 때 삭제하는 api
+    void clickWishList(RequestUserWishlist requestUserWishlist);
     List<UserWishlist> getByUserWishlist(Long userId);
 }

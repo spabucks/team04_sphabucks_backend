@@ -1,10 +1,12 @@
 package sphabucks.users.vo;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class RequestUserWishlist {
+@Setter
+public class ResponseWishList {
 
-    private String userId;
+    private Long id;
     private Long productId;
 }

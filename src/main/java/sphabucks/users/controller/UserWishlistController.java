@@ -23,9 +23,9 @@ public class UserWishlistController {
     private final IUserWishlistService iUserWishlistService;
 
     @PostMapping("/add")
-    @Operation(summary = "위시리스트에 상품 담기", description = "구현 X")
+    @Operation(summary = "위시리스트에 상품 담기", description = "구현 중")
     void addUserWishlist(@RequestBody RequestUserWishlist requestUserWishlist){
-        iUserWishlistService.addUserWishlist(requestUserWishlist);
+        iUserWishlistService.clickWishList(requestUserWishlist);
     }
 
     @GetMapping("/get/{userId}")
