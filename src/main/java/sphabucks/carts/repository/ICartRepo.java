@@ -1,6 +1,9 @@
 package sphabucks.carts.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import sphabucks.carts.model.Cart;
 
 import java.util.List;
@@ -15,4 +18,8 @@ public interface ICartRepo extends JpaRepository<Cart, Long> {
 
     // 조회하는 유저의 장바구니에 해당 상품이 담겼던 이력이 있는지를 판단하는 쿼리문(과거에 담겼던 제품 포함)
     boolean existsByUserUserIdAndProductId(String userId, Long productId);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Cart c SET c.amount = :amount where c.product.id = :id ")
+    void updateAmount(@Param(value="amount") Long amount, @Param(value="id") Long id);
 }
