@@ -3,11 +3,11 @@ package sphabucks.carts.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.carts.model.Cart;
 import sphabucks.carts.service.ICartService;
 import sphabucks.carts.vo.RequestCart;
+import sphabucks.carts.vo.ResponseGetCart;
+import sphabucks.carts.vo.ResponseGetCartProduct;
 
 import java.util.List;
 
@@ -22,31 +22,36 @@ public class CartController {
 
     @PostMapping("/add")
     @Operation(summary = "장바구니 담기")
-    void addCart(@RequestBody RequestCart requestCart){
-        iCartService.addCart(requestCart);
+    Integer addCart(@RequestBody RequestCart requestCart){
+        return iCartService.addCart(requestCart);
     }
 
     @GetMapping("/get/{userId}")
     @Operation(summary = "장바구니 조회", description = "uuid 사용")
-    List<Cart> getCart(@PathVariable Long userId){
+    List<ResponseGetCart> getCart(@PathVariable String userId){
         return iCartService.getCart(userId);
     }
 
-    @GetMapping("/update")
+    @GetMapping("/get/product/{id}")
+    public ResponseGetCartProduct getCartProduct(@PathVariable Long id) {
+        return iCartService.getCartProduct(id);
+    }
+
+    @PutMapping("/update/{id}")
     @Operation(summary = "장바구니 수정")
-    Cart updateCart(@RequestBody RequestCart requestCart){
-        return iCartService.updateCart(requestCart);
+    void updateCart(@PathVariable Long id, @RequestBody String amount){
+        iCartService.updateCart(id, Integer.parseInt(amount));
     }
 
-    @GetMapping("/delete")
+    @GetMapping("/delete/{cartId}")
     @Operation(summary = "장바구니에서 선택 상품 삭제")
-    void deleteCart(@RequestBody RequestCart requestCart){
-        iCartService.deleteCart(requestCart);
+    void deleteCart(@PathVariable Long cartId){
+        iCartService.deleteCart(cartId);
     }
 
-    @GetMapping("/delete/all")
+    @PostMapping("/delete/all")
     @Operation(summary = "장바구니 전체 삭제")
-    void deleteAll(@RequestBody RequestCart requestCart){
-        iCartService.deleteAll(requestCart);
+    void deleteAll(@RequestBody String userId){
+        iCartService.deleteAll(userId);
     }
 }

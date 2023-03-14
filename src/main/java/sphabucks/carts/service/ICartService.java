@@ -1,17 +1,19 @@
 package sphabucks.carts.service;
 
-import sphabucks.carts.model.Cart;
 import sphabucks.carts.vo.RequestCart;
+import sphabucks.carts.vo.ResponseGetCart;
+import sphabucks.carts.vo.ResponseGetCartProduct;
 
 import java.util.List;
 
 public interface ICartService {
-    void addCart(RequestCart requestCart);
-    List<Cart> getCart(Long userId);
+    Integer addCart(RequestCart requestCart);
+    List<ResponseGetCart> getCart(String userId);  // uuid 를 입력받음
+    ResponseGetCartProduct getCartProduct(Long productId);    // 카트안의 상품 정보를 불러오는 api
 
-    Cart updateCart(RequestCart requestCart);
+    void updateCart(Long id, Integer amount);
 
-    void deleteCart(RequestCart requestCart);
-    void deleteAll(RequestCart requestCart);
+    void deleteCart(Long id);
+    void deleteAll(String userId);
 
 }
