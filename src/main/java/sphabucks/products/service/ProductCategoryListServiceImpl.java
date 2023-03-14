@@ -50,7 +50,7 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
     }
 
     @Override
-    public List<ResponseProductSummary> getProductsBySmallCategoryId(Integer smallCategoryId) {
+    public List<ResponseProductSummary> getProductsBySmallCategoryId(Long smallCategoryId) {
         List<ResponseProductSummary> responseProductSummaries = new ArrayList<>();
         List<ProductCategoryList> productCategoryLists = iProductCategoryListRepository.findAllBySmallCategoryId(smallCategoryId);
         for (ProductCategoryList productCategoryList : productCategoryLists) {
@@ -79,7 +79,7 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
                 .data(iEventProductService.getProductsByEventId(currentEventId))
                 .build());
 
-        Integer currentSmallCategoryId = iProductCategoryListRepository.findById(productId).get().getSmallCategory().getId();
+        Long currentSmallCategoryId = iProductCategoryListRepository.findById(productId).get().getSmallCategory().getId();
         return_value.add(ResponseProductList.builder()
                 .id(2L)
                 .name("다른 고객이 함께 본 상품")

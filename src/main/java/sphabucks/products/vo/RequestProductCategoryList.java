@@ -6,11 +6,8 @@ import lombok.Getter;
 @Getter
 public class RequestProductCategoryList {
 
-    @Column(nullable = false)
-    private Integer bigCategoryId;
-    @Column(nullable = false)
-    private Integer smallCategoryId;
-    @Column(nullable = false)
+    private Long bigCategoryId;
+    private Long smallCategoryId;
     private Long productId;
 
 }

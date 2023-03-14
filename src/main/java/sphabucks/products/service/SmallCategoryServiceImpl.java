@@ -31,7 +31,7 @@ public class SmallCategoryServiceImpl implements ISmallCategoryService{
     }
 
     @Override
-    public SmallCategory getSmallCategory(Integer smallCategoryId) {
+    public SmallCategory getSmallCategory(Long smallCategoryId) {
 
         return iSmallCategoryRepository.findById(smallCategoryId).get();
     }

@@ -3,6 +3,8 @@ package sphabucks.products.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sphabucks.event.model.Event;
 import sphabucks.event.repository.IEventProductListRepository;
@@ -64,7 +66,7 @@ public class ProductServiceImpl implements IProductService{
 
     // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)
     @Override
-    public List<ResponseProduct> getBestBigCategory(Integer bigCategoryId) {
+    public List<ResponseProduct> getBestBigCategory(Long bigCategoryId) {
         List<ProductCategoryList> productCategoryLists = iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId);
         List<ResponseProduct> responseProductList = new ArrayList<>();
 
@@ -88,14 +90,17 @@ public class ProductServiceImpl implements IProductService{
         return responseProductList;
     }
 
-    // 상품 검색 기능
-    public List<ResponseSearchProduct> searchProductKeyword(String keyword) {
 
-        List<Product> productList = iProductRepository.findByNameContains(keyword);
+    // 상품 검색 기능
+    public List<ResponseSearchProduct> searchProductKeyword(String keyword, Pageable pageable) {
+
+        Page<Product> productList = iProductRepository.findByNameContains(keyword, pageable);
 
         List<ResponseSearchProduct> responseSearchProductList = new ArrayList<>();
 
 
+        // paging 처리 할 때 page별로 foreach 문 사용되어 있는데,
+        // List별로 foreach 문 사용 후 paging 처리를 해줘야 할 것 같다.
         productList.forEach(product -> {
             String tag = "";
             if (iProductTagRepository.findAllByProductId(product.getId()).size() != 0) {
@@ -125,8 +130,8 @@ public class ProductServiceImpl implements IProductService{
 
     // 상품 검색시 상단 메뉴 호출 (키워드 검색)
     @Override
-    public ResponseSearchMenu searchProductKeywordMenu(String keyword) {
-        List<ResponseSearchProduct> responseSearchProductList = searchProductKeyword(keyword);
+    public ResponseSearchMenu searchProductKeywordMenu(String keyword, Pageable pageable) {
+        List<ResponseSearchProduct> responseSearchProductList = searchProductKeyword(keyword, pageable);
 
         List<ResponseMenu> responseMenu_size = new ArrayList<>();
         List<String> size = new ArrayList<>();

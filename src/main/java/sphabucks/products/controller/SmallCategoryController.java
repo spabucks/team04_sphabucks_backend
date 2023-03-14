@@ -29,7 +29,7 @@ public class SmallCategoryController {
 
     @GetMapping("/get/{smallCategoryId}")
     @Operation(summary = "소분류 조회", description = "상품 조회도 아닌 단순한 소분류 정보 조회 - 삭제 예정?")
-    public SmallCategory getSmallCategory(@PathVariable Integer smallCategoryId){
+    public SmallCategory getSmallCategory(@PathVariable Long smallCategoryId){
         return iSmallCategoryService.getSmallCategory(smallCategoryId);
     }
 

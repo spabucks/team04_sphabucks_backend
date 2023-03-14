@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class ResponseGetCartProduct {
     private String productName;
-    private Integer price;
+    private Long price;
     private String imgUrl;
 }

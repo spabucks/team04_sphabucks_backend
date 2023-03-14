@@ -27,7 +27,7 @@ public class BigCategoryServiceImpl implements IBigCategoryService{
     }
 
     @Override
-    public BigCategory getBigCategory(Integer bigCategoryId) {
+    public BigCategory getBigCategory(Long bigCategoryId) {
 
         return iBigCategoryRepository.findById(bigCategoryId).get();
     }

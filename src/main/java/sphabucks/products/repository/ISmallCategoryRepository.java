@@ -6,7 +6,7 @@ import sphabucks.products.model.SmallCategory;
 
 import java.util.List;
 
-public interface ISmallCategoryRepository extends JpaRepository<SmallCategory, Integer> {
+public interface ISmallCategoryRepository extends JpaRepository<SmallCategory, Long> {
 
     List<SmallCategory> findById(BigCategory bigCategory);
 

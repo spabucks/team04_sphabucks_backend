@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.products.model.Product;
 import sphabucks.products.service.IProductService;
@@ -43,26 +45,25 @@ public class ProductController {
     @GetMapping("/get-best/{bigCategoryId}")
     @Operation(summary = "베스트 상품 조회")
     @Tag(name = "검색")
-    public List<ResponseProduct> getBestBigCategory(@PathVariable Integer bigCategoryId) {
+    public List<ResponseProduct> getBestBigCategory(@PathVariable Long bigCategoryId) {
 
         return iProductService.getBestBigCategory(bigCategoryId);
     }
-
     // 상품 검색 메서드 (키워드 검색)
     @GetMapping("/search")
     @Operation(summary = "키워드 검색", description = "돋보기 아이콘 클릭을 통해 들어간 검색창에서 키워드로 검색")
     @Tag(name = "검색")
-    public List<ResponseSearchProduct> searchProductKeyword(@RequestParam("keyword") String keyword){
+    public List<ResponseSearchProduct> searchProductKeyword(@RequestParam("keyword") String keyword, @PageableDefault(size = 10) Pageable pageable){
 
-        return iProductService.searchProductKeyword(keyword);
+        return iProductService.searchProductKeyword(keyword, pageable);
     }
 
     // 상품 검색 상단 필터 메뉴 호출 (키워드 검색)
     @GetMapping("/search-menu")
-    @Operation(summary = "필터링 항목?", description = "이거 뭐에요 영민이 형?")
+    @Operation(summary = "키워드 검색 시 필터메뉴", description = "키워드로 검색할 시 필터메뉴목록 출력")
     @Tag(name = "검색")
-    public ResponseSearchMenu searchProductKeywordMenu(@RequestParam("keyword") String keyword) {
-        return iProductService.searchProductKeywordMenu(keyword);
+    public ResponseSearchMenu searchProductKeywordMenu(@RequestParam("keyword") String keyword, Pageable pageable) {
+        return iProductService.searchProductKeywordMenu(keyword, pageable);
     }
 
 

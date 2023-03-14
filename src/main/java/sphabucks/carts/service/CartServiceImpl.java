@@ -28,7 +28,7 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public Integer addCart(RequestCart requestCart) {
+    public Long addCart(RequestCart requestCart) {
 
         // 해당 상품이 고객의 장바구니에 담겼던 이력이 있는지 없는지
         if (iCartRepo.existsByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId())) {    // 장바구니에 저장되었던 이력이 있다면
@@ -54,7 +54,7 @@ public class CartServiceImpl implements ICartService{
                     .isDelete(false)
                     .build());
         }
-        return 200;
+        return 200L;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public void updateCart(Long id, Integer amount) {
+    public void updateCart(Long id, Long amount) {
         iCartRepo.findById(id).get().setAmount(amount);
     }
 
@@ -95,7 +95,7 @@ public class CartServiceImpl implements ICartService{
     @Transactional
     public void deleteCart(Long id) {
         Cart cart = iCartRepo.findById(id).get();
-        cart.setAmount(0);
+        cart.setAmount(0L);
         cart.setIsDelete(true);
     }
 
@@ -105,7 +105,7 @@ public class CartServiceImpl implements ICartService{
         // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
         List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId).getId());
         for(Cart cart:cartList){
-            cart.setAmount(0);
+            cart.setAmount(0L);
             cart.setIsDelete(true);
         }
     }

@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class ResponseCard {
     private String name;
     private String image;
-    private Integer money;
+    private Long money;
 
 }
