@@ -20,6 +20,6 @@ public interface ICartRepo extends JpaRepository<Cart, Long> {
     boolean existsByUserUserIdAndProductId(String userId, Long productId);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE Cart c SET c.amount = :amount where c.product.id = :id ")
+    @Query("UPDATE Cart c SET c.amount = :amount where c.id = :id")
     void updateAmount(@Param(value="amount") Long amount, @Param(value="id") Long id);
 }
