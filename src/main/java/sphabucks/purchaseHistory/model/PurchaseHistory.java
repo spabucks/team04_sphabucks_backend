@@ -19,8 +19,6 @@ public class PurchaseHistory extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private String category;
-    @Column(nullable = false)
     private String productName;
     @Column(nullable = false)
     private Long amount;

@@ -3,9 +3,11 @@ package sphabucks.purchaseHistory.service;
 import sphabucks.purchaseHistory.model.PurchaseHistory;
 import sphabucks.purchaseHistory.vo.RequestPurchaseHistory;
 
+import java.util.List;
+
 public interface IPurchaseHistoryService {
 
-    PurchaseHistory addPurchaseHistory(RequestPurchaseHistory requestPurchaseHistory);
+    void addPurchaseHistory(List<Long> selected, String userId);
 
     PurchaseHistory getPurchaseHistory(Long id);
 }

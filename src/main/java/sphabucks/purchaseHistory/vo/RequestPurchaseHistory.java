@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @Getter
 public class RequestPurchaseHistory {
-    private String category;
     private String productName;
     private Long amount;
     private Long sum;
