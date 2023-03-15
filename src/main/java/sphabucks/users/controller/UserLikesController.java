@@ -20,10 +20,10 @@ public class UserLikesController {
 
     private final IUserLikesService iUserLikesService;
 
-    @PostMapping("/add")
+    @PutMapping("/push")
     @Operation(summary = "좋아요 클릭", description = "다시 한번 눌리면 좋아요 취소")
-    void addUserLikes(@RequestBody RequestUserLikes requestUserLikes){
-        iUserLikesService.addUserLikes(requestUserLikes);
+    void pushUserLikes(@RequestBody RequestUserLikes requestUserLikes){
+        iUserLikesService.pushUserLikes(requestUserLikes);
     }
 
     @GetMapping("/get/{userId}")

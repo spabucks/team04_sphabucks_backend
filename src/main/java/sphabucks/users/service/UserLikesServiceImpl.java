@@ -24,9 +24,10 @@ public class UserLikesServiceImpl implements IUserLikesService{
     private final IProductRepository iProductRepository;
     private final IUserRepository iUserRepository;
     @Override
-    public void addUserLikes(RequestUserLikes requestUserLikes) {
+    @Transactional
+    public void pushUserLikes(RequestUserLikes requestUserLikes) {
         // User가 like를 했을 때
-        if(!iUserLikesRepo.existsAllByUserId(requestUserLikes.getUserId())) {
+        if(!iUserLikesRepo.existsAllByProductId(requestUserLikes.getProductId())) {
             iUserLikesRepo.save(UserLikes.builder()
                     .product(iProductRepository.findById(requestUserLikes.getProductId()).get())
                     .user(iUserRepository.findById(requestUserLikes.getUserId()).get())
@@ -35,9 +36,9 @@ public class UserLikesServiceImpl implements IUserLikesService{
             iProductRepository.updateLikeCount(count+1, requestUserLikes.getProductId());
         }else{
             // User가 이미 like를 한 상태일 때
-            iUserLikesRepo.deleteById(requestUserLikes.getUserId());
             Long count = iProductRepository.findById(requestUserLikes.getProductId()).get().getLikeCount();
             iProductRepository.updateLikeCount(count-1, requestUserLikes.getProductId());
+            iUserLikesRepo.deleteByUserId(requestUserLikes.getUserId());
         }
     }
 

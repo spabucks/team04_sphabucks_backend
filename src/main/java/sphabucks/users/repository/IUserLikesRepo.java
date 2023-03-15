@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface IUserLikesRepo extends JpaRepository<UserLikes, Long> {
     List<UserLikes> findUserLikesByUserId(Long userId);
-    Boolean existsAllByUserId(Long userId);
+    Boolean existsAllByProductId(Long productId);
+    void deleteByUserId(Long userId);
 
 }
