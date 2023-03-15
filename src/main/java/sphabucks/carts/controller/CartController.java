@@ -37,7 +37,7 @@ public class CartController {
         return iCartService.getCartProduct(id);
     }
 
-    @PostMapping("/update")
+    @PatchMapping("/update")
     @Operation(summary = "장바구니 수정")
     void updateCart(@RequestBody RequestUpdateCart request){
         iCartService.updateCart(request);
@@ -46,7 +46,6 @@ public class CartController {
     @PatchMapping("/delete")
     @Operation(summary = "장바구니에서 선택 상품 삭제")
     void deleteCart(@RequestBody RequestDeleteCart request){
-        log.info(request.getUserId().toString());
         iCartService.deleteCart(request.getUserId());
     }
 

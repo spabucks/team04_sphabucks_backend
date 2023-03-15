@@ -99,7 +99,6 @@ public class CartServiceImpl implements ICartService{
         Cart cart = iCartRepo.findById(id).get();
         cart.setAmount(0L);
         cart.setIsDelete(true);
-        log.info("complete");
     }
 
 //    @Override
