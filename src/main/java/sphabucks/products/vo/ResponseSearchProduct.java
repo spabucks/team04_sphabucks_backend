@@ -19,6 +19,7 @@ public class ResponseSearchProduct {
     private Long amount;
     private Boolean isNew;
     private Boolean isBest;
+    private Long likeCount;
 
 
 }

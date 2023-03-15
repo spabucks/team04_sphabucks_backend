@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.repository.ICartRepo;
 import sphabucks.carts.vo.RequestCart;
+import sphabucks.carts.vo.RequestUpdateCart;
 import sphabucks.carts.vo.ResponseGetCart;
 import sphabucks.carts.vo.ResponseGetCartProduct;
 import sphabucks.productimage.repository.IProductImageRepo;
@@ -87,8 +88,9 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public void updateCart(Long id, Long amount) {
-        iCartRepo.findById(id).get().setAmount(amount);
+    public void updateCart(RequestUpdateCart request) {
+        Cart cart = iCartRepo.findById(request.getCartId()).get();
+        cart.setAmount(request.getAmount());
     }
 
     @Override
