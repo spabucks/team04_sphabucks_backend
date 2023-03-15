@@ -87,8 +87,8 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public void updateCart(Long id, Long amount) {
-        iCartRepo.findById(id).get().setAmount(amount);
+    public void updateCart(Long cartId, RequestCart requestCart) {
+        iCartRepo.updateAmount(requestCart.getAmount(), cartId);
     }
 
     @Override
