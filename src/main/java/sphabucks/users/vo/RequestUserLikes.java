@@ -1,9 +1,11 @@
 package sphabucks.users.vo;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class RequestUserLikes {
-    private Long userId;
+    private String userId;
     private Long productId;
 }

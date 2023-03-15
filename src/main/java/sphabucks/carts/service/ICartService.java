@@ -11,7 +11,7 @@ public interface ICartService {
     List<ResponseGetCart> getCart(String userId);  // uuid 를 입력받음
     ResponseGetCartProduct getCartProduct(Long productId);    // 카트안의 상품 정보를 불러오는 api
 
-    void updateCart(Long id, Long amount);
+    void updateCart(Long productId, RequestCart requestCart);
 
     void deleteCart(Long id);
     void deleteAll(String userId);

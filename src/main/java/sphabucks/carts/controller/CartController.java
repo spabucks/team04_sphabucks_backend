@@ -39,8 +39,8 @@ public class CartController {
 
     @PutMapping("/update/{id}")
     @Operation(summary = "장바구니 수정")
-    void updateCart(@PathVariable Long id, @RequestBody String amount){
-        iCartService.updateCart(id, Long.parseLong(amount));
+    void updateCart(@PathVariable Long id, @RequestBody RequestCart requestCart){
+        iCartService.updateCart(id, requestCart);
     }
 
     @GetMapping("/delete/{cartId}")
