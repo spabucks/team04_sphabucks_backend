@@ -27,7 +27,7 @@ public class UserLikesServiceImpl implements IUserLikesService{
     @Transactional
     public void pushUserLikes(RequestUserLikes requestUserLikes) {
         // User가 like를 했을 때
-        if(!iUserLikesRepo.existsAllByProductId(requestUserLikes.getProductId())) {
+        if(!iUserLikesRepo.existsAllByProductIdAAndUserId(requestUserLikes.getProductId(), requestUserLikes.getUserId())) {
             iUserLikesRepo.save(UserLikes.builder()
                     .product(iProductRepository.findById(requestUserLikes.getProductId()).get())
                     .user(iUserRepository.findById(requestUserLikes.getUserId()).get())
