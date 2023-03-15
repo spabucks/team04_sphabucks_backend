@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface IUserLikesService {
     void pushUserLikes(RequestUserLikes requestUserLikes);
-    List<UserLikes> getUserLikes(Long userId);
+    List<UserLikes> getUserLikes(String userId);
     List<UserLikes> getAll();
 }
