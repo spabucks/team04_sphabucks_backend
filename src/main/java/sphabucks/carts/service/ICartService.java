@@ -15,6 +15,6 @@ public interface ICartService {
     void updateCart(RequestUpdateCart requestUpdateCart);
 
     void deleteCart(Long id);
-    void deleteAll(String userId);
+//    void deleteAll(String userId);
 
 }

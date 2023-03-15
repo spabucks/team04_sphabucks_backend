@@ -3,12 +3,10 @@ package sphabucks.carts.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.carts.service.ICartService;
-import sphabucks.carts.vo.RequestCart;
-import sphabucks.carts.vo.RequestUpdateCart;
-import sphabucks.carts.vo.ResponseGetCart;
-import sphabucks.carts.vo.ResponseGetCartProduct;
+import sphabucks.carts.vo.*;
 
 import java.util.List;
 
@@ -17,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/v1/cart")
 @Tag(name = "장바구니(카트)")
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
+@Slf4j
 public class CartController {
 
     private final ICartService iCartService;
@@ -38,21 +37,22 @@ public class CartController {
         return iCartService.getCartProduct(id);
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     @Operation(summary = "장바구니 수정")
     void updateCart(@RequestBody RequestUpdateCart request){
         iCartService.updateCart(request);
     }
 
-    @GetMapping("/delete/{cartId}")
+    @PatchMapping("/delete")
     @Operation(summary = "장바구니에서 선택 상품 삭제")
-    void deleteCart(@PathVariable Long cartId){
-        iCartService.deleteCart(cartId);
+    void deleteCart(@RequestBody RequestDeleteCart request){
+        log.info(request.getUserId().toString());
+        iCartService.deleteCart(request.getUserId());
     }
 
-    @PostMapping("/delete/all")
-    @Operation(summary = "장바구니 전체 삭제")
-    void deleteAll(@RequestBody String userId){
-        iCartService.deleteAll(userId);
-    }
+//    @PostMapping("/delete/all")
+//    @Operation(summary = "장바구니 전체 삭제")
+//    void deleteAll(@RequestBody String userId){
+//        iCartService.deleteAll(userId);
+//    }
 }

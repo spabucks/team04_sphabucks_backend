@@ -2,6 +2,7 @@ package sphabucks.carts.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.repository.ICartRepo;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements ICartService{
     private final ICartRepo iCartRepo;
     private final IUserRepository iUserRepository;
@@ -65,14 +67,12 @@ public class CartServiceImpl implements ICartService{
         // 고객의 장바구니 속 isDelete = false 인 제품들만 가져옴
         List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
 
-        cartList.forEach(cart -> {
-            responseGetCartList.add(ResponseGetCart.builder()
-                    .cartId(cart.getId())
-                    .productId(cart.getProduct().getId())
-                    .bigCategoryId(cart.getCategoryId())
-                    .count(cart.getAmount())
-                    .build());
-        });
+        cartList.forEach(cart -> responseGetCartList.add(ResponseGetCart.builder()
+                .cartId(cart.getId())
+                .productId(cart.getProduct().getId())
+                .bigCategoryId(cart.getCategoryId())
+                .count(cart.getAmount())
+                .build()));
         return responseGetCartList;
     }
 
@@ -99,16 +99,17 @@ public class CartServiceImpl implements ICartService{
         Cart cart = iCartRepo.findById(id).get();
         cart.setAmount(0L);
         cart.setIsDelete(true);
+        log.info("complete");
     }
 
-    @Override
-    @Transactional
-    public void deleteAll(String userId) {
-        // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
-        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId).getId());
-        for(Cart cart:cartList){
-            cart.setAmount(0L);
-            cart.setIsDelete(true);
-        }
-    }
+//    @Override
+//    @Transactional
+//    public void deleteAll(String userId) {
+//        // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
+//        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId).getId());
+//        for(Cart cart:cartList){
+//            cart.setAmount(0L);
+//            cart.setIsDelete(true);
+//        }
+//    }
 }
