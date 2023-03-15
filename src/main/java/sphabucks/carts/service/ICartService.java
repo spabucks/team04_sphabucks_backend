@@ -1,6 +1,7 @@
 package sphabucks.carts.service;
 
 import sphabucks.carts.vo.RequestCart;
+import sphabucks.carts.vo.RequestUpdateCart;
 import sphabucks.carts.vo.ResponseGetCart;
 import sphabucks.carts.vo.ResponseGetCartProduct;
 
@@ -11,7 +12,7 @@ public interface ICartService {
     List<ResponseGetCart> getCart(String userId);  // uuid 를 입력받음
     ResponseGetCartProduct getCartProduct(Long productId);    // 카트안의 상품 정보를 불러오는 api
 
-    void updateCart(Long productId, RequestCart requestCart);
+    void updateCart(RequestUpdateCart requestUpdateCart);
 
     void deleteCart(Long id);
     void deleteAll(String userId);

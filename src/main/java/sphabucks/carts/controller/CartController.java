@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.carts.service.ICartService;
 import sphabucks.carts.vo.RequestCart;
+import sphabucks.carts.vo.RequestUpdateCart;
 import sphabucks.carts.vo.ResponseGetCart;
 import sphabucks.carts.vo.ResponseGetCartProduct;
 
@@ -37,10 +38,10 @@ public class CartController {
         return iCartService.getCartProduct(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update")
     @Operation(summary = "장바구니 수정")
-    void updateCart(@PathVariable Long id, @RequestBody RequestCart requestCart){
-        iCartService.updateCart(id, requestCart);
+    void updateCart(@RequestBody RequestUpdateCart request){
+        iCartService.updateCart(request);
     }
 
     @GetMapping("/delete/{cartId}")

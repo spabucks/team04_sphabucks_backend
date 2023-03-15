@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class RequestUserWishlist {
-    private Long userId;
+
+    private String userId;
     private Long productId;
 }
