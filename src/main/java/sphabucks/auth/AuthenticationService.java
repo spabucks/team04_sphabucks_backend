@@ -55,7 +55,9 @@ public class AuthenticationService {
             );
             var user = userRepository.findByLoginId(authenticationRequest.getLoginId()).orElseThrow();
             var jwtToken = jwtService.generateToken(user);
+
             return AuthenticationResponse.builder()
+                    .userId(userRepository.findByLoginId(authenticationRequest.getLoginId()).get().getUserId())
                     .token(jwtToken)
                     .build();
         }
