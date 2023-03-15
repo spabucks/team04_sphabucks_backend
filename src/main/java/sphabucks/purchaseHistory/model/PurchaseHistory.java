@@ -25,7 +25,7 @@ public class PurchaseHistory extends BaseTimeEntity {
     @Column(nullable = false)
     private Long sum;
     @Column(nullable = false)
-    private String payment_num;
+    private String paymentNum;
     @ManyToOne
     private User user;
     @Column(nullable = false)
