@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
+import sphabucks.users.vo.RequestLoginIdCheck;
 import sphabucks.users.vo.RequestUser;
 import sphabucks.users.vo.ResponseUser;
 
@@ -74,5 +75,10 @@ public class UserServiceImplement implements IUserService{
                 .build();
 
         return responseUser;
+    }
+
+    @Override
+    public Boolean existByLoginId(RequestLoginIdCheck requestLoginIdCheck) {
+        return iUserRepository.existsByLoginId(requestLoginIdCheck.getLoginId());
     }
 }
