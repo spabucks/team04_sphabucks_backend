@@ -46,7 +46,7 @@ public class CartController {
     @PatchMapping("/delete")
     @Operation(summary = "장바구니에서 선택 상품 삭제")
     void deleteCart(@RequestBody RequestDeleteCart request){
-        iCartService.deleteCart(request.getUserId());
+        iCartService.deleteCart(request.getCartId());
     }
 
 //    @PostMapping("/delete/all")
