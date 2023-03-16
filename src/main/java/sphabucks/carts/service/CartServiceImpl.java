@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.repository.ICartRepo;
-import sphabucks.carts.vo.RequestCart;
-import sphabucks.carts.vo.RequestUpdateCart;
-import sphabucks.carts.vo.ResponseGetCart;
-import sphabucks.carts.vo.ResponseGetCartProduct;
+import sphabucks.carts.vo.*;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductCategoryListRepository;
@@ -101,14 +98,25 @@ public class CartServiceImpl implements ICartService{
         cart.setIsDelete(true);
     }
 
-//    @Override
-//    @Transactional
-//    public void deleteAll(String userId) {
-//        // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
-//        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId).getId());
-//        for(Cart cart:cartList){
-//            cart.setAmount(0L);
-//            cart.setIsDelete(true);
-//        }
-//    }
+    @Override
+    @Transactional
+    public void deleteSelectedCart(List<RequestDeleteSelectedCart> requestList) {
+        requestList.forEach(request -> {
+            Cart cart = iCartRepo.findById(request.getCartId()).get();
+            log.info(cart.toString());
+            cart.setAmount(0L);
+            cart.setIsDelete(true);
+        });
+    }
+
+    @Override
+    @Transactional
+    public void deleteAll(String userId) {
+        // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
+        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId).getId());
+        for(Cart cart:cartList){
+            cart.setAmount(0L);
+            cart.setIsDelete(true);
+        }
+    }
 }

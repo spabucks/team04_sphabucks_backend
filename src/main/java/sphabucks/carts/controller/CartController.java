@@ -49,9 +49,15 @@ public class CartController {
         iCartService.deleteCart(request.getCartId());
     }
 
-//    @PostMapping("/delete/all")
-//    @Operation(summary = "장바구니 전체 삭제")
-//    void deleteAll(@RequestBody String userId){
-//        iCartService.deleteAll(userId);
-//    }
+    @PutMapping("/selectedDelete")
+    @Operation(summary = "장바구니에서 선택 상품 여러개 삭제")
+    void selectedDeleteCart(@RequestBody List<RequestDeleteSelectedCart> request) {
+        iCartService.deleteSelectedCart(request);
+    }
+
+    @PutMapping("/delete/all")
+    @Operation(summary = "장바구니 전체 삭제")
+    void deleteAll(@RequestBody RequestDeleteAll request){
+        iCartService.deleteAll(request.getUserId());
+    }
 }
