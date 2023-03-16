@@ -1,6 +1,7 @@
 package sphabucks.users.service;
 
 import sphabucks.users.model.User;
+import sphabucks.users.vo.RequestLoginIdCheck;
 import sphabucks.users.vo.RequestUser;
 import sphabucks.users.vo.ResponseUser;
 
@@ -14,5 +15,7 @@ public interface IUserService {
     List<User> getAll();
     ResponseUser getUserByEmail(String email);
     ResponseUser getUserByLoginId(String loginId);
+
+    Boolean existByLoginId(RequestLoginIdCheck requestLoginIdCheck);
 
 }
