@@ -3,6 +3,8 @@ package sphabucks.tag.service;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
 import sphabucks.tag.model.Tag;
 import sphabucks.tag.repository.ITagRepository;
 import sphabucks.tag.vo.RequestTag;
@@ -20,6 +22,9 @@ public class TagServiceImpl implements ITagService{
 
     @Override
     public void addTag(RequestTag requestTag) {
+        if(iTagRepository.findByName(requestTag.getName()).isPresent()){
+            throw new BusinessException(ErrorCode.TAG_NOT_EXISTS,ErrorCode.TAG_NOT_EXISTS.getCode());
+        }
         ModelMapper modelMapper = new ModelMapper();
         Tag tag = modelMapper.map(requestTag, Tag.class);
         iTagRepository.save(tag);
@@ -27,11 +32,18 @@ public class TagServiceImpl implements ITagService{
 
     @Override
     public Tag getTag(Long id) {
-        return iTagRepository.findById(id).get();
+        Tag tag = iTagRepository.findById(id)
+                .orElseThrow(()-> new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode()));
+        return tag;
     }
 
     @Override
     public List<Tag> getAll() {
+
+        if(iTagRepository.findAll().isEmpty()){
+            throw new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode());
+        }
+
         return iTagRepository.findAll();
     }
 
@@ -41,9 +53,14 @@ public class TagServiceImpl implements ITagService{
         HashSet<Long> tagIds = new HashSet<>();
         while (tagIds.size() < 6) tagIds.add((long) (Math.random() * iTagRepository.count()) + 1);
 
+        if(iTagRepository.findAll().isEmpty()){
+            throw new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode());
+        }
         for (Long tagId : tagIds) responseRecommendTags.add(ResponseRecommendTag.builder()
                 .id(tagId)
-                .name(iTagRepository.findById(tagId).get().getName())
+                .name(iTagRepository.findById(tagId)
+                        .orElseThrow(()-> new BusinessException(ErrorCode.DUPLICATE_TAG, ErrorCode.DUPLICATE_TAG.getCode()))
+                        .getName())
                 .build());
         return responseRecommendTags;
     }
