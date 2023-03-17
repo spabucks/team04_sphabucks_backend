@@ -2,6 +2,7 @@ package sphabucks.carts.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.repository.ICartRepo;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements ICartService{
     private final ICartRepo iCartRepo;
     private final IUserRepository iUserRepository;
@@ -77,14 +79,12 @@ public class CartServiceImpl implements ICartService{
         // 고객의 장바구니 속 isDelete = false 인 제품들만 가져옴
         List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
 
-        cartList.forEach(cart -> {
-            responseGetCartList.add(ResponseGetCart.builder()
-                    .cartId(cart.getId())
-                    .productId(cart.getProduct().getId())
-                    .bigCategoryId(cart.getCategoryId())
-                    .count(cart.getAmount())
-                    .build());
-        });
+        cartList.forEach(cart -> responseGetCartList.add(ResponseGetCart.builder()
+                .cartId(cart.getId())
+                .productId(cart.getProduct().getId())
+                .bigCategoryId(cart.getCategoryId())
+                .count(cart.getAmount())
+                .build()));
         return responseGetCartList;
     }
 
@@ -114,6 +114,17 @@ public class CartServiceImpl implements ICartService{
                 .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
         cart.setAmount(0L);
         cart.setIsDelete(true);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSelectedCart(List<RequestDeleteSelectedCart> requestList) {
+        requestList.forEach(request -> {
+            Cart cart = iCartRepo.findById(request.getCartId()).get();
+            log.info(cart.toString());
+            cart.setAmount(0L);
+            cart.setIsDelete(true);
+        });
     }
 
     @Override

@@ -1,9 +1,6 @@
 package sphabucks.carts.service;
 
-import sphabucks.carts.vo.RequestCart;
-import sphabucks.carts.vo.RequestUpdateCart;
-import sphabucks.carts.vo.ResponseGetCart;
-import sphabucks.carts.vo.ResponseGetCartProduct;
+import sphabucks.carts.vo.*;
 
 import java.util.List;
 
@@ -15,6 +12,6 @@ public interface ICartService {
     void updateCart(RequestUpdateCart requestUpdateCart);
 
     void deleteCart(Long id);
+    void deleteSelectedCart(List<RequestDeleteSelectedCart> requestList);
     void deleteAll(String userId);
-
 }
