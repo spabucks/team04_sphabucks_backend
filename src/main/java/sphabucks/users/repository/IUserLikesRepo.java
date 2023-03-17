@@ -9,7 +9,8 @@ import sphabucks.users.model.UserLikes;
 import java.util.List;
 
 public interface IUserLikesRepo extends JpaRepository<UserLikes, Long> {
-    List<UserLikes> findUserLikesByUserId(Long userId);
-    Boolean existsAllByUserId(Long userId);
+    List<UserLikes> findUserLikesByUserUserId(String userId);
+    Boolean existsAllByProductIdAndUserUserId(Long productId, String userId);
+    void deleteByUserUserId(String userId);
 
 }

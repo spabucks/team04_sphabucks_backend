@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
 import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.users.model.UserLikes;
@@ -24,30 +26,47 @@ public class UserLikesServiceImpl implements IUserLikesService{
     private final IProductRepository iProductRepository;
     private final IUserRepository iUserRepository;
     @Override
-    public void addUserLikes(RequestUserLikes requestUserLikes) {
+    @Transactional
+    public void pushUserLikes(RequestUserLikes requestUserLikes) {
         // User가 like를 했을 때
-        if(!iUserLikesRepo.existsAllByUserId(requestUserLikes.getUserId())) {
+        if(!iUserLikesRepo.existsAllByProductIdAndUserUserId(requestUserLikes.getProductId(), requestUserLikes.getUserId())) {
             iUserLikesRepo.save(UserLikes.builder()
-                    .product(iProductRepository.findById(requestUserLikes.getProductId()).get())
-                    .user(iUserRepository.findById(requestUserLikes.getUserId()).get())
+                    .product(iProductRepository.findById(requestUserLikes.getProductId())
+                            .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode())))
+                    .user(iUserRepository.findByUserId(requestUserLikes.getUserId())
+                            .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                     .build());
-            Long count = iProductRepository.findById(requestUserLikes.getProductId()).get().getLikeCount();
+            Long count = iProductRepository.findById(requestUserLikes.getProductId())
+                    .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()))
+                    .getLikeCount();
             iProductRepository.updateLikeCount(count+1, requestUserLikes.getProductId());
         }else{
             // User가 이미 like를 한 상태일 때
-            iUserLikesRepo.deleteById(requestUserLikes.getUserId());
-            Long count = iProductRepository.findById(requestUserLikes.getProductId()).get().getLikeCount();
+            Long count = iProductRepository.findById(requestUserLikes.getProductId())
+                    .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()))
+                    .getLikeCount();
             iProductRepository.updateLikeCount(count-1, requestUserLikes.getProductId());
+            iUserLikesRepo.deleteByUserUserId(requestUserLikes.getUserId());
         }
     }
 
     @Override
-    public List<UserLikes> getUserLikes(Long userId) {
-        return iUserLikesRepo.findUserLikesByUserId(userId);
+    public List<UserLikes> getUserLikes(String userId) {
+
+        if(iUserLikesRepo.findUserLikesByUserUserId(userId).isEmpty()){
+            throw new BusinessException(ErrorCode.LIKE_NOT_EXISTS, ErrorCode.LIKE_NOT_EXISTS.getCode());
+        }
+
+        return iUserLikesRepo.findUserLikesByUserUserId(userId);
     }
 
     @Override
     public List<UserLikes> getAll() {
+
+        if(iUserLikesRepo.findAll().isEmpty()){
+            throw new BusinessException(ErrorCode.LIKE_NOT_EXISTS, ErrorCode.LIKE_NOT_EXISTS.getCode());
+        }
+
         return iUserLikesRepo.findAll();
     }
 }

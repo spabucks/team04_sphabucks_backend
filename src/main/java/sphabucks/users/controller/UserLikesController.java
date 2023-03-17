@@ -20,15 +20,16 @@ public class UserLikesController {
 
     private final IUserLikesService iUserLikesService;
 
-    @PostMapping("/add")
+    @PutMapping("/push")
     @Operation(summary = "좋아요 클릭", description = "다시 한번 눌리면 좋아요 취소")
-    void addUserLikes(@RequestBody RequestUserLikes requestUserLikes){
-        iUserLikesService.addUserLikes(requestUserLikes);
+    void pushUserLikes(@RequestBody RequestUserLikes requestUserLikes, @RequestHeader String userId){
+        requestUserLikes.setUserId(userId);
+        iUserLikesService.pushUserLikes(requestUserLikes);
     }
 
-    @GetMapping("/get/{userId}")
+    @GetMapping("/get")
     @Operation(summary = "좋아요 클릭한 상품 조회", description = "")
-    List<UserLikes> getUserLikes(@PathVariable Long userId){
+    List<UserLikes> getUserLikes(@RequestHeader String userId){
         return iUserLikesService.getUserLikes(userId);
     }
 

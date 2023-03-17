@@ -6,6 +6,7 @@ import sphabucks.tag.vo.ResponseExhibitionProduct;
 import sphabucks.tag.vo.ResponseProductTag;
 
 import java.util.List;
+import java.util.Optional;
 
 // 진행사항, 이슈상황, 팁 공유
 
@@ -15,6 +16,8 @@ public interface IProductTagRepository extends JpaRepository<ProductTag, Long> {
     //    List<ResponseExhibitionProduct> findAllByTagId(Long tagId);
     List<ProductTag> findAllByTagId(Long tagId);
     List<ProductTag> findAllById(Long productTagId);
+
+    Optional<ProductTag> findByProductIdAndTagId(Long productId, Long tagId);
 
 
 //    List<ProductTag> findByProductIdOrderByTagId(Long tagId);

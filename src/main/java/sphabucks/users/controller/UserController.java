@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.users.model.User;
 import sphabucks.users.service.IUserService;
+import sphabucks.users.vo.RequestLoginIdCheck;
 import sphabucks.users.vo.RequestUser;
 import sphabucks.users.vo.ResponseUser;
 
@@ -34,13 +35,13 @@ public class UserController {
 
     @GetMapping("/get/email/{email}")
     @Operation(summary = "이메일로 고객 찾기", description = "필요 없어 보임")
-    public ResponseUser getUserByEmail(@RequestParam String email) {
+    public ResponseUser getUserByEmail(@PathVariable String email) {
         return iUserService.getUserByEmail(email);
     }
 
     @GetMapping("/get/loginId/{loginId}")
     @Operation(summary = "로그인 아이디로 고객 찾기", description = "필요 없어 보임")
-    public ResponseUser getUserByLoginId(@RequestParam String loginId) {
+    public ResponseUser getUserByLoginId(@PathVariable String loginId) {
         return iUserService.getUserByLoginId(loginId);
     }
 
@@ -49,4 +50,11 @@ public class UserController {
     public List<User> getAll(){
         return iUserService.getAll();
     }
+
+    @PostMapping("/check/loginId")
+    @Operation(summary = "아이디 중복 체크", description = "회원가입시 아이디 중복체크")
+    public Boolean checkLoginId(@RequestBody RequestLoginIdCheck requestLoginIdCheck) {
+        return iUserService.existByLoginId(requestLoginIdCheck);
+    }
+
 }

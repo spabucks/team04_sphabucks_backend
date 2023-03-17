@@ -6,6 +6,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sphabucks.config.JwtService;
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
 import sphabucks.users.model.Role;
 import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
@@ -53,9 +55,12 @@ public class AuthenticationService {
                             authenticationRequest.getPwd()
                     )
             );
-            var user = userRepository.findByLoginId(authenticationRequest.getLoginId()).orElseThrow();
+            var user = userRepository.findByLoginId(authenticationRequest.getLoginId())
+                    .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
             var jwtToken = jwtService.generateToken(user);
+
             return AuthenticationResponse.builder()
+                    .userId(userRepository.findByLoginId(authenticationRequest.getLoginId()).get().getUserId())
                     .token(jwtToken)
                     .build();
         }

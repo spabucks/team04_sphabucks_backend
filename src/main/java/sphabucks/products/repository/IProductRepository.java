@@ -10,11 +10,14 @@ import sphabucks.products.model.Product;
 import sphabucks.products.vo.ResponseProduct;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllById(Long id);
 
     Page<Product> findByNameContains(String keyword, Pageable pageable);
+
+    Optional<Product> findByName(String name);
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Product p SET p.likeCount = :likeCount where p.id = :id ")
