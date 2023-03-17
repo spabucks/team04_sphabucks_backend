@@ -6,6 +6,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
+import sphabucks.error.ErrorResponse;
 import sphabucks.event.model.Event;
 import sphabucks.event.repository.IEventProductListRepository;
 import sphabucks.event.repository.IEventRepository;
@@ -36,6 +39,11 @@ public class ProductServiceImpl implements IProductService{
 
     @Override
     public void addProduct(RequestProduct requestProduct) {
+
+        if(iProductRepository.findByName(requestProduct.getName()).isPresent()){
+            throw new BusinessException(ErrorCode.DUPLICATE_PRODUCT, ErrorCode.DUPLICATE_PRODUCT.getCode());
+        }
+
         ModelMapper modelMapper = new ModelMapper();
         Product product = modelMapper.map(requestProduct, Product.class);
 
@@ -44,11 +52,21 @@ public class ProductServiceImpl implements IProductService{
 
     @Override
     public ResponseProduct getProduct(Long id) {
-        Product product = iProductRepository.findById(id).get();
+
+        Product product = iProductRepository.findById(id)
+                .orElseThrow(()->new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
+
+        if(iProductImageRepo.findAllByProductId(id).isEmpty()){
+            throw new BusinessException(ErrorCode.IMAGE_NOT_EXISTS, ErrorCode.IMAGE_NOT_EXISTS.getCode());
+        }
+
         List<ProductImage> productImages = iProductImageRepo.findAllByProductId(id);
         String thumbnail = productImages.get(0).getImage();
         List<String> detailImages = new ArrayList<>();
-        for (int i=1; i<productImages.size(); i++) detailImages.add(productImages.get(i).getImage());
+        for (int i=1; i<productImages.size(); i++) {
+            detailImages.add(productImages.get(i).getImage());
+        }
+
         return ResponseProduct.builder()
                 .id(id)
                 .title(product.getName())
@@ -62,16 +80,29 @@ public class ProductServiceImpl implements IProductService{
 
     @Override
     public List<Product> getAll() {
+
+        if(iProductRepository.findAll().isEmpty()){
+            throw new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode());
+        }
+
         return iProductRepository.findAll();
     }
 
     // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)
     @Override
     public List<ResponseProduct> getBestBigCategory(Long bigCategoryId) {
+
+        if(iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId).isEmpty()){
+            throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+        }
         List<ProductCategoryList> productCategoryLists = iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId);
         List<ResponseProduct> responseProductList = new ArrayList<>();
 
         productCategoryLists.forEach(productList -> {
+
+            if(iProductImageRepo.findAllByProductId(productList.getId()).isEmpty()){
+                throw new BusinessException(ErrorCode.IMAGE_NOT_EXISTS, ErrorCode.IMAGE_NOT_EXISTS.getCode());
+            }
 
             List<ProductImage> productImageList = iProductImageRepo.findAllByProductId(productList.getId());
             List<String> productDetailImage = new ArrayList<>();
@@ -96,13 +127,13 @@ public class ProductServiceImpl implements IProductService{
     // 상품 검색 기능
     public List<ResponseSearchProduct> searchProductKeyword(String keyword, Pageable pageable) {
 
+        if(iProductRepository.findByNameContains(keyword, pageable).isEmpty()){
+            throw new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode());
+        }
         Page<Product> productList = iProductRepository.findByNameContains(keyword, pageable);
 
         List<ResponseSearchProduct> responseSearchProductList = new ArrayList<>();
 
-
-        // paging 처리 할 때 page별로 foreach 문 사용되어 있는데,
-        // List별로 foreach 문 사용 후 paging 처리를 해줘야 할 것 같다.
         productList.forEach(product -> {
             String tag = "";
             if (iProductTagRepository.findAllByProductId(product.getId()).size() != 0) {
@@ -112,7 +143,9 @@ public class ProductServiceImpl implements IProductService{
                     .productId(product.getId())
                     .bigCategory(iProductCategoryListRepository.findAllByProductId(product.getId()).get(0).getBigCategory().getName())
                     .smallCategory(iProductCategoryListRepository.findAllByProductId(product.getId()).get(0).getSmallCategory().getName())
-                    .event(iEventProductListRepository.findByProductId(product.getId()).getEvent().getSeason())
+                    .event(iEventProductListRepository.findByProductId(product.getId())
+                            .orElseThrow(()-> new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode()))
+                            .getEvent().getSeason())
                     .tag(tag)
                     .productName(product.getName())
                     //.imgUrl(iProductImageRepo.findAllByProductId(product.getId()).get(0).getImage())
