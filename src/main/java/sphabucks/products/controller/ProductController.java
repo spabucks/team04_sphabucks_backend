@@ -41,6 +41,12 @@ public class ProductController {
         return iProductService.getAll();
     }
 
+    @GetMapping("/get/allProduct")
+    @Operation(summary = "전체상품조회(카테고리포함)", description = "구현 중 ")
+    public List<ResponseSearchProduct> getAllProduct(Pageable pageable){
+        return iProductService.getAllProducts(pageable);
+    }
+
     // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)
     @GetMapping("/get-best/{bigCategoryId}")
     @Operation(summary = "베스트 상품 조회")

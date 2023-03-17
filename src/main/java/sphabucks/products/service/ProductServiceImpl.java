@@ -88,6 +88,42 @@ public class ProductServiceImpl implements IProductService{
         return iProductRepository.findAll();
     }
 
+    @Override
+    public List<ResponseSearchProduct> getAllProducts(Pageable pageable){
+
+        Page<Product> productList = iProductRepository.findAll(pageable);
+
+        List<ResponseSearchProduct> responseSearchProductList = new ArrayList<>();
+
+        productList.forEach(product -> {
+            String tag = "";
+            if (iProductTagRepository.findAllByProductId(product.getId()).size() != 0) {
+                tag = iProductTagRepository.findAllByProductId(product.getId()).get(0).getTag().getName();
+            }
+            ResponseSearchProduct responseProduct = ResponseSearchProduct.builder()
+                    .productId(product.getId())
+                    .bigCategory(iProductCategoryListRepository.findAllByProductId(product.getId()).get(0).getBigCategory().getName())
+                    .smallCategory(iProductCategoryListRepository.findAllByProductId(product.getId()).get(0).getSmallCategory().getName())
+                    .event(iEventProductListRepository.findByProductId(product.getId())
+                            .orElseThrow(()-> new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode()))
+                            .getEvent().getSeason())
+                    .tag(tag)
+                    .productName(product.getName())
+                    .imgUrl(iProductImageService.getProductImage(product.getId()).get(0).getImage())
+                    .price(product.getPrice())
+                    .size(product.getSize())
+                    .amount(product.getAmount())
+                    .isBest(product.getIsBest())
+                    .isNew(product.getIsNew())
+                    .likeCount(product.getLikeCount())
+                    .build();
+
+            responseSearchProductList.add(responseProduct);
+        });
+
+        return responseSearchProductList;
+    }
+
     // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)
     @Override
     public List<ResponseProduct> getBestBigCategory(Long bigCategoryId) {

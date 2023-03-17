@@ -14,6 +14,8 @@ public interface IProductService {
     ResponseProduct getProduct(Long productId);
     List<Product> getAll();
 
+    List<ResponseSearchProduct> getAllProducts(Pageable pageable);
+
     // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)
     List<ResponseProduct> getBestBigCategory(Long bigCategoryId);
 
