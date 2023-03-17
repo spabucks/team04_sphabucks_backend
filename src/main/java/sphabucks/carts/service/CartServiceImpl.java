@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.repository.ICartRepo;
-import sphabucks.carts.vo.RequestCart;
-import sphabucks.carts.vo.RequestUpdateCart;
-import sphabucks.carts.vo.ResponseGetCart;
-import sphabucks.carts.vo.ResponseGetCartProduct;
+import sphabucks.carts.vo.*;
 import sphabucks.error.BusinessException;
 import sphabucks.error.ErrorCode;
 import sphabucks.productimage.repository.IProductImageRepo;
@@ -120,8 +117,8 @@ public class CartServiceImpl implements ICartService{
     @Transactional
     public void deleteSelectedCart(List<RequestDeleteSelectedCart> requestList) {
         requestList.forEach(request -> {
-            Cart cart = iCartRepo.findById(request.getCartId()).get();
-            log.info(cart.toString());
+            Cart cart = iCartRepo.findById(request.getCartId())
+                    .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
             cart.setAmount(0L);
             cart.setIsDelete(true);
         });
