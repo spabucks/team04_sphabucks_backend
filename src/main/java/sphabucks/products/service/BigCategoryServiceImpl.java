@@ -23,7 +23,7 @@ public class BigCategoryServiceImpl implements IBigCategoryService{
     @Override
     public void addBigCategory(RequestBigCategory requestBigCategory) {
         if(iBigCategoryRepository.findByName(requestBigCategory.getName()).isPresent()){
-            throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+            throw new BusinessException(ErrorCode.DUPLICATE_CATEGORY, ErrorCode.DUPLICATE_CATEGORY.getCode());
         }
         ModelMapper modelMapper = new ModelMapper();
         BigCategory bigCategory = modelMapper.map(requestBigCategory, BigCategory.class);

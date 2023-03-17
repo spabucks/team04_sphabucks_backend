@@ -122,7 +122,7 @@ public class CartServiceImpl implements ICartService{
         // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
 
         List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId)
-                .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()))
+                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
                 .getId());
         if(cartList.isEmpty()){
             throw new BusinessException(ErrorCode.CARTS_NOT_EXISTS, ErrorCode.CARTS_NOT_EXISTS.getCode());

@@ -91,9 +91,12 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
         // 2. 현재 보고있는 상품과 동일한 소분류 카테고리 상품들을 검색
 
         Long currentEventId = iEventProductListRepository.findByProductId(productId)
-                .orElseThrow(()-> new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode()))
+                .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()))
                 .getEvent().getId();
 
+        if(iEventProductService.getProductsByEventId(currentEventId).isEmpty()){
+            throw new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode());
+        }
         return_value.add(ResponseProductList.builder()
                 .id(1L)
                 .name(iEventRepository.findById(currentEventId)

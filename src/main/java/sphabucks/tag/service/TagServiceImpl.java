@@ -23,7 +23,7 @@ public class TagServiceImpl implements ITagService{
     @Override
     public void addTag(RequestTag requestTag) {
         if(iTagRepository.findByName(requestTag.getName()).isPresent()){
-            throw new BusinessException(ErrorCode.TAG_NOT_EXISTS,ErrorCode.TAG_NOT_EXISTS.getCode());
+            throw new BusinessException(ErrorCode.DUPLICATE_TAG,ErrorCode.DUPLICATE_TAG.getCode());
         }
         ModelMapper modelMapper = new ModelMapper();
         Tag tag = modelMapper.map(requestTag, Tag.class);
@@ -59,7 +59,7 @@ public class TagServiceImpl implements ITagService{
         for (Long tagId : tagIds) responseRecommendTags.add(ResponseRecommendTag.builder()
                 .id(tagId)
                 .name(iTagRepository.findById(tagId)
-                        .orElseThrow(()-> new BusinessException(ErrorCode.DUPLICATE_TAG, ErrorCode.DUPLICATE_TAG.getCode()))
+                        .orElseThrow(()-> new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode()))
                         .getName())
                 .build());
         return responseRecommendTags;

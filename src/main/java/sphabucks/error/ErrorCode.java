@@ -31,6 +31,7 @@ public enum ErrorCode {
     DUPLICATE_EVENT(404, "EVENT-002","이벤트가 하나도 존재하지 않는 경우"),
 
     CATEGORY_NOT_EXISTS(404, "CATEGORY-001","해당 카테고리가 존재하지 않는 경우"),
+    DUPLICATE_CATEGORY(404, "CATEGORY-002","카테고리가 중복된 경우"),
 
     HISTORY_NOT_EXISTS(404, "HISTORY-001","해당 결제내역이 존재하지 않는 경우"),
     DUPLICATE_HISTORY(404, "HISTORY-002","주문번호가 중복된 경우"),
@@ -38,6 +39,7 @@ public enum ErrorCode {
     IMAGES_NOT_EXISTS(404, "IMAGE-002","이미지가 하나도 존재하지 않는 경우"),
     DESTINATION_NOT_EXISTS(404, "DESTINATION-001","해당 배송지가 존재하지 않는 경우"),
     DESTINATION_BASIC_NOT_EXISTS(404, "DESTINATION-002","기본 배송지가 존재하지 않는 경우"),
+
 
     TAG_NOT_EXISTS(404, "TAG-001","해당 태그가 존재하지 않는 경우"),
     DUPLICATE_TAG(404, "TAG-002","태그가 중복된 경우"),

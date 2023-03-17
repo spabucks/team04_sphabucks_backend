@@ -40,7 +40,7 @@ public class CardListServiceImpl implements ICardListService{
     public List<CardList> getCardList(Long userId) {
 
         User findUser = iUserRepository.findById(userId)
-                .orElseThrow(()-> new BusinessException(ErrorCode.CARDS_NOT_EXISTS, ErrorCode.CARDS_NOT_EXISTS.getCode()));
+                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
         if(iCardListRepo.findAllByUserUserId(findUser.getUserId()).isEmpty()){
             throw new BusinessException(ErrorCode.CARD_NOT_EXISTS, ErrorCode.CARD_NOT_EXISTS.getCode());
