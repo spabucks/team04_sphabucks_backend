@@ -3,6 +3,8 @@ package sphabucks.payments.gifticons.service;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
 import sphabucks.payments.gifticons.model.GiftIcon;
 import sphabucks.payments.gifticons.repository.IGiftIconRepository;
 import sphabucks.payments.gifticons.vo.RequestGiftIcon;
@@ -16,6 +18,11 @@ public class GiftIconServiceImpl implements IGiftIconService{
 
     @Override
     public void addGiftIcon(RequestGiftIcon requestGiftIcon) {
+
+        if(iGiftIconRepository.findByNumber(requestGiftIcon.getNumber()).isPresent()){
+            throw new BusinessException(ErrorCode.DUPLICATE_GIFTICON, ErrorCode.DUPLICATE_GIFTICON.getCode());
+        }
+
         ModelMapper modelMapper = new ModelMapper();
         GiftIcon giftIcon = modelMapper.map(requestGiftIcon, GiftIcon.class);
         iGiftIconRepository.save(giftIcon);
@@ -23,7 +30,9 @@ public class GiftIconServiceImpl implements IGiftIconService{
 
     @Override
     public ResponseGiftIcon getGiftIcon(Long id) {
-        GiftIcon giftIcon = iGiftIconRepository.findById(id).get();
+
+        GiftIcon giftIcon = iGiftIconRepository.findById(id)
+                .orElseThrow(()-> new BusinessException(ErrorCode.GIFTICON_NOT_EXISTS, ErrorCode.GIFTICON_NOT_EXISTS.getCode()));
 
         ResponseGiftIcon responseGiftIcon = ResponseGiftIcon.builder()
                 .Id(giftIcon.getId())
