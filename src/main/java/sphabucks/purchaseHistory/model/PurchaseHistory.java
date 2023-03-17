@@ -31,9 +31,9 @@ public class PurchaseHistory extends BaseTimeEntity {
     @Column(nullable = false)
     private Boolean type;
     @Column(nullable = false)
-    private String sp_status;
+    private String spStatus;
     @Column(nullable = false)
-    private String or_status;
+    private String orStatus;
     @Column(nullable = false)
     private String image;
 

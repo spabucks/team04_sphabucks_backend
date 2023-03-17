@@ -7,7 +7,11 @@ import sphabucks.purchaseHistory.vo.IResponsePaymentNum;
 
 import java.util.List;
 
+import java.util.Optional;
+
 public interface IPurchaseHistoryRepository extends JpaRepository<PurchaseHistory, Long> {
+
+    Optional<PurchaseHistory> findByPaymentNum(String paymentNum);
 
     // 거래내역 조회 1. userId에 해당하는 모든 주문번호 조회 (중복x)
     @Query(value = "select payment_num as paymentNum, sum(sum) as sum, sum(amount) as amount " +
@@ -21,4 +25,5 @@ public interface IPurchaseHistoryRepository extends JpaRepository<PurchaseHistor
     List<PurchaseHistory> findAllByPaymentNum(Long userId, String paymentNum);
 
     //List<PurchaseHistory> findAllByPaymentNumAndUserId(Long userId, String paymentNum);
+
 }

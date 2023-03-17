@@ -3,9 +3,14 @@ package sphabucks.purchaseHistory.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
+
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.repository.ICartRepo;
 import sphabucks.productimage.repository.IProductImageRepo;
+
 import sphabucks.purchaseHistory.model.PurchaseHistory;
 import sphabucks.purchaseHistory.repository.IPurchaseHistoryRepository;
 import sphabucks.purchaseHistory.vo.IResponsePaymentNum;
@@ -38,12 +43,17 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
 
         // 주문번호 생성
         String paymentNum = createPaymentNum();
+        if(iPurchaseHistoryRepository.findByPaymentNum(paymentNum).isEmpty()){
+            throw new BusinessException(ErrorCode.DUPLICATE_HISTORY, ErrorCode.DUPLICATE_HISTORY.getCode());
+        }
 
         for (int i = 0; i < selected.size(); i++) {
-            Cart cart = iCartRepo.findById(selected.get(i)).get();
+            Cart cart = iCartRepo.findById(selected.get(i))
+                    .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
 
             PurchaseHistory purchaseHistory = PurchaseHistory.builder()
-                    .user(iUserRepository.findByUserId(userId))
+                    .user(iUserRepository.findByUserId(userId)
+                            .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                     .image(iProductImageRepo.findAllByProductId(
                             cart.getProduct().getId()
                             ).get(0).getImage())
@@ -53,8 +63,8 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                     )
                     .paymentNum(paymentNum.toString())
                     .type(false)
-                    .sp_status("1")
-                    .or_status("1")
+                    .spStatus("1")
+                    .orStatus("1")
                     .productName(cart.getProduct().getName())
                     .build();
 
@@ -69,8 +79,13 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
 
         // userId에 해당하는 paymentNum 모두 조회
         List<IResponsePaymentNum> paymentNumList = iPurchaseHistoryRepository.findAllPaymentNum(
-                iUserRepository.findByUserId(userId).getId()
+                iUserRepository.findByUserId(userId)
+                        .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                        .getId()
         );
+        if(paymentNumList.isEmpty()){
+            throw new BusinessException(ErrorCode.HISTORY_NOT_EXISTS, ErrorCode.HISTORY_NOT_EXISTS.getCode());
+        }
 
         log.info("@@@@@@@@@@@@@@@@@@@@@@@2 {}",paymentNumList);
 
@@ -80,7 +95,9 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
         // 조회한 paymentNum로 조회하면서 list에 결과 저장
         paymentNumList.forEach(paymentNum -> {
             List<PurchaseHistory> purchaseHistoryList = iPurchaseHistoryRepository.findAllByPaymentNum(
-                    iUserRepository.findByUserId(userId).getId(), paymentNum.getPaymentNum()
+                    iUserRepository.findByUserId(userId)
+                            .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                            .getId(), paymentNum.getPaymentNum()
             );
 
             List<ResponsePurchaseHistory> tmp2 = new ArrayList<>();
@@ -97,8 +114,8 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                         .type(purchaseHistory.getType())
                         .paymentNum(purchaseHistory.getPaymentNum())
                         .orderDate(purchaseHistory.getCreateDate())
-                        .sp_status(purchaseHistory.getSp_status())
-                        .or_status(purchaseHistory.getOr_status())
+                        .sp_status(purchaseHistory.getSpStatus())
+                        .or_status(purchaseHistory.getOrStatus())
                         .image(purchaseHistory.getImage())
                         .build();
 
@@ -117,8 +134,8 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                         .sum(paymentNum.getSum())
                         .paymentNum(purchaseHistoryList.get(0).getPaymentNum())
                         .orderDate(purchaseHistoryList.get(0).getCreateDate())
-                        .sp_status(purchaseHistoryList.get(0).getSp_status())
-                        .or_status(purchaseHistoryList.get(0).getOr_status())
+                        .sp_status(purchaseHistoryList.get(0).getSpStatus())
+                        .or_status(purchaseHistoryList.get(0).getOrStatus())
                         .image(purchaseHistoryList.get(0).getImage())
                         .list(tmp2)
                         .build();
@@ -133,8 +150,8 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                         .sum(paymentNum.getSum())
                         .paymentNum(purchaseHistoryList.get(0).getPaymentNum())
                         .orderDate(purchaseHistoryList.get(0).getCreateDate())
-                        .sp_status(purchaseHistoryList.get(0).getSp_status())
-                        .or_status(purchaseHistoryList.get(0).getOr_status())
+                        .sp_status(purchaseHistoryList.get(0).getSpStatus())
+                        .or_status(purchaseHistoryList.get(0).getOrStatus())
                         .image(purchaseHistoryList.get(0).getImage())
                         .list(tmp2)
                         .build();
@@ -149,16 +166,16 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
 
     // 주문번호 생성 (ex) 230315(날짜)-xxxxxx(난수 6자리)
     private String createPaymentNum() {
-        StringBuffer paymentNum = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMMdd");
-        paymentNum.append(currentDate.format(dateTimeFormatter));
-        paymentNum.append("-");
+        sb.append(currentDate.format(dateTimeFormatter));
+        sb.append("-");
         for (int i = 0; i < 6; i++) {
             Random random = new Random();
-            paymentNum.append((random.nextInt(10)));
+            sb.append((random.nextInt(10)));
         }
 
-        return paymentNum.toString();
+        return sb.toString();
     }
 }

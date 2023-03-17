@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductRepository;
@@ -33,7 +35,8 @@ public class UserWishlistServiceImpl implements IUserWishlistService {
     public void clickWishList(RequestUserWishlist request) {
 
         // uuid 를 이용하여 조회한 user
-        User user = iUserRepository.findByUserId(request.getUserId());
+        User user = iUserRepository.findByUserId(request.getUserId())
+                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
         // 해당 유저가 상품을 위시리스트에 추가했던 내역이 있었다면
         if (iUserWishlistRepo.existsByUserUserIdAndProductId(request.getUserId(), request.getProductId())) {
@@ -44,7 +47,8 @@ public class UserWishlistServiceImpl implements IUserWishlistService {
             log.info("new data");
             iUserWishlistRepo.save(UserWishlist.builder()
                             .user(user)
-                            .product(iProductRepository.findById(request.getProductId()).get())
+                            .product(iProductRepository.findById(request.getProductId())
+                                    .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode())))
                             .isDeleted(false)
                     .build());
         }
@@ -53,6 +57,11 @@ public class UserWishlistServiceImpl implements IUserWishlistService {
     @Override
     public List<ResponseWishList> getByUserWishlist(String userId) {
         List<ResponseWishList> responseWishLists = new ArrayList<>();
+
+        if(iUserWishlistRepo.findAllByUserUserIdAndIsDeletedIsFalse(userId).isEmpty()){
+            throw new BusinessException(ErrorCode.WISHLIST_NOT_EXISTS, ErrorCode.WISHLIST_NOT_EXISTS.getCode());
+        }
+
         iUserWishlistRepo.findAllByUserUserIdAndIsDeletedIsFalse(userId).forEach(userWishlist -> {
             responseWishLists.add(ResponseWishList.builder()
                     .id(userWishlist.getId())
@@ -64,7 +73,8 @@ public class UserWishlistServiceImpl implements IUserWishlistService {
 
     @Override
     public ResponseWishListProduct getWishListProduct(Long productId) {
-        Product product = iProductRepository.findById(productId).get();
+        Product product = iProductRepository.findById(productId)
+                .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
         return ResponseWishListProduct.builder()
                 .title(product.getName())
                 .price(product.getPrice())
