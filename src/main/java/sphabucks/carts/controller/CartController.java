@@ -32,6 +32,12 @@ public class CartController {
         return iCartService.getCart(userId);
     }
 
+    @GetMapping("/get/v2/{userId}")
+    @Operation(summary = "장바구니 조회 v2", description = "유저의 카트 속 모든 정보를 한번에 반환해줌")
+    List<ResponseCartV2> getCartV2(@PathVariable String userId) {
+        return iCartService.getCartV2(userId);
+    }
+
     @GetMapping("/get/product/{id}")
     public ResponseGetCartProduct getCartProduct(@PathVariable Long id) {
         return iCartService.getCartProduct(id);
