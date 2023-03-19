@@ -15,8 +15,10 @@ import sphabucks.event.repository.IEventRepository;
 import sphabucks.productimage.model.ProductImage;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.productimage.service.IProductImageService;
+import sphabucks.products.model.BigCategory;
 import sphabucks.products.model.Product;
 import sphabucks.products.model.ProductCategoryList;
+import sphabucks.products.repository.IBigCategoryRepository;
 import sphabucks.products.repository.IProductCategoryListRepository;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.products.vo.*;
@@ -36,6 +38,7 @@ public class ProductServiceImpl implements IProductService{
     private final IProductTagRepository iProductTagRepository;
     private final IEventRepository iEventRepository;
     private final IProductImageService iProductImageService;
+    private final IBigCategoryRepository iBigCategoryRepository;
 
     @Override
     public void addProduct(RequestProduct requestProduct) {
@@ -295,6 +298,215 @@ public class ProductServiceImpl implements IProductService{
                 .smallCategory(responseMenu_smallCategory)
                 .season(responseMenu_season)
                 .build();
+    }
+
+    // 빅카테고리 조회 (햄버거 메뉴에서 넘어갈 떄 사용)
+    @Override
+    public List<ResponseBigCategory> getAllBigCategory() {
+
+        List<BigCategory> list = iBigCategoryRepository.findAll();
+
+        List<ResponseBigCategory> result = new ArrayList<>();
+        ResponseBigCategory totalMenu = ResponseBigCategory.builder()
+                .index(0L)
+                .name("전체")
+                .build();
+        result.add(totalMenu);
+
+
+        list.forEach(item -> {
+            ResponseBigCategory responseBigCategory = ResponseBigCategory.builder()
+                    .index(item.getId())
+                    .name(item.getName())
+                    .build();
+
+            result.add(responseBigCategory);
+        });
+
+        return result;
+    }
+
+    // 빅카테고리별 서브 카테고리 조회 (햄버거 메뉴때 사용)
+    @Override
+    public List<ResponseCategoryMenu> getAllSubCategory(Long bigCategoryId) {
+
+        // 리턴할 결과 리스트
+        List<ResponseCategoryMenu> result = new ArrayList<>();
+
+        // 사이즈 (텀블러, 머그만)
+        if (bigCategoryId == 2 || bigCategoryId == 3) {
+            List<ResponseMenu> listSize = new ArrayList<>();
+            ResponseMenu responseMenu1 = ResponseMenu.builder()
+                    .id(1L)
+                    .name("Short")
+                    .build();
+            listSize.add(responseMenu1);
+            ResponseMenu responseMenu2 = ResponseMenu.builder()
+                    .id(2L)
+                    .name("Tall")
+                    .build();
+            listSize.add(responseMenu2);
+            ResponseMenu responseMenu3 = ResponseMenu.builder()
+                    .id(3L)
+                    .name("Grande")
+                    .build();
+            listSize.add(responseMenu3);
+            ResponseMenu responseMenu4 = ResponseMenu.builder()
+                    .id(4L)
+                    .name("Venti")
+                    .build();
+            listSize.add(responseMenu4);
+
+            ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
+                    .id(1L)
+                    .title("용량")
+                    .data(listSize)
+                    .build();
+            result.add(responseCategorySmallCategory);
+        }
+
+        // 가격 (공통)
+        List<ResponseMenu> listPrice = new ArrayList<>();
+        for (int i = 1; i < 6; i++) {
+            switch (i) {
+                case 1 : ResponseMenu responsePrice1 = ResponseMenu.builder()
+                        .id(Integer.toUnsignedLong(i))
+                        .name("1만원 미만")
+                        .build();
+                    listPrice.add(responsePrice1);
+                    break;
+                case 2,3,4 : ResponseMenu responsePrice2 = ResponseMenu.builder()
+                        .id(Integer.toUnsignedLong(i))
+                        .name(i + "만원대")
+                        .build();
+                    listPrice.add(responsePrice2);
+                    break;
+                case 5 : ResponseMenu responsePrice3 = ResponseMenu.builder()
+                        .id(Integer.toUnsignedLong(i))
+                        .name(i + "만원 이상")
+                        .build();
+                    listPrice.add(responsePrice3);
+                    break;
+            }
+        }
+        if (bigCategoryId == 2 || bigCategoryId == 3) {
+            ResponseCategoryMenu responseCategoryPrice = ResponseCategoryMenu.builder()
+                    .id(2L)
+                    .title("가격")
+                    .data(listPrice)
+                    .build();
+            result.add(responseCategoryPrice);
+        } else {
+            ResponseCategoryMenu responseCategoryPrice = ResponseCategoryMenu.builder()
+                    .id(1L)
+                    .title("가격")
+                    .data(listPrice)
+                    .build();
+            result.add(responseCategoryPrice);
+        }
+
+        if (bigCategoryId == 0) {
+
+        } else if (bigCategoryId == 1) {
+            List<ResponseMenu> listSmallCategory = new ArrayList<>();
+            ResponseMenu responseMenu1 = ResponseMenu.builder()
+                    .id(1L)
+                    .name("롤케이크")
+                    .build();
+            listSmallCategory.add(responseMenu1);
+            ResponseMenu responseMenu2 = ResponseMenu.builder()
+                    .id(2L)
+                    .name("홀케이크")
+                    .build();
+            listSmallCategory.add(responseMenu2);
+
+            ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
+                    .id(2L)
+                    .title("카테고리")
+                    .data(listSmallCategory)
+                    .build();
+            result.add(responseCategorySmallCategory);
+
+        } else if (bigCategoryId == 2) {
+            List<ResponseMenu> listSmallCategory = new ArrayList<>();
+            ResponseMenu responseMenu1 = ResponseMenu.builder()
+                    .id(1L)
+                    .name("플라스틱 텀블러")
+                    .build();
+            listSmallCategory.add(responseMenu1);
+            ResponseMenu responseMenu2 = ResponseMenu.builder()
+                    .id(2L)
+                    .name("스테인리스 텀블러")
+                    .build();
+            listSmallCategory.add(responseMenu2);
+            ResponseMenu responseMenu3 = ResponseMenu.builder()
+                    .id(3L)
+                    .name("보온병")
+                    .build();
+            listSmallCategory.add(responseMenu3);
+            ResponseMenu responseMenu4 = ResponseMenu.builder()
+                    .id(4L)
+                    .name("콜드컵")
+                    .build();
+            listSmallCategory.add(responseMenu4);
+
+            ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
+                    .id(3L)
+                    .title("카테고리")
+                    .data(listSmallCategory)
+                    .build();
+            result.add(responseCategorySmallCategory);
+
+        } else if (bigCategoryId == 3) {
+            List<ResponseMenu> listSmallCategory = new ArrayList<>();
+            ResponseMenu responseMenu1 = ResponseMenu.builder()
+                    .id(1L)
+                    .name("머그")
+                    .build();
+            listSmallCategory.add(responseMenu1);
+            ResponseMenu responseMenu2 = ResponseMenu.builder()
+                    .id(2L)
+                    .name("글라스")
+                    .build();
+            listSmallCategory.add(responseMenu2);
+            ResponseMenu responseMenu3 = ResponseMenu.builder()
+                    .id(3L)
+                    .name("리유저블")
+                    .build();
+            listSmallCategory.add(responseMenu3);
+
+            ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
+                    .id(3L)
+                    .title("카테고리")
+                    .data(listSmallCategory)
+                    .build();
+            result.add(responseCategorySmallCategory);
+
+        } else {
+            // 없는 카테고리
+        }
+
+        // 시즌 (공통) (list 사이즈별로 다르게 처리)
+        List<ResponseMenu> listSeason = new ArrayList<>();
+
+        List<Event> eventList = iEventRepository.findAll();
+        for (int i = 0; i < eventList.size(); i++) {
+            if (!eventList.get(i).getSeason().equals("일반")) {
+                ResponseMenu responseSeason = ResponseMenu.builder()
+                        .id(Integer.toUnsignedLong(i))
+                        .name(eventList.get(i).getSeason())
+                        .build();
+                listSeason.add(responseSeason);
+            }
+        }
+        ResponseCategoryMenu responseCategorySeason = ResponseCategoryMenu.builder()
+                .id( Integer.toUnsignedLong(result.size()+1) )
+                .title("시즌")
+                .data(listSeason)
+                .build();
+        result.add(responseCategorySeason);
+
+        return result;
     }
 
 

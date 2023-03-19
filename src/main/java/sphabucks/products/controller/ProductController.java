@@ -72,5 +72,22 @@ public class ProductController {
         return iProductService.searchProductKeywordMenu(keyword, pageable);
     }
 
+    @GetMapping("/getBigCategory")
+    @Operation(summary = "빅 카테고리 메뉴 불러오기 (전체, 케이크, 텀블러 ,,,)",
+            description = "빅 카테고리 메뉴 불러오기 (전체 메뉴도 포함), 햄버거 메뉴 구현시 사용")
+    @Tag(name = "검색")
+    public List<ResponseBigCategory> getBigCategoryMenu() {
+        return iProductService.getAllBigCategory();
+    }
+
+    @GetMapping("/getSubCategory/{bigCategoryId}")
+    @Operation(summary = "하위 카테고리 메뉴 불러오기 (전체, 케이크, 텀블러 ,,,)",
+            description = "빅 카테고리 메뉴 클릭시 동적으로 하위 메뉴 구현시 사용")
+    @Tag(name = "검색")
+    public List<ResponseCategoryMenu> getSubCategoryMenu(@PathVariable Long bigCategoryId) {
+        return iProductService.getAllSubCategory(bigCategoryId);
+    }
+
+
 
 }
