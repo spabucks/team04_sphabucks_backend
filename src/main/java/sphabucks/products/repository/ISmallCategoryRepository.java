@@ -11,6 +11,8 @@ public interface ISmallCategoryRepository extends JpaRepository<SmallCategory, L
 
     List<SmallCategory> findById(BigCategory bigCategory);
     Optional<SmallCategory> findByName(String name);
+    List<SmallCategory> findAllByBigCategoryId(Long bigCategoryId);
+
 
 
 }

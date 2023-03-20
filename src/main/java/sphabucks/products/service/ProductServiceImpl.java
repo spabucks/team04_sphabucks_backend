@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sphabucks.error.BusinessException;
 import sphabucks.error.ErrorCode;
-import sphabucks.error.ErrorResponse;
 import sphabucks.event.model.Event;
 import sphabucks.event.repository.IEventProductListRepository;
 import sphabucks.event.repository.IEventRepository;
@@ -18,9 +17,11 @@ import sphabucks.productimage.service.IProductImageService;
 import sphabucks.products.model.BigCategory;
 import sphabucks.products.model.Product;
 import sphabucks.products.model.ProductCategoryList;
+import sphabucks.products.model.SmallCategory;
 import sphabucks.products.repository.IBigCategoryRepository;
 import sphabucks.products.repository.IProductCategoryListRepository;
 import sphabucks.products.repository.IProductRepository;
+import sphabucks.products.repository.ISmallCategoryRepository;
 import sphabucks.products.vo.*;
 import sphabucks.tag.repository.IProductTagRepository;
 
@@ -39,6 +40,7 @@ public class ProductServiceImpl implements IProductService{
     private final IEventRepository iEventRepository;
     private final IProductImageService iProductImageService;
     private final IBigCategoryRepository iBigCategoryRepository;
+    private final ISmallCategoryRepository iSmallCategoryRepository;
 
     @Override
     public void addProduct(RequestProduct requestProduct) {
@@ -131,10 +133,18 @@ public class ProductServiceImpl implements IProductService{
     @Override
     public List<ResponseProduct> getBestBigCategory(Long bigCategoryId) {
 
-        if(iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId).isEmpty()){
+        if(bigCategoryId != 0 && iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId).isEmpty()){
             throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
         }
-        List<ProductCategoryList> productCategoryLists = iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId);
+
+        List<ProductCategoryList> productCategoryLists;
+        if (bigCategoryId == 0) {
+            productCategoryLists = iProductCategoryListRepository.findAll();
+        } else {
+            productCategoryLists = iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId);
+        }
+
+
         List<ResponseProduct> responseProductList = new ArrayList<>();
 
         productCategoryLists.forEach(productList -> {
@@ -305,6 +315,9 @@ public class ProductServiceImpl implements IProductService{
     public List<ResponseBigCategory> getAllBigCategory() {
 
         List<BigCategory> list = iBigCategoryRepository.findAll();
+        if(list.isEmpty()){
+            throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+        }
 
         List<ResponseBigCategory> result = new ArrayList<>();
         ResponseBigCategory totalMenu = ResponseBigCategory.builder()
@@ -330,6 +343,9 @@ public class ProductServiceImpl implements IProductService{
     @Override
     public List<ResponseCategoryMenu> getAllSubCategory(Long bigCategoryId) {
 
+        if ( bigCategoryId != 0 && iBigCategoryRepository.findById(bigCategoryId).isEmpty() ) {
+            throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+        }
         // 리턴할 결과 리스트
         List<ResponseCategoryMenu> result = new ArrayList<>();
 
@@ -389,107 +405,52 @@ public class ProductServiceImpl implements IProductService{
                     break;
             }
         }
+
+        // 항목별로 가격 index 다르게 설정
+        Long indexPrice = 1L;
         if (bigCategoryId == 2 || bigCategoryId == 3) {
-            ResponseCategoryMenu responseCategoryPrice = ResponseCategoryMenu.builder()
-                    .id(2L)
-                    .title("가격")
-                    .data(listPrice)
-                    .build();
-            result.add(responseCategoryPrice);
-        } else {
-            ResponseCategoryMenu responseCategoryPrice = ResponseCategoryMenu.builder()
-                    .id(1L)
-                    .title("가격")
-                    .data(listPrice)
-                    .build();
-            result.add(responseCategoryPrice);
+            indexPrice = 2L;
         }
+        ResponseCategoryMenu responseCategoryPrice = ResponseCategoryMenu.builder()
+                .id(indexPrice)
+                .title("가격")
+                .data(listPrice)
+                .build();
+        result.add(responseCategoryPrice);
 
-        if (bigCategoryId == 0) {
+        // big 카테고리별로 small 카테고리
+        if (bigCategoryId == 1 || bigCategoryId == 2 || bigCategoryId == 3) {
+            List<SmallCategory> listSmallCategoryDB = iSmallCategoryRepository.findAllByBigCategoryId(bigCategoryId);
+            if (listSmallCategoryDB.isEmpty()) {
+                throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+            }
 
-        } else if (bigCategoryId == 1) {
             List<ResponseMenu> listSmallCategory = new ArrayList<>();
-            ResponseMenu responseMenu1 = ResponseMenu.builder()
-                    .id(1L)
-                    .name("롤케이크")
-                    .build();
-            listSmallCategory.add(responseMenu1);
-            ResponseMenu responseMenu2 = ResponseMenu.builder()
-                    .id(2L)
-                    .name("홀케이크")
-                    .build();
-            listSmallCategory.add(responseMenu2);
+            for (int i = 0; i < listSmallCategoryDB.size(); i++) {
+                ResponseMenu responseMenu = ResponseMenu.builder()
+                        .id(Integer.toUnsignedLong(i+1))
+                        .name(listSmallCategoryDB.get(i).getName())
+                        .build();
+                listSmallCategory.add(responseMenu);
+            }
 
+            Long smallCategoryIndex = 2L;
+            if (bigCategoryId != 1) { smallCategoryIndex = 3L; }
             ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
-                    .id(2L)
+                    .id(smallCategoryIndex)
                     .title("카테고리")
                     .data(listSmallCategory)
                     .build();
             result.add(responseCategorySmallCategory);
-
-        } else if (bigCategoryId == 2) {
-            List<ResponseMenu> listSmallCategory = new ArrayList<>();
-            ResponseMenu responseMenu1 = ResponseMenu.builder()
-                    .id(1L)
-                    .name("플라스틱 텀블러")
-                    .build();
-            listSmallCategory.add(responseMenu1);
-            ResponseMenu responseMenu2 = ResponseMenu.builder()
-                    .id(2L)
-                    .name("스테인리스 텀블러")
-                    .build();
-            listSmallCategory.add(responseMenu2);
-            ResponseMenu responseMenu3 = ResponseMenu.builder()
-                    .id(3L)
-                    .name("보온병")
-                    .build();
-            listSmallCategory.add(responseMenu3);
-            ResponseMenu responseMenu4 = ResponseMenu.builder()
-                    .id(4L)
-                    .name("콜드컵")
-                    .build();
-            listSmallCategory.add(responseMenu4);
-
-            ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
-                    .id(3L)
-                    .title("카테고리")
-                    .data(listSmallCategory)
-                    .build();
-            result.add(responseCategorySmallCategory);
-
-        } else if (bigCategoryId == 3) {
-            List<ResponseMenu> listSmallCategory = new ArrayList<>();
-            ResponseMenu responseMenu1 = ResponseMenu.builder()
-                    .id(1L)
-                    .name("머그")
-                    .build();
-            listSmallCategory.add(responseMenu1);
-            ResponseMenu responseMenu2 = ResponseMenu.builder()
-                    .id(2L)
-                    .name("글라스")
-                    .build();
-            listSmallCategory.add(responseMenu2);
-            ResponseMenu responseMenu3 = ResponseMenu.builder()
-                    .id(3L)
-                    .name("리유저블")
-                    .build();
-            listSmallCategory.add(responseMenu3);
-
-            ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
-                    .id(3L)
-                    .title("카테고리")
-                    .data(listSmallCategory)
-                    .build();
-            result.add(responseCategorySmallCategory);
-
-        } else {
-            // 없는 카테고리
         }
 
         // 시즌 (공통) (list 사이즈별로 다르게 처리)
         List<ResponseMenu> listSeason = new ArrayList<>();
 
         List<Event> eventList = iEventRepository.findAll();
+        if (eventList.isEmpty()) {
+            throw new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode());
+        }
         for (int i = 0; i < eventList.size(); i++) {
             if (!eventList.get(i).getSeason().equals("일반")) {
                 ResponseMenu responseSeason = ResponseMenu.builder()
