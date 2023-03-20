@@ -2,6 +2,7 @@ package sphabucks.products.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import sphabucks.utility.BaseTimeEntity;
 
 import java.util.Date;
@@ -29,5 +30,6 @@ public class Product extends BaseTimeEntity {
     private String size;  // 용량
     private Boolean isBest;   // 베스트
     private Boolean isNew;
+    @ColumnDefault("0")
     private Long likeCount;
 }
