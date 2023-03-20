@@ -13,4 +13,5 @@ public class ResponseProductSummary {
     private String imgUrl;
     private Long price;
     private Boolean isNew;
+    private Boolean isBest;
 }
