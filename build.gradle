@@ -8,10 +8,8 @@ jar {
 	enabled = false
 }
 
-bootJar{
-	archivesBaseName = 'app'
+bootJar {
 	archiveFileName = 'app.jar'
-	archiveVersion = "0.0.0"
 }
 
 configurations {
