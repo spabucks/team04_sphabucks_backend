@@ -17,7 +17,7 @@ name: Build and Deploy to Google Compute Engine
 on:
   push:
     branches:
-      [master, develop]
+      [main, develop]
 
 env:
   PROJECT_ID: $
