@@ -133,10 +133,18 @@ public class ProductServiceImpl implements IProductService{
     @Override
     public List<ResponseProduct> getBestBigCategory(Long bigCategoryId) {
 
-        if(iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId).isEmpty()){
+        if(bigCategoryId != 0 && iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId).isEmpty()){
             throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
         }
-        List<ProductCategoryList> productCategoryLists = iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId);
+
+        List<ProductCategoryList> productCategoryLists;
+        if (bigCategoryId == 0) {
+            productCategoryLists = iProductCategoryListRepository.findAll();
+        } else {
+            productCategoryLists = iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId);
+        }
+
+
         List<ResponseProduct> responseProductList = new ArrayList<>();
 
         productCategoryLists.forEach(productList -> {
@@ -404,7 +412,7 @@ public class ProductServiceImpl implements IProductService{
                 .build();
         result.add(responseCategoryPrice);
 
-        // 빅카테고리
+        // big 카테고리별로 small 카테고리
         if (bigCategoryId == 1 || bigCategoryId == 2 || bigCategoryId == 3) {
             List<SmallCategory> listSmallCategoryDB = iSmallCategoryRepository.findAllByBigCategoryId(bigCategoryId);
             List<ResponseMenu> listSmallCategory = new ArrayList<>();
@@ -413,6 +421,7 @@ public class ProductServiceImpl implements IProductService{
                         .id(Integer.toUnsignedLong(i+1))
                         .name(listSmallCategoryDB.get(i).getName())
                         .build();
+                listSmallCategory.add(responseMenu);
             }
 
             Long smallCategoryIndex = 2L;
