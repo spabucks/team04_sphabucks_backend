@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class ResponseCategoryMenu {
 
-    private Long id;
+    private Long index;
     private String title;
     private List<ResponseMenu> data;
 

@@ -14,14 +14,8 @@ import sphabucks.event.repository.IEventRepository;
 import sphabucks.productimage.model.ProductImage;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.productimage.service.IProductImageService;
-import sphabucks.products.model.BigCategory;
-import sphabucks.products.model.Product;
-import sphabucks.products.model.ProductCategoryList;
-import sphabucks.products.model.SmallCategory;
-import sphabucks.products.repository.IBigCategoryRepository;
-import sphabucks.products.repository.IProductCategoryListRepository;
-import sphabucks.products.repository.IProductRepository;
-import sphabucks.products.repository.ISmallCategoryRepository;
+import sphabucks.products.model.*;
+import sphabucks.products.repository.*;
 import sphabucks.products.vo.*;
 import sphabucks.tag.repository.IProductTagRepository;
 
@@ -41,6 +35,7 @@ public class ProductServiceImpl implements IProductService{
     private final IProductImageService iProductImageService;
     private final IBigCategoryRepository iBigCategoryRepository;
     private final ISmallCategoryRepository iSmallCategoryRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public void addProduct(RequestProduct requestProduct) {
@@ -322,6 +317,7 @@ public class ProductServiceImpl implements IProductService{
         List<ResponseBigCategory> result = new ArrayList<>();
         ResponseBigCategory totalMenu = ResponseBigCategory.builder()
                 .index(0L)
+                .id(0l)
                 .name("전체")
                 .build();
         result.add(totalMenu);
@@ -330,6 +326,7 @@ public class ProductServiceImpl implements IProductService{
         list.forEach(item -> {
             ResponseBigCategory responseBigCategory = ResponseBigCategory.builder()
                     .index(item.getId())
+                    .id(item.getId())
                     .name(item.getName())
                     .build();
 
@@ -353,28 +350,32 @@ public class ProductServiceImpl implements IProductService{
         if (bigCategoryId == 2 || bigCategoryId == 3) {
             List<ResponseMenu> listSize = new ArrayList<>();
             ResponseMenu responseMenu1 = ResponseMenu.builder()
+                    .index(1L)
                     .id(1L)
                     .name("Short")
                     .build();
             listSize.add(responseMenu1);
             ResponseMenu responseMenu2 = ResponseMenu.builder()
+                    .index(2L)
                     .id(2L)
                     .name("Tall")
                     .build();
             listSize.add(responseMenu2);
             ResponseMenu responseMenu3 = ResponseMenu.builder()
+                    .index(3L)
                     .id(3L)
                     .name("Grande")
                     .build();
             listSize.add(responseMenu3);
             ResponseMenu responseMenu4 = ResponseMenu.builder()
+                    .index(4L)
                     .id(4L)
                     .name("Venti")
                     .build();
             listSize.add(responseMenu4);
 
             ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
-                    .id(1L)
+                    .index(1L)
                     .title("용량")
                     .data(listSize)
                     .build();
@@ -383,22 +384,25 @@ public class ProductServiceImpl implements IProductService{
 
         // 가격 (공통)
         List<ResponseMenu> listPrice = new ArrayList<>();
-        for (int i = 1; i < 6; i++) {
+        for (int i = 0; i < 6; i++) {
             switch (i) {
-                case 1 : ResponseMenu responsePrice1 = ResponseMenu.builder()
-                        .id(Integer.toUnsignedLong(i))
+                case 0 : ResponseMenu responsePrice1 = ResponseMenu.builder()
+                        .index(Integer.toUnsignedLong(i+1))
+                        .id(0L)
                         .name("1만원 미만")
                         .build();
                     listPrice.add(responsePrice1);
                     break;
-                case 2,3,4 : ResponseMenu responsePrice2 = ResponseMenu.builder()
-                        .id(Integer.toUnsignedLong(i))
+                case 1,2,3,4 : ResponseMenu responsePrice2 = ResponseMenu.builder()
+                        .index(Integer.toUnsignedLong(i+1))
+                        .id(i*10000L)
                         .name(i + "만원대")
                         .build();
                     listPrice.add(responsePrice2);
                     break;
                 case 5 : ResponseMenu responsePrice3 = ResponseMenu.builder()
-                        .id(Integer.toUnsignedLong(i))
+                        .index(Integer.toUnsignedLong(i+1))
+                        .id(i*10000L)
                         .name(i + "만원 이상")
                         .build();
                     listPrice.add(responsePrice3);
@@ -412,7 +416,7 @@ public class ProductServiceImpl implements IProductService{
             indexPrice = 2L;
         }
         ResponseCategoryMenu responseCategoryPrice = ResponseCategoryMenu.builder()
-                .id(indexPrice)
+                .index(indexPrice)
                 .title("가격")
                 .data(listPrice)
                 .build();
@@ -428,7 +432,8 @@ public class ProductServiceImpl implements IProductService{
             List<ResponseMenu> listSmallCategory = new ArrayList<>();
             for (int i = 0; i < listSmallCategoryDB.size(); i++) {
                 ResponseMenu responseMenu = ResponseMenu.builder()
-                        .id(Integer.toUnsignedLong(i+1))
+                        .index(Integer.toUnsignedLong(i+1))
+                        .id(listSmallCategoryDB.get(i).getId())
                         .name(listSmallCategoryDB.get(i).getName())
                         .build();
                 listSmallCategory.add(responseMenu);
@@ -437,7 +442,7 @@ public class ProductServiceImpl implements IProductService{
             Long smallCategoryIndex = 2L;
             if (bigCategoryId != 1) { smallCategoryIndex = 3L; }
             ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
-                    .id(smallCategoryIndex)
+                    .index(smallCategoryIndex)
                     .title("카테고리")
                     .data(listSmallCategory)
                     .build();
@@ -454,20 +459,57 @@ public class ProductServiceImpl implements IProductService{
         for (int i = 0; i < eventList.size(); i++) {
             if (!eventList.get(i).getSeason().equals("일반")) {
                 ResponseMenu responseSeason = ResponseMenu.builder()
-                        .id(Integer.toUnsignedLong(i))
+                        .index(Integer.toUnsignedLong(i))
+                        .id(eventList.get(i).getId())
                         .name(eventList.get(i).getSeason())
                         .build();
                 listSeason.add(responseSeason);
             }
         }
         ResponseCategoryMenu responseCategorySeason = ResponseCategoryMenu.builder()
-                .id( Integer.toUnsignedLong(result.size()+1) )
+                .index( Integer.toUnsignedLong(result.size()+1) )
                 .title("시즌")
                 .data(listSeason)
                 .build();
         result.add(responseCategorySeason);
 
         return result;
+    }
+
+//    @Override
+//    public List<ResponseSearchResult> testSearch(RequestSearchParam requestSearchParam) {
+//        return productRepository.searchProduct(requestSearchParam);
+//    }
+
+    @Override
+    public List<ResponseSearchResult> searchProduct(RequestSearchParam requestSearchParam, Pageable pageable) {
+
+        List<ProductSearch> productSearchList = productRepository.searchProduct(requestSearchParam, pageable);
+
+        List<ResponseSearchResult> responseSearchResultList = new ArrayList<>();
+
+        log.info("{}", productSearchList);
+
+        productSearchList.forEach(item -> {
+            ResponseSearchResult responseSearchResult = ResponseSearchResult.builder()
+                    .id(item.getProduct().getId())
+                    .name(item.getProduct().getName())
+                    .description(item.getProduct().getDescription())
+                    .price(item.getProduct().getPrice())
+                    .size(item.getProduct().getSize())
+                    .amount(item.getProduct().getAmount())
+                    .isBest(item.getProduct().getIsBest())
+                    .isNew(item.getProduct().getIsNew())
+                    .likeCount(item.getProduct().getLikeCount())
+                    .imgUrl(iProductImageRepo.findAllByProductId(item.getProduct().getId()).get(0).getImage())
+                    .build();
+
+            responseSearchResultList.add(responseSearchResult);
+        });
+
+
+
+        return responseSearchResultList;
     }
 
 

@@ -12,6 +12,8 @@ import sphabucks.products.service.IProductService;
 import sphabucks.products.vo.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -64,6 +66,34 @@ public class ProductController {
         return iProductService.searchProductKeyword(keyword, pageable);
     }
 
+    @GetMapping("/search2")
+    @Operation(summary = "상품 검색, 필터링 API", description = "돋보기 아이콘 검색, 햄버거 메뉴 검색 모두 사용 가능")
+    @Tag(name = "검색")
+    public List<ResponseSearchResult> searchProductKeyword2(
+                                                             @RequestParam(required = false) String keyword,
+                                                             @RequestParam(required = false) Long bigCategory,
+                                                             @RequestParam(required = false) List<String> size,
+                                                             @RequestParam(required = false) Long price,
+                                                             @RequestParam(required = false) List<Long> smallCategory,
+                                                             @RequestParam(required = false) List<Long> season,
+
+                                                             @PageableDefault(size = 10) Pageable pageable){
+
+        RequestSearchParam requestSearchParam = RequestSearchParam.builder()
+                .keyword(keyword)
+                .bigCategory(bigCategory)
+                .size(size)
+                .price(price)
+                .smallCategory(smallCategory)
+                .season(season)
+                .build();
+
+
+        return iProductService.searchProduct(requestSearchParam, pageable);
+    }
+
+
+
     // 상품 검색 상단 필터 메뉴 호출 (키워드 검색)
     @GetMapping("/search-menu")
     @Operation(summary = "키워드 검색 시 필터메뉴", description = "키워드로 검색할 시 필터메뉴목록 출력")
@@ -89,5 +119,27 @@ public class ProductController {
     }
 
 
+
+//    @GetMapping("/test")
+//    public List<ResponseSearchResult> testSearch(
+//            @RequestParam(required = false) String keyword,
+//            @RequestParam(required = false) Long bigCategory,
+//            @RequestParam(required = false) List<String> size,
+//            @RequestParam(required = false) Long price,
+//            @RequestParam(required = false) List<Long> smallCategory,
+//            @RequestParam(required = false) List<Long> season
+//    ) {
+//
+//        RequestSearchParam requestSearchParam = RequestSearchParam.builder()
+//                .keyword(keyword)
+//                .bigCategory(bigCategory)
+//                .size(size)
+//                .price(price)
+//                .smallCategory(smallCategory)
+//                .season(season)
+//                .build();
+//
+//        return null;
+//    }
 
 }

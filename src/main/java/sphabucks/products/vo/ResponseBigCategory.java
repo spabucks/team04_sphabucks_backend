@@ -8,6 +8,7 @@ import lombok.Getter;
 public class ResponseBigCategory {
 
     private Long index;
+    private Long id;
     private String name;
 
 }

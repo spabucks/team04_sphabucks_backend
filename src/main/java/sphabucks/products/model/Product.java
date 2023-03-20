@@ -2,6 +2,7 @@ package sphabucks.products.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import sphabucks.utility.BaseTimeEntity;
 
 import java.util.Date;
