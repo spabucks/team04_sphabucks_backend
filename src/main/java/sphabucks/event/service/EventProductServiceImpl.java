@@ -11,7 +11,6 @@ import sphabucks.event.repository.IEventRepository;
 import sphabucks.event.vo.RequestEventProductList;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
-import sphabucks.products.model.ProductCategoryList;
 import sphabucks.products.repository.IProductRepository;
 import sphabucks.products.vo.ResponseProductList;
 import sphabucks.products.vo.ResponseProductSummary;
@@ -46,6 +45,7 @@ public class EventProductServiceImpl implements IEventProductService{
                     .price(product.getPrice())
                     .isNew(product.getIsNew())
                     .imgUrl(iProductImageRepo.findAllByProductId(product.getId()).get(0).getImage())
+                    .isBest(product.getIsBest())
                     .build());
         }
 
@@ -89,8 +89,7 @@ public class EventProductServiceImpl implements IEventProductService{
     }
     @Override
     public EventProductList getEventProductList(Long id) {
-        EventProductList eventProductList = iEventProductListRepository.findById(id)
+        return iEventProductListRepository.findById(id)
                 .orElseThrow(()-> new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode()));
-        return eventProductList;
     }
 }

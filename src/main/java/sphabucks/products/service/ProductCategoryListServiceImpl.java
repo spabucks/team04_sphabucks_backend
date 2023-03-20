@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sphabucks.error.BusinessException;
 import sphabucks.error.ErrorCode;
-import sphabucks.event.model.EventProductList;
 import sphabucks.event.repository.IEventProductListRepository;
 import sphabucks.event.repository.IEventRepository;
-import sphabucks.event.service.EventProductServiceImpl;
 import sphabucks.event.service.IEventProductService;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
@@ -74,12 +72,13 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
             Product product = iProductRepository.findById(productCategoryList.getProduct().getId())
                     .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
             responseProductSummaries.add(ResponseProductSummary.builder()
-                            .id(product.getId())
-                            .title(product.getName())
-                            .price(product.getPrice())
-                            .isNew(product.getIsNew())
-                            .imgUrl(iProductImageRepo.findAllByProductId(product.getId()).get(0).getImage())
-                            .build());
+                    .id(product.getId())
+                    .title(product.getName())
+                    .price(product.getPrice())
+                    .isNew(product.getIsNew())
+                    .imgUrl(iProductImageRepo.findAllByProductId(product.getId()).get(0).getImage())
+                    .isBest(product.getIsBest())
+                    .build());
         }
         return responseProductSummaries;
     }
