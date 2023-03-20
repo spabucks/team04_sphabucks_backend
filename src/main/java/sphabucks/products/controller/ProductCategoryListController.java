@@ -8,7 +8,6 @@ import sphabucks.products.model.ProductCategoryList;
 import sphabucks.products.service.IProductCategoryListService;
 import sphabucks.products.vo.RequestProductCategoryList;
 import sphabucks.products.vo.ResponseProductList;
-import sphabucks.products.vo.ResponseProductSummary;
 
 import java.util.List;
 

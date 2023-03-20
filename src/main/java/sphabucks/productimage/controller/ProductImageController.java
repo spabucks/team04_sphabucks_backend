@@ -3,10 +3,8 @@ package sphabucks.productimage.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.productimage.model.ProductImage;
-import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.productimage.service.IProductImageService;
 import sphabucks.productimage.vo.RequestProductImage;
 

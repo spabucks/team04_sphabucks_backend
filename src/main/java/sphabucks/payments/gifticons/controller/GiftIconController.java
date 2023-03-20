@@ -4,14 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.payments.gifticons.model.GiftIconList;
-import sphabucks.payments.gifticons.service.IGiftIconListService;
 import sphabucks.payments.gifticons.service.IGiftIconService;
 import sphabucks.payments.gifticons.vo.RequestGiftIcon;
-import sphabucks.payments.gifticons.vo.RequestGiftIconList;
 import sphabucks.payments.gifticons.vo.ResponseGiftIcon;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/gift-icon")
@@ -20,7 +15,6 @@ import java.util.List;
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class GiftIconController {
     private final IGiftIconService iGiftIconService;
-    private final IGiftIconListService iGiftIconListService;
 
     @PostMapping("/v1/add")
     @Operation(summary = "기프티콘 정보 등록", description = "어드민 권한 - 삭제 예정?")

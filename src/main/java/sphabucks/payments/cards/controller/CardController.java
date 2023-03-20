@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.payments.cards.model.Card;
 import sphabucks.payments.cards.service.ICardService;
 import sphabucks.payments.cards.vo.RequestCard;
 import sphabucks.payments.cards.vo.ResponseCard;

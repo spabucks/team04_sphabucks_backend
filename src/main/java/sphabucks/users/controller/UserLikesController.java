@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.users.model.UserLikes;
-import sphabucks.users.repository.IUserLikesRepo;
 import sphabucks.users.service.IUserLikesService;
 import sphabucks.users.vo.RequestUserLikes;
 
@@ -28,7 +27,7 @@ public class UserLikesController {
     }
 
     @GetMapping("/v1/get")
-    @Operation(summary = "좋아요 클릭한 상품 조회", description = "")
+    @Operation(summary = "좋아요 클릭한 상품 조회")
     List<UserLikes> getUserLikes(@RequestHeader String userId){
         return iUserLikesService.getUserLikes(userId);
     }

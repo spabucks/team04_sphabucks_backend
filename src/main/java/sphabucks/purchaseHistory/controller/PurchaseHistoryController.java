@@ -5,13 +5,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.purchaseHistory.model.PurchaseHistory;
 import sphabucks.purchaseHistory.service.IPurchaseHistoryService;
-import sphabucks.purchaseHistory.vo.ResponsePurchaseHistory;
 import sphabucks.purchaseHistory.vo.ResponsePurchaseHistoryList;
-import sphabucks.users.repository.IUserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

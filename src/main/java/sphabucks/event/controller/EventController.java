@@ -7,13 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.event.model.Event;
 import sphabucks.event.model.EventImage;
-import sphabucks.event.model.EventProductList;
 import sphabucks.event.service.IEventService;
 import sphabucks.event.vo.RequestEvent;
 import sphabucks.event.vo.RequestEventImage;
-import sphabucks.event.vo.RequestEventProductList;
 import sphabucks.event.vo.ResponseEventBanner;
-import sphabucks.products.vo.ResponseProductList;
 
 import java.util.List;
 

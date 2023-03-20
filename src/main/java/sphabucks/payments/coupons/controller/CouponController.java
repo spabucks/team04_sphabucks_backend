@@ -5,11 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.payments.coupons.model.Coupon;
-import sphabucks.payments.coupons.model.CouponList;
-import sphabucks.payments.coupons.service.ICouponListService;
 import sphabucks.payments.coupons.service.ICouponService;
 import sphabucks.payments.coupons.vo.RequestCoupon;
-import sphabucks.payments.coupons.vo.RequestCouponList;
 import sphabucks.payments.coupons.vo.ResponseCoupon;
 
 import java.util.List;
@@ -22,7 +19,6 @@ import java.util.List;
 public class CouponController {
 
     private final ICouponService iCouponService;
-    private final ICouponListService iCouponListService;
 
     @PostMapping("/v1/add")    // DB에 쿠폰 추가
     @Operation(summary = "쿠폰 등록", description = "어드민 권한 - 삭제 예정?")
