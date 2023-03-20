@@ -18,10 +18,7 @@ import sphabucks.products.model.BigCategory;
 import sphabucks.products.model.Product;
 import sphabucks.products.model.ProductCategoryList;
 import sphabucks.products.model.SmallCategory;
-import sphabucks.products.repository.IBigCategoryRepository;
-import sphabucks.products.repository.IProductCategoryListRepository;
-import sphabucks.products.repository.IProductRepository;
-import sphabucks.products.repository.ISmallCategoryRepository;
+import sphabucks.products.repository.*;
 import sphabucks.products.vo.*;
 import sphabucks.tag.repository.IProductTagRepository;
 
@@ -41,6 +38,7 @@ public class ProductServiceImpl implements IProductService{
     private final IProductImageService iProductImageService;
     private final IBigCategoryRepository iBigCategoryRepository;
     private final ISmallCategoryRepository iSmallCategoryRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public void addProduct(RequestProduct requestProduct) {
@@ -468,6 +466,11 @@ public class ProductServiceImpl implements IProductService{
         result.add(responseCategorySeason);
 
         return result;
+    }
+
+    @Override
+    public List<ResponseSearchResult> testSearch() {
+        return productRepository.searchProduct();
     }
 
 

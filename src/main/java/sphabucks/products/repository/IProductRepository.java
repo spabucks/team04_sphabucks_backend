@@ -22,4 +22,6 @@ public interface IProductRepository extends JpaRepository<Product, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Product p SET p.likeCount = :likeCount where p.id = :id ")
     void updateLikeCount(@Param(value="likeCount") Long likeCount, @Param(value="id") Long id);
+
+
 }

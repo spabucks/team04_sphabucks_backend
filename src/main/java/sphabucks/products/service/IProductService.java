@@ -27,4 +27,6 @@ public interface IProductService {
 
     // 빅카테고리별 서브 카테고리 호출
     List<ResponseCategoryMenu> getAllSubCategory(Long bigCategoryId);
+
+    List<ResponseSearchResult> testSearch();
 }

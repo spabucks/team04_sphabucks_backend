@@ -88,6 +88,9 @@ public class ProductController {
         return iProductService.getAllSubCategory(bigCategoryId);
     }
 
-
+    @GetMapping("/test")
+    public List<ResponseSearchResult> testSearch() {
+        return iProductService.testSearch();
+    }
 
 }
