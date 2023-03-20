@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import sphabucks.users.vo.RequestUser;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Tag(name = "회원 인증", description = "회원가입, 로그인, 로그아웃 등")
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
@@ -20,7 +20,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/signup")
+    @PostMapping("/v1/signup")
     @Operation(summary = "회원 가입")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원가입 성공"),
@@ -32,7 +32,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.signup(signupRequest));
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/v1/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest authenticationRequest) {
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));

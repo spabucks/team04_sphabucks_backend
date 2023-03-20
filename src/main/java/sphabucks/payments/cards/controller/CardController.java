@@ -10,20 +10,20 @@ import sphabucks.payments.cards.vo.RequestCard;
 import sphabucks.payments.cards.vo.ResponseCard;
 
 @RestController
-@RequestMapping("/api/v1/card")
+@RequestMapping("/api/card")
 @RequiredArgsConstructor
 @Tag(name = "결제 수단")
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class CardController {
     private final ICardService iCardService;
 
-    @PostMapping("/add")
+    @PostMapping("/v1/add")
     @Operation(summary = "스타벅스 카드 추가", description = "어드민 권한 - 삭제 예정?")
     public void addCard(@RequestBody RequestCard requestCard) {
         iCardService.addCard(requestCard);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/v1/get/{id}")
     @Operation(summary = "스타벅스 카드 조회", description = "사용자가 등록한 카드 정보 조회?")
     public ResponseCard getCard(@PathVariable Long id) {
         return iCardService.getCard(id);

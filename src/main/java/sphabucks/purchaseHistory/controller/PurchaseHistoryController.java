@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/purchaseHistory")
+@RequestMapping("/api/purchaseHistory")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
 @Slf4j
@@ -24,14 +24,14 @@ public class PurchaseHistoryController {
 
     private final IPurchaseHistoryService iPurchaseHistoryService;
 
-    @PostMapping("/add")
+    @PostMapping("/v1/add")
     @Operation(summary = "구매 내역 추가", description = "폼태그로 데이터 어떻게 넘어오는지 확인 후 수정 필요할 듯")
     public void addPurchaseHistory(@RequestBody List<Long> selected, @RequestHeader String userId){
 
         iPurchaseHistoryService.addPurchaseHistory(selected, userId);
     }
 
-    @GetMapping("/get")
+    @GetMapping("/v1/get")
     @Operation(summary = "구매 내역 조회", description = "프론트와 테스트 후 수정 필요")
     public List<ResponsePurchaseHistoryList> getPurchaseHistory(@RequestHeader String userId) {
 

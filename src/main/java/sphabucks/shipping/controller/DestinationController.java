@@ -12,14 +12,14 @@ import sphabucks.shipping.vo.ResponseDestinationSummary;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/shipping")
+@RequestMapping("/api/shipping")
 @RequiredArgsConstructor
 @Tag(name = "배송지")
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class DestinationController {
     private final IDestinationService iDestinationService;
 
-    @PostMapping("/add")
+    @PostMapping("/v1/add")
     @Operation(summary = "배송지 추가")
     public void addDestination(
             @RequestHeader String uuid,
@@ -28,19 +28,19 @@ public class DestinationController {
         iDestinationService.addDestination(uuid, requestDestination);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/v1/get/{id}")
     @Operation(summary = "배송지 수정 클릭 했을 때 뜨는 정보들")
     public Destination getDestination(@PathVariable Long id) {
         return iDestinationService.getDestination(id);
     }
 
-    @GetMapping("/get")
+    @GetMapping("/v1/get")
     @Operation(summary = "배송지 관리 클릭했을 때 뜨는 배송지 리스트", description = "기본 배송지가 최상단, 그 이후로는 최근에 수정한 순으로 정렬되서 반환됨")
     public List<ResponseDestinationSummary> getDestinationsByUUID(@RequestHeader String uuid) {
         return iDestinationService.getDestinationsByUUID(uuid);
     }
 
-    @PostMapping("/update/{id}")
+    @PostMapping("/v1/update/{id}")
     @Operation(summary = "배송지 수정")
     public void updateDestination(
             @PathVariable Long id,
@@ -49,7 +49,7 @@ public class DestinationController {
         iDestinationService.updateDestination(id, requestDestination);
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/v1/delete/{id}")
     @Operation(summary = "배송지 삭제")
     public void deleteDestination(@PathVariable Long id) {
         iDestinationService.deleteDestination(id);

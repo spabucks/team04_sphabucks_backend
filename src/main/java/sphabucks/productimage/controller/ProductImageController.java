@@ -13,26 +13,26 @@ import sphabucks.productimage.vo.RequestProductImage;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/productImage")
+@RequestMapping("/api/productImage")
 @RequiredArgsConstructor
 @Tag(name = "상품")
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class ProductImageController {
     private final IProductImageService iProductImageService;
 
-    @PostMapping("/add")
+    @PostMapping("/v1/add")
     @Operation(summary = "상품 이미지 정보 등록", description = "어드민 권한 - 삭제 예정?")
     public void addProductImage(@RequestBody RequestProductImage requestProductImage){
         iProductImageService.addProductImage(requestProductImage);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/v1/get/{id}")
     @Operation(summary = "상품 이미지 정보 확인", description = "어디 쓰이는 놈이지?")
     public List<ProductImage> getProductImage(@PathVariable Long id){
         return iProductImageService.getProductImage(id);
     }
 
-    @GetMapping("/get/all")
+    @GetMapping("/v1/get/all")
     @Operation(summary = "전체 상품 이미지 확인", description = "어드민 권한 - 삭제 예정?")
     public List<ProductImage> getAll(){
         return iProductImageService.getAll();
