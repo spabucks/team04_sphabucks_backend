@@ -315,6 +315,9 @@ public class ProductServiceImpl implements IProductService{
     public List<ResponseBigCategory> getAllBigCategory() {
 
         List<BigCategory> list = iBigCategoryRepository.findAll();
+        if(list.isEmpty()){
+            throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+        }
 
         List<ResponseBigCategory> result = new ArrayList<>();
         ResponseBigCategory totalMenu = ResponseBigCategory.builder()
@@ -340,6 +343,9 @@ public class ProductServiceImpl implements IProductService{
     @Override
     public List<ResponseCategoryMenu> getAllSubCategory(Long bigCategoryId) {
 
+        if ( bigCategoryId != 0 && iBigCategoryRepository.findById(bigCategoryId).isEmpty() ) {
+            throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+        }
         // 리턴할 결과 리스트
         List<ResponseCategoryMenu> result = new ArrayList<>();
 
@@ -415,6 +421,10 @@ public class ProductServiceImpl implements IProductService{
         // big 카테고리별로 small 카테고리
         if (bigCategoryId == 1 || bigCategoryId == 2 || bigCategoryId == 3) {
             List<SmallCategory> listSmallCategoryDB = iSmallCategoryRepository.findAllByBigCategoryId(bigCategoryId);
+            if (listSmallCategoryDB.isEmpty()) {
+                throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+            }
+
             List<ResponseMenu> listSmallCategory = new ArrayList<>();
             for (int i = 0; i < listSmallCategoryDB.size(); i++) {
                 ResponseMenu responseMenu = ResponseMenu.builder()
@@ -438,6 +448,9 @@ public class ProductServiceImpl implements IProductService{
         List<ResponseMenu> listSeason = new ArrayList<>();
 
         List<Event> eventList = iEventRepository.findAll();
+        if (eventList.isEmpty()) {
+            throw new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode());
+        }
         for (int i = 0; i < eventList.size(); i++) {
             if (!eventList.get(i).getSeason().equals("일반")) {
                 ResponseMenu responseSeason = ResponseMenu.builder()
