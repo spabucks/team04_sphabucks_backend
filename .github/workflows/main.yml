@@ -32,11 +32,15 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      
+    - run: |
+        sudo apt-get install python2.7
+        export CLOUDSDK_PYTHON="/usr/bin/python2"
 
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v0
       with:
-        version: '318.0.0'
+        version: '290.0.1'
         service_account_key: ${{ secrets.GCE_SA_KEY }}
         project_id: ${{ secrets.GCE_PROJECT }}
 
