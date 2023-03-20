@@ -28,5 +28,8 @@ public interface IProductService {
     // 빅카테고리별 서브 카테고리 호출
     List<ResponseCategoryMenu> getAllSubCategory(Long bigCategoryId);
 
-    List<ResponseSearchResult> testSearch();
+    // 테스트 메서드
+//    List<ResponseSearchResult> testSearch(RequestSearchParam requestSearchParam);
+
+    List<ResponseSearchResult> searchProduct(RequestSearchParam requestSearchParam, Pageable pageable);
 }

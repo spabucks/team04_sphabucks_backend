@@ -30,6 +30,5 @@ public class Product extends BaseTimeEntity {
     private String size;  // 용량
     private Boolean isBest;   // 베스트
     private Boolean isNew;
-    @ColumnDefault("0")
     private Long likeCount;
 }

@@ -1,15 +1,19 @@
 package sphabucks.products.vo;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class ResponseSearchResult {
     Long id;
     String name;
-    String price;
+    String description;
+    Long price;
     String size;
-    String image;
-    Long eventId;
-    Long bigCategoryId;
-    Long smallCategoryId;
+    Long amount;
+    Boolean isBest;
+    Boolean isNew;
+    Long likeCount;
+    String imgUrl;
 }

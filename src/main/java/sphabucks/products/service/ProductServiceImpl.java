@@ -14,10 +14,7 @@ import sphabucks.event.repository.IEventRepository;
 import sphabucks.productimage.model.ProductImage;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.productimage.service.IProductImageService;
-import sphabucks.products.model.BigCategory;
-import sphabucks.products.model.Product;
-import sphabucks.products.model.ProductCategoryList;
-import sphabucks.products.model.SmallCategory;
+import sphabucks.products.model.*;
 import sphabucks.products.repository.*;
 import sphabucks.products.vo.*;
 import sphabucks.tag.repository.IProductTagRepository;
@@ -468,9 +465,40 @@ public class ProductServiceImpl implements IProductService{
         return result;
     }
 
+//    @Override
+//    public List<ResponseSearchResult> testSearch(RequestSearchParam requestSearchParam) {
+//        return productRepository.searchProduct(requestSearchParam);
+//    }
+
     @Override
-    public List<ResponseSearchResult> testSearch() {
-        return productRepository.searchProduct();
+    public List<ResponseSearchResult> searchProduct(RequestSearchParam requestSearchParam, Pageable pageable) {
+
+        List<ProductSearch> productSearchList = productRepository.searchProduct(requestSearchParam, pageable);
+
+        List<ResponseSearchResult> responseSearchResultList = new ArrayList<>();
+
+        log.info("{}", productSearchList);
+
+        productSearchList.forEach(item -> {
+            ResponseSearchResult responseSearchResult = ResponseSearchResult.builder()
+                    .id(item.getProduct().getId())
+                    .name(item.getProduct().getName())
+                    .description(item.getProduct().getDescription())
+                    .price(item.getProduct().getPrice())
+                    .size(item.getProduct().getSize())
+                    .amount(item.getProduct().getAmount())
+                    .isBest(item.getProduct().getIsBest())
+                    .isNew(item.getProduct().getIsNew())
+                    .likeCount(item.getProduct().getLikeCount())
+                    .imgUrl(iProductImageRepo.findAllByProductId(item.getProduct().getId()).get(0).getImage())
+                    .build();
+
+            responseSearchResultList.add(responseSearchResult);
+        });
+
+
+
+        return responseSearchResultList;
     }
 
 
