@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseMenu {
 
+    private Long index;
     private Long id;
     private String name;
 }
