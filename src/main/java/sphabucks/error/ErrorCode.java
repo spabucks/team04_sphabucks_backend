@@ -14,6 +14,9 @@ public enum ErrorCode {
     CART_NOT_EXISTS(404, "CART-001","해당 카트가 존재하지 않는 경우"),
     CARTS_NOT_EXISTS(404, "CART-002","카트가 하나도 존재하지 않는 경우"),
 
+    NOTIFICATION_NOT_EXISTS(404, "NOTIFICATION-001", "해당 알림이 존재하지 않는 경우"),
+    DUPLICATE_NOTIFICATION(404, "NOTIFICATION-002", "알림이 중복된 경우"),
+
     CARD_NOT_EXISTS(404,"CARD-001", "해당 카드가 존재하지 않는 경우"),
     CARDS_NOT_EXISTS(404,"CARD-002", "카드가 하나도 존재하지 않는 경우"),
     DUPLICATE_CARD(404,"CARD-003", "카드가 중복된 경우"),

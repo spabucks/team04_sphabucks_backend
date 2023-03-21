@@ -61,6 +61,7 @@ public class EmailService {
         return ePw.substring(0, 3) + ePw.substring(3, 6);
     }
 
+
     // 메세지 전송
     public String sendSimpleMessage(String to) throws Exception{
         User user = iUserRepository.findByEmail(to)

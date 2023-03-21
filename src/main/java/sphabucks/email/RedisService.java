@@ -38,6 +38,7 @@ public class RedisService {
         redisTemplate.delete(email);
     }
 
+
     public boolean hasKey(String email) {
         return Boolean.TRUE.equals(redisTemplate.hasKey(email));
     }

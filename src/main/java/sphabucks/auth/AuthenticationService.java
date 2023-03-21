@@ -78,6 +78,7 @@ public class AuthenticationService {
                     .build();
         }
 
+
         public AuthenticationResponse refresh(RefreshRequest refreshRequest){
             UserDetails userDetails = userDetailsService.loadUserByUsername(jwtService.extractUsername(refreshRequest.getRefreshToken()));
             var redisUserLoginId = redis.getEmailByRefreshToken(refreshRequest.getRefreshToken());
