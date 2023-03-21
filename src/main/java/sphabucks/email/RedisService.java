@@ -26,6 +26,13 @@ public class RedisService {
         return redisTemplate.opsForValue().get(email);
     }
 
+    public String getEmailByRefreshToken(String refreshToken){
+        return redisTemplate.opsForValue().get(refreshToken);
+    }
+    public void createEmailByRefreshToken(String email, String refreshToken){
+        ValueOperations<String, String> vop = redisTemplate.opsForValue();
+        vop.set(refreshToken, email, Duration.ofSeconds(LIMIT_TIME));
+    }
     public void removeEmailCertification(String email) {
         redisTemplate.delete(email);
     }

@@ -48,6 +48,16 @@ public class JwtService {
                 .compact();
     }
 
+    public String refreshToken(String jwt){
+        return Jwts
+                .builder()
+                .setClaims(extractAllClaims(jwt))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     public Boolean isTokenValid(String jwt, UserDetails userDetails) {
         final String username = extractUsername(jwt);
         return ( username.equals(userDetails.getUsername())) && !isTokenExpired(jwt);
