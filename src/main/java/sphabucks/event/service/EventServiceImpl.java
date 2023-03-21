@@ -105,7 +105,7 @@ public class EventServiceImpl implements IEventService {
 
         eventImages.forEach(eventImage -> {
             if (eventImage.getEvent().getId() != 1) {
-                if (eventImage.getEvent().getIsBanner() == true) {
+                if (eventImage.getEvent().getIsBanner()) {
                     ResponseEventBanner responseEventBanner = ResponseEventBanner.builder()
                             .eventId(eventImage.getEvent().getId())
                             .name(eventImage.getEvent().getSeason())
