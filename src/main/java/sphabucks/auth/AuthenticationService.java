@@ -3,9 +3,12 @@ package sphabucks.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sphabucks.config.JwtService;
+import sphabucks.email.RedisService;
 import sphabucks.error.BusinessException;
 import sphabucks.error.ErrorCode;
 import sphabucks.users.model.Role;
@@ -22,7 +25,9 @@ public class AuthenticationService {
         private final IUserRepository userRepository;
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
+        private final RedisService redis;
         private final AuthenticationManager authenticationManager;
+        private final UserDetailsService userDetailsService;
         public AuthenticationResponse signup(RequestUser signupRequest) {
 
             var user = User.builder()
@@ -43,8 +48,12 @@ public class AuthenticationService {
                     .build();
             userRepository.save(user);
             var jwtToken = jwtService.generateToken(user);
+            var refreshToken = jwtService.refreshToken(jwtToken);
+            redis.createEmailCertification(user.getLoginId(), refreshToken);
+
             return AuthenticationResponse.builder()
-                    .token(jwtToken)
+                    .accessToken(jwtToken)
+                    .refreshToken(refreshToken)
                     .build();
         }
 
@@ -58,10 +67,55 @@ public class AuthenticationService {
             var user = userRepository.findByLoginId(authenticationRequest.getLoginId())
                     .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
             var jwtToken = jwtService.generateToken(user);
+            var refreshToken = jwtService.refreshToken(jwtToken);
+            redis.createEmailByRefreshToken(user.getLoginId(), refreshToken);
 
             return AuthenticationResponse.builder()
-                    .userId(userRepository.findByLoginId(authenticationRequest.getLoginId()).get().getUserId())
-                    .token(jwtToken)
+                    .userId(userRepository.findByLoginId(authenticationRequest.getLoginId())
+                            .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                            .getUserId())
+                    .accessToken(jwtToken)
                     .build();
         }
+
+        public AuthenticationResponse refresh(RefreshRequest refreshRequest){
+            UserDetails userDetails = userDetailsService.loadUserByUsername(jwtService.extractUsername(refreshRequest.getRefreshToken()));
+            var redisUserLoginId = redis.getEmailByRefreshToken(refreshRequest.getRefreshToken());
+            if(!userDetails.getUsername().equals(redisUserLoginId) &&
+                    !jwtService.isTokenValid(refreshRequest.getRefreshToken(), userDetails)){
+                throw new RuntimeException("Refresh token is not valid");
+            }
+            var jwtAToken = jwtService.generateToken(userDetails);
+            var jwtRToken = jwtService.refreshToken(jwtAToken);
+
+            return AuthenticationResponse.builder()
+                    .accessToken(jwtAToken)
+                    .refreshToken(jwtRToken)
+                    .build();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
