@@ -28,5 +28,7 @@ public class Event {
     private Date startDate; // 이벤트 시작 날짜
     @Column(nullable = false)
     private Date endDate;   // 이벤트 종료 날짜
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isBanner;
 
 }
