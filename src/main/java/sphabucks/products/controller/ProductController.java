@@ -74,7 +74,7 @@ public class ProductController {
                                                              @RequestParam(required = false) String keyword,
                                                              @RequestParam(required = false) Long bigCategory,
                                                              @RequestParam(required = false) List<Long> size,
-                                                             @RequestParam(required = false) Long price,
+                                                             @RequestParam(required = false) List<Long> price,
                                                              @RequestParam(required = false) List<Long> smallCategory,
                                                              @RequestParam(required = false) List<Long> season,
 

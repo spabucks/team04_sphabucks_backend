@@ -54,6 +54,15 @@ public class ProductRepository {
             }
             jpql += " p.product.size in :size";
         }
+//        if (requestSearchParam.getPrice() != null) {
+//            if (isFirst) {
+//                jpql += " where";
+//                isFirst = false;
+//            } else {
+//                jpql += " and";
+//            }
+//            jpql += " (p.product.price between :price and :price2)";
+//        }
         if (requestSearchParam.getPrice() != null) {
             if (isFirst) {
                 jpql += " where";
@@ -61,8 +70,20 @@ public class ProductRepository {
             } else {
                 jpql += " and";
             }
-            jpql += " (p.product.price between :price1 and :price2)";
+            jpql += " (";
+            for (int i = 0; i < requestSearchParam.getPrice().size(); i++) {
+                if (i != 0) {
+                    jpql += " or";
+                }
+                jpql += " (p.product.price between :price" + i + " and :price" + i + "plus10000)";
+            }
+            jpql += " )";
         }
+
+
+
+
+
         if (requestSearchParam.getSmallCategory() != null) {
             if (isFirst) {
                 jpql += " where";
@@ -101,8 +122,10 @@ public class ProductRepository {
             query.setParameter("size", requestSearchParam.getSize());
         }
         if (requestSearchParam.getPrice() != null) {
-            query.setParameter("price1", requestSearchParam.getPrice());
-            query.setParameter("price2", requestSearchParam.getPrice()+10000);
+            for (int i = 0; i < requestSearchParam.getPrice().size(); i++) {
+                query.setParameter("price" + i, requestSearchParam.getPrice().get(i));
+                query.setParameter("price" + i + "plus10000", requestSearchParam.getPrice().get(i) + 10000);
+            }
         }
         if (requestSearchParam.getSmallCategory() != null) {
             query.setParameter("smallCategory", requestSearchParam.getSmallCategory());
