@@ -31,5 +31,5 @@ public interface IProductService {
     // 테스트 메서드
 //    List<ResponseSearchResult> testSearch(RequestSearchParam requestSearchParam);
 
-    List<ResponseSearchResult> searchProduct(RequestSearchParam requestSearchParam, Pageable pageable);
+    List<ResponseSearchResult> searchProduct(RequestSearchParam requestSearchParam, Long page);
 }

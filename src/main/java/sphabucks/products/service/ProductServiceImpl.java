@@ -482,9 +482,9 @@ public class ProductServiceImpl implements IProductService{
 //    }
 
     @Override
-    public List<ResponseSearchResult> searchProduct(RequestSearchParam requestSearchParam, Pageable pageable) {
+    public List<ResponseSearchResult> searchProduct(RequestSearchParam requestSearchParam, Long page) {
 
-        List<ProductSearch> productSearchList = productRepository.searchProduct(requestSearchParam, pageable);
+        List<ProductSearch> productSearchList = productRepository.searchProduct(requestSearchParam, page);
 
         List<ResponseSearchResult> responseSearchResultList = new ArrayList<>();
 

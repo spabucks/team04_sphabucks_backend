@@ -77,7 +77,7 @@ public class ProductController {
                                                              @RequestParam(required = false) List<Long> smallCategory,
                                                              @RequestParam(required = false) List<Long> season,
 
-                                                             @PageableDefault(size = 10) Pageable pageable){
+                                                             @RequestParam(required = false) Long page){
 
         RequestSearchParam requestSearchParam = RequestSearchParam.builder()
                 .keyword(keyword)
@@ -89,7 +89,7 @@ public class ProductController {
                 .build();
 
 
-        return iProductService.searchProduct(requestSearchParam, pageable);
+        return iProductService.searchProduct(requestSearchParam, page);
     }
 
 

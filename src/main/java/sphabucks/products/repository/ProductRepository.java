@@ -18,7 +18,7 @@ public class ProductRepository {
 
     private final EntityManager em;
 
-    public List<ProductSearch> searchProduct(RequestSearchParam requestSearchParam, Pageable pageable) {
+    public List<ProductSearch> searchProduct(RequestSearchParam requestSearchParam, Long page) {
 
         String jpql = "select p from ProductSearch p";
         Boolean isFirst = true;
@@ -80,7 +80,8 @@ public class ProductRepository {
 
 
         TypedQuery<ProductSearch> query = em.createQuery(jpql, ProductSearch.class)
-                .setMaxResults(1000);
+                .setFirstResult(page.intValue()*10)
+                .setMaxResults(10);
 
         if (requestSearchParam.getKeyword() != null) {
             query.setParameter("keyword", "%"+requestSearchParam.getKeyword()+"%");
