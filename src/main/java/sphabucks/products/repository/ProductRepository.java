@@ -80,8 +80,11 @@ public class ProductRepository {
 
 
         TypedQuery<ProductSearch> query = em.createQuery(jpql, ProductSearch.class)
-                .setFirstResult(page.intValue()*10)
                 .setMaxResults(10);
+
+        if(page != null) {
+            query.setFirstResult(page.intValue()*10);
+        }
 
         if (requestSearchParam.getKeyword() != null) {
             query.setParameter("keyword", "%"+requestSearchParam.getKeyword()+"%");
