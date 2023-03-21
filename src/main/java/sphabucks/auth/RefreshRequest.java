@@ -6,12 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
-    private String accessToken;
-    private String userId;
-    private String refreshToken;
+@Builder
+public class RefreshRequest {
 
+    private String refreshToken;
 }

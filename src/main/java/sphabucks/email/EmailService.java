@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
 import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
 
@@ -59,12 +61,11 @@ public class EmailService {
         return ePw.substring(0, 3) + ePw.substring(3, 6);
     }
 
+
     // 메세지 전송
     public String sendSimpleMessage(String to) throws Exception{
-        Optional<User> user = iUserRepository.findByEmail(to);
-        if (!user.isEmpty()) {
-            return "이메일 중복";
-        }
+        User user = iUserRepository.findByEmail(to)
+                .orElseThrow(() -> new BusinessException(ErrorCode.DUPLICATE_EMAIL, ErrorCode.DUPLICATE_EMAIL.getCode()));
 
         String code = createCode(ePw);
         MimeMessage message= createMessage(to, code);

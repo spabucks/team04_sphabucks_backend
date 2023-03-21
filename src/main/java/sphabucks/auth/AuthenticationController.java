@@ -38,4 +38,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthenticationResponse> refresh(
+            @RequestBody RefreshRequest refreshRequest){
+        return ResponseEntity.ok(authenticationService.refresh(refreshRequest));
+    }
+
+
+
 }
