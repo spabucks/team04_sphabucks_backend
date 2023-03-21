@@ -377,6 +377,7 @@ public class ProductServiceImpl implements IProductService{
             ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
                     .index(1L)
                     .title("용량")
+                    .value("size")
                     .data(listSize)
                     .build();
             result.add(responseCategorySmallCategory);
@@ -418,6 +419,7 @@ public class ProductServiceImpl implements IProductService{
         ResponseCategoryMenu responseCategoryPrice = ResponseCategoryMenu.builder()
                 .index(indexPrice)
                 .title("가격")
+                .value("price")
                 .data(listPrice)
                 .build();
         result.add(responseCategoryPrice);
@@ -444,6 +446,7 @@ public class ProductServiceImpl implements IProductService{
             ResponseCategoryMenu responseCategorySmallCategory = ResponseCategoryMenu.builder()
                     .index(smallCategoryIndex)
                     .title("카테고리")
+                    .value("smallCategory")
                     .data(listSmallCategory)
                     .build();
             result.add(responseCategorySmallCategory);
@@ -469,6 +472,7 @@ public class ProductServiceImpl implements IProductService{
         ResponseCategoryMenu responseCategorySeason = ResponseCategoryMenu.builder()
                 .index( Integer.toUnsignedLong(result.size()+1) )
                 .title("시즌")
+                .value("season")
                 .data(listSeason)
                 .build();
         result.add(responseCategorySeason);

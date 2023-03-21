@@ -11,6 +11,7 @@ public class ResponseCategoryMenu {
 
     private Long index;
     private String title;
+    private String value;
     private List<ResponseMenu> data;
 
 
