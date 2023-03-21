@@ -36,6 +36,10 @@ jobs:
       - run: touch ./src/main/resources/application.yml
       - run: echo "${{ secrets.APPLICATION_DEV }}" > ./src/main/resources/application.yml
       - run: cat ./src/main/resources/application.yml
+      
+      - run: touch ./src/main/resources/email.properties
+      - run: echo "${{ secrets.EMAIL_PROPERTIES }}" > ./src/main/resources/email.properties
+      - run: cat ./src/main/resources/email.properties
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
