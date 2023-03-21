@@ -19,4 +19,5 @@ public class RequestProduct {
     private String size;  // 용량
     private Boolean isBest;   // 베스트
     private Boolean isNew;
+    private Long likeCount;
 }
