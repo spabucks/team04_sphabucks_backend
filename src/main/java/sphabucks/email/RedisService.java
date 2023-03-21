@@ -11,6 +11,7 @@ import java.time.Duration;
 public class RedisService {
 
     private final int LIMIT_TIME = 5 * 60;
+    private final int RLIMIT_TIME = 70 * 60;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -31,14 +32,14 @@ public class RedisService {
     }
     public void createEmailByRefreshToken(String email, String refreshToken){
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        vop.set(refreshToken, email, Duration.ofSeconds(LIMIT_TIME));
+        vop.set(refreshToken, email, Duration.ofSeconds(RLIMIT_TIME));
     }
     public void removeEmailCertification(String email) {
         redisTemplate.delete(email);
     }
 
     public boolean hasKey(String email) {
-        return redisTemplate.hasKey(email);
+        return Boolean.TRUE.equals(redisTemplate.hasKey(email));
     }
 
 }

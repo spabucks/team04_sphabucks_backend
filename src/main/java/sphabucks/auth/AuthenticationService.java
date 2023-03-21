@@ -49,7 +49,7 @@ public class AuthenticationService {
             userRepository.save(user);
             var jwtToken = jwtService.generateToken(user);
             var refreshToken = jwtService.refreshToken(jwtToken);
-            redis.createEmailCertification(refreshToken, user.getLoginId());
+            redis.createEmailCertification(user.getLoginId(), refreshToken);
 
             return AuthenticationResponse.builder()
                     .accessToken(jwtToken)
@@ -68,7 +68,7 @@ public class AuthenticationService {
                     .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
             var jwtToken = jwtService.generateToken(user);
             var refreshToken = jwtService.refreshToken(jwtToken);
-            redis.createEmailByRefreshToken(refreshToken, user.getEmail());
+            redis.createEmailByRefreshToken(user.getLoginId(), refreshToken);
 
             return AuthenticationResponse.builder()
                     .userId(userRepository.findByLoginId(authenticationRequest.getLoginId())

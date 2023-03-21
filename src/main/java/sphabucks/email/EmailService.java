@@ -62,7 +62,7 @@ public class EmailService {
     // 메세지 전송
     public String sendSimpleMessage(String to) throws Exception{
         Optional<User> user = iUserRepository.findByEmail(to);
-        if (!user.isEmpty()) {
+        if (user.isPresent()) {
             return "이메일 중복";
         }
 
