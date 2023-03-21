@@ -11,6 +11,7 @@ import sphabucks.products.model.Product;
 import sphabucks.products.service.IProductService;
 import sphabucks.products.vo.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -72,24 +73,58 @@ public class ProductController {
     public List<ResponseSearchResult> searchProductKeyword2(
                                                              @RequestParam(required = false) String keyword,
                                                              @RequestParam(required = false) Long bigCategory,
-                                                             @RequestParam(required = false) List<String> size,
+                                                             @RequestParam(required = false) List<Long> size,
                                                              @RequestParam(required = false) Long price,
                                                              @RequestParam(required = false) List<Long> smallCategory,
                                                              @RequestParam(required = false) List<Long> season,
 
                                                              @RequestParam(required = false) Long page){
 
-        RequestSearchParam requestSearchParam = RequestSearchParam.builder()
-                .keyword(keyword)
-                .bigCategory(bigCategory)
-                .size(size)
-                .price(price)
-                .smallCategory(smallCategory)
-                .season(season)
-                .build();
+        List<String> sizeList = new ArrayList<>();
+        if (size != null) {
+            size.forEach(item -> {
+                String tmpSize = "";
+                if (item == 1L) {
+                    tmpSize = "Short";
+                } else if (item == 2L) {
+                    tmpSize = "Tall";
+                } else if (item == 3L) {
+                    tmpSize = "Grande";
+                } else if (item == 4L) {
+                    tmpSize = "Venti";
+                }
+                sizeList.add(tmpSize);
+            });
+        }
+
+        if (size != null) {
+            RequestSearchParam requestSearchParam = RequestSearchParam.builder()
+                    .keyword(keyword)
+                    .bigCategory(bigCategory)
+                    .size(sizeList)
+                    .price(price)
+                    .smallCategory(smallCategory)
+                    .season(season)
+                    .build();
+
+            return iProductService.searchProduct(requestSearchParam, page);
+        } else {
+            RequestSearchParam requestSearchParam = RequestSearchParam.builder()
+                    .keyword(keyword)
+                    .bigCategory(bigCategory)
+                    .size(null)
+                    .price(price)
+                    .smallCategory(smallCategory)
+                    .season(season)
+                    .build();
+
+            return iProductService.searchProduct(requestSearchParam, page);
+        }
 
 
-        return iProductService.searchProduct(requestSearchParam, page);
+
+
+
     }
 
 

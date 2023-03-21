@@ -38,7 +38,12 @@ public class ProductRepository {
             } else {
                 jpql += " and";
             }
-            jpql += " p.bigCategory.id = :bigCategory";
+            if (requestSearchParam.getBigCategory() == 0) {
+                jpql += " 1 = 1";
+            } else {
+                jpql += " p.bigCategory.id = :bigCategory";
+            }
+
         }
         if (requestSearchParam.getSize() != null) {
             if (isFirst) {
@@ -89,7 +94,7 @@ public class ProductRepository {
         if (requestSearchParam.getKeyword() != null) {
             query.setParameter("keyword", "%"+requestSearchParam.getKeyword()+"%");
         }
-        if (requestSearchParam.getBigCategory() != null) {
+        if (requestSearchParam.getBigCategory() != null && requestSearchParam.getBigCategory() != 0) {
             query.setParameter("bigCategory", requestSearchParam.getBigCategory());
         }
         if (requestSearchParam.getSize() != null) {
