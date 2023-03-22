@@ -20,6 +20,7 @@ import sphabucks.products.vo.*;
 import sphabucks.tag.repository.IProductTagRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -210,99 +211,51 @@ public class ProductServiceImpl implements IProductService{
 
     // 상품 검색시 상단 메뉴 호출 (키워드 검색)
     @Override
-    public ResponseSearchMenu searchProductKeywordMenu(String keyword, Pageable pageable) {
+    public List<ResponseBigCategory> searchProductKeywordMenu(String keyword, Pageable pageable) {
         List<ResponseSearchProduct> responseSearchProductList = searchProductKeyword(keyword, pageable);
 
-        List<ResponseMenu> responseMenu_size = new ArrayList<>();
-        List<String> size = new ArrayList<>();
-        size.add("Short");
-        size.add("Tall");
-        size.add("Grande");
-        size.add("Venti");
-        for (String item : size) {
-            ResponseMenu responseMenu4 = ResponseMenu.builder()
-                    .name(item)
-                    .build();
-            responseMenu_size.add(responseMenu4);
-        }
+        HashSet<String> nameSet = new HashSet<>();
 
-        List<ResponseMenu> responseMenu_price = new ArrayList<>();
-        List<String> price = new ArrayList<>();
-        price.add("1만원미만");
-        price.add("1만원대");
-        price.add("2만원대");
-        price.add("3만원대");
-        price.add("4만원대");
-        price.add("5만원이상");
-        for (String item : price) {
-            ResponseMenu responseMenu5 = ResponseMenu.builder()
-                    .name(item)
-                    .build();
-            responseMenu_price.add(responseMenu5);
-        }
-
-        List<Map<String, String>> responseMenu_bigCategory = new ArrayList<>();
-        Map<String, String>  Map = new HashMap<>();
-        Map.put("index", "0");
-        Map.put("name", "전체");
-        responseMenu_bigCategory.add(Map);
-        List<Map<String, String>> responseMenu_smallCategory = new ArrayList<>();
-
+        List<ResponseBigCategory> responseBigCategoryList = new ArrayList<>();
+        ResponseBigCategory totalMenu = ResponseBigCategory.builder()
+                .index(0L)
+                .id(0l)
+                .name("전체")
+                .build();
+        responseBigCategoryList.add(totalMenu);
 
         for (int i = 0; i < responseSearchProductList.size(); i++) {
-            Map<String, String> tmpMap = new HashMap<>();
-            tmpMap.put("index", Long.toString(
-                    iProductCategoryListRepository.findAllByProductId(responseSearchProductList.get(i).getProductId()).get(0).getBigCategory().getId()
-            ));
-            tmpMap.put("name", responseSearchProductList.get(i).getBigCategory());
-            responseMenu_bigCategory.add(tmpMap);
-
-            Map<String, String> tmpMap2 = new HashMap<>();
-            tmpMap2.put("bigCategory", responseSearchProductList.get(i).getBigCategory());
-            tmpMap2.put("name", responseSearchProductList.get(i).getSmallCategory());
-
-            responseMenu_smallCategory.add(tmpMap2);
-        }
-
-        HashSet<Map<String, String>> tmpSet1 = new HashSet<>(responseMenu_bigCategory);
-        responseMenu_bigCategory = new ArrayList<>(tmpSet1);
-        responseMenu_bigCategory.sort((o1, o2) -> Integer.parseInt(o1.get("index")) - Integer.parseInt(o2.get("index")));
-
-        HashSet<Map<String, String>> tmpSet2 = new HashSet<>(responseMenu_smallCategory);
-        responseMenu_smallCategory = new ArrayList<>(tmpSet2);
-
-
-        List<ResponseMenu> responseMenu_season = new ArrayList<>();
-        List<Event> eventList = iEventRepository.findAll();
-        for (Event event : eventList) {
-            if (!event.getSeason().equals("일반")) {
-                ResponseMenu responseMenu3 = ResponseMenu.builder()
-                        .name(event.getSeason())
+            if (nameSet.add(responseSearchProductList.get(i).getBigCategory())) {
+                ResponseBigCategory responseBigCategory = ResponseBigCategory.builder()
+                        .name(responseSearchProductList.get(i).getBigCategory())
+                        .id(iProductCategoryListRepository.findAllByProductId(
+                                responseSearchProductList.get(i).getProductId()).get(0).getBigCategory().getId())
                         .build();
-                responseMenu_season.add(responseMenu3);
+                responseBigCategoryList.add(responseBigCategory);
             }
         }
 
-        for (Map<String, String> map : responseMenu_bigCategory) {
+        responseBigCategoryList.sort((o1, o2) -> Integer.parseInt(o1.getId()+"")
+                - Integer.parseInt(o2.getId()+""));
+        for (int i = 0; i < responseBigCategoryList.size(); i++) {
+            responseBigCategoryList.get(i).setIndex(Integer.toUnsignedLong(i));
+        }
+
+        // 빅카테고리 상품수
+        for (ResponseBigCategory responseBigCategory : responseBigCategoryList) {
             int num = 0;
-            if (!map.get("name").equals("전체")) {
+            if (!responseBigCategory.getName().equals("전체")) {
                 for (ResponseSearchProduct item : responseSearchProductList) {
-                    if (item.getBigCategory().equals(map.get("name"))) {
+                    if (item.getBigCategory().equals(responseBigCategory.getName())) {
                         num++;
                     }
                 }
-                map.put("name", map.get("name")+"("+num+")") ;
+                responseBigCategory.setName(responseBigCategory.getName() + "(" + num + ")");
             }
 
         }
 
-        return ResponseSearchMenu.builder()
-                .bigCategory(responseMenu_bigCategory)
-                .size(responseMenu_size)
-                .price(responseMenu_price)
-                .smallCategory(responseMenu_smallCategory)
-                .season(responseMenu_season)
-                .build();
+        return responseBigCategoryList;
     }
 
     // 빅카테고리 조회 (햄버거 메뉴에서 넘어갈 떄 사용)
@@ -491,8 +444,6 @@ public class ProductServiceImpl implements IProductService{
         List<ProductSearch> productSearchList = productRepository.searchProduct(requestSearchParam, page);
 
         List<ResponseSearchResult> responseSearchResultList = new ArrayList<>();
-
-        log.info("{}", productSearchList);
 
         productSearchList.forEach(item -> {
             ResponseSearchResult responseSearchResult = ResponseSearchResult.builder()
