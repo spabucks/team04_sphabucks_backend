@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.products.model.Product;
@@ -46,7 +47,7 @@ public class ProductController {
 
     @GetMapping("/get/allProduct")
     @Operation(summary = "전체상품조회(카테고리포함)", description = "구현 중 ")
-    public List<ResponseSearchProduct> getAllProduct(Pageable pageable){
+    public List<ResponseSearchProduct> getAllProduct(@PageableDefault(size = 10, sort = {"index"}, direction = Sort.Direction.ASC) Pageable pageable){
         return iProductService.getAllProducts(pageable);
     }
 
@@ -62,7 +63,7 @@ public class ProductController {
     @GetMapping("/search")
     @Operation(summary = "키워드 검색", description = "돋보기 아이콘 클릭을 통해 들어간 검색창에서 키워드로 검색")
     @Tag(name = "검색")
-    public List<ResponseSearchProduct> searchProductKeyword(@RequestParam("keyword") String keyword, @PageableDefault(size = 10) Pageable pageable){
+    public List<ResponseSearchProduct> searchProductKeyword(@RequestParam("keyword") String keyword, @PageableDefault(size = 10, sort = {"index"}, direction = Sort.Direction.ASC) Pageable pageable){
 
         return iProductService.searchProductKeyword(keyword, pageable);
     }
@@ -122,9 +123,6 @@ public class ProductController {
         }
 
 
-
-
-
     }
 
 
@@ -133,7 +131,7 @@ public class ProductController {
     @GetMapping("/search-menu")
     @Operation(summary = "키워드 검색 시 필터메뉴", description = "키워드로 검색할 시 필터메뉴목록 출력")
     @Tag(name = "검색")
-    public List<ResponseBigCategory> searchProductKeywordMenu(@RequestParam("keyword") String keyword, Pageable pageable) {
+    public List<ResponseBigCategory> searchProductKeywordMenu(@RequestParam("keyword") String keyword,@PageableDefault(size = 10, sort = {"index"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return iProductService.searchProductKeywordMenu(keyword, pageable);
     }
 
