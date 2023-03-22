@@ -64,8 +64,10 @@ public class EmailService {
 
     // 메세지 전송
     public String sendSimpleMessage(String to) throws Exception{
-        User user = iUserRepository.findByEmail(to)
-                .orElseThrow(() -> new BusinessException(ErrorCode.DUPLICATE_EMAIL, ErrorCode.DUPLICATE_EMAIL.getCode()));
+
+        if(iUserRepository.findByEmail(to).isPresent()) {
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL, ErrorCode.DUPLICATE_EMAIL.getCode());
+        }
 
         String code = createCode(ePw);
         MimeMessage message= createMessage(to, code);
