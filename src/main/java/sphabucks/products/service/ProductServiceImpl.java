@@ -128,7 +128,7 @@ public class ProductServiceImpl implements IProductService{
     @Override
     public List<ResponseProduct> getBestBigCategory(Long bigCategoryId) {
 
-        if(bigCategoryId != 0 && iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId).isEmpty()){
+        if(bigCategoryId != 0 && iProductCategoryListRepository.findTop30ByBigCategoryId(bigCategoryId).isEmpty()){
             throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
         }
 
@@ -136,7 +136,7 @@ public class ProductServiceImpl implements IProductService{
         if (bigCategoryId == 0) {
             productCategoryLists = iProductCategoryListRepository.findAll();
         } else {
-            productCategoryLists = iProductCategoryListRepository.findAllByBigCategoryId(bigCategoryId);
+            productCategoryLists = iProductCategoryListRepository.findTop30ByBigCategoryId(bigCategoryId);
         }
 
 
