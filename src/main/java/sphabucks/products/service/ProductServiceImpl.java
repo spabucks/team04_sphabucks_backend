@@ -390,7 +390,7 @@ public class ProductServiceImpl implements IProductService{
                 case 0 : ResponseMenu responsePrice1 = ResponseMenu.builder()
                         .index(Integer.toUnsignedLong(i+1))
                         .id(0L)
-                        .name("1만원 미만")
+                        .name("1만원미만")
                         .build();
                     listPrice.add(responsePrice1);
                     break;
@@ -404,7 +404,7 @@ public class ProductServiceImpl implements IProductService{
                 case 5 : ResponseMenu responsePrice3 = ResponseMenu.builder()
                         .index(Integer.toUnsignedLong(i+1))
                         .id(i*10000L)
-                        .name(i + "만원 이상")
+                        .name(i + "만원이상")
                         .build();
                     listPrice.add(responsePrice3);
                     break;
