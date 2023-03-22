@@ -445,8 +445,6 @@ public class ProductServiceImpl implements IProductService{
 
         List<ResponseSearchResult> responseSearchResultList = new ArrayList<>();
 
-        log.info("{}", productSearchList);
-
         productSearchList.forEach(item -> {
             ResponseSearchResult responseSearchResult = ResponseSearchResult.builder()
                     .id(item.getProduct().getId())
