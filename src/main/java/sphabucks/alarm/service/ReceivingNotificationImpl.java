@@ -51,7 +51,7 @@ public class ReceivingNotificationImpl implements IReceivingNotificationService 
     public List<ReceivingNotification> getReceivingNotification(RequestGetNotification requestGetNotification) {
 
         if(iReceivingNotificationRepo.findAllByUser_UserId(requestGetNotification.getUserId()).isEmpty()){
-            throw new BusinessException(ErrorCode.DUPLICATE_NOTIFICATION, ErrorCode.DUPLICATE_NOTIFICATION.getCode());
+            throw new BusinessException(ErrorCode.NOTIFICATION_NOT_EXISTS, ErrorCode.NOTIFICATION_NOT_EXISTS.getCode());
         }
         List<ReceivingNotification> receivingNotificationList = iReceivingNotificationRepo.findAllByUser_UserId(requestGetNotification.getUserId());
         for (ReceivingNotification receivingNotification : receivingNotificationList) {
