@@ -20,7 +20,7 @@ public interface IProductService {
     List<ResponseSearchProduct> searchProductKeyword(String keyword, Pageable pageable);
 
     // 상품 검색 상단 메뉴 호출 (키워드 검색)
-    ResponseSearchMenu searchProductKeywordMenu(String keyword, Pageable pageable);
+    List<ResponseBigCategory> searchProductKeywordMenu(String keyword, Pageable pageable);
 
     // 빅 카테고리 메뉴 호출
     List<ResponseBigCategory> getAllBigCategory();
