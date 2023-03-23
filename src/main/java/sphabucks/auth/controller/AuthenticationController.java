@@ -32,6 +32,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
+    @Operation(summary = "로그인", description = "로그인 시 access 토큰, uuid, userid(추가예정) 반환")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest authenticationRequest) {
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
@@ -44,17 +45,20 @@ public class AuthenticationController {
     }
 
     @PostMapping("/chkemail")
+    @Operation(summary = "이메일 중복 체크", description = "이메일 중복 체크 (회원가입시 사용)")
     public Boolean chkEmailIsDuplicate(@RequestBody RequestEmail requestEmail) {
         return authenticationService.chkEmailIsDuplicate(requestEmail);
     }
 
     // 영민 (비밀번호 찾기)
     @PostMapping("/findPassword")
+    @Operation(summary = "비밀번호 찾기", description = "이름, loginId, email이 일치하는 회원이 있으면 메일 전송")
     public String findPassword(@RequestBody RequestFindPassword requestFindPassword) {
         return authenticationService.findPassword(requestFindPassword);
     }
 
     @PostMapping("/resetPassword")
+    @Operation(summary = "비밀번호 재설정", description = "비밀번호 재설정, 비밀번호 변경할 유저 loginId도 함께 줘야 함")
     public void resetPassword(@RequestBody RequestResetPassword requestResetPassword) {
 
         log.info("@@@@@@@@@@@@@@@@@@{}", requestResetPassword);
