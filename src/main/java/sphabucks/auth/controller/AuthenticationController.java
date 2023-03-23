@@ -45,9 +45,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/chkemail")
+    @Operation(summary = "이메일 중복 체크(유무 체크)", description = "회원가입 시에는 중복일 경우 진행 X, 그 외에는 중복일 때 진행 O")
     public Boolean chkEmailIsDuplicate(@RequestBody RequestEmail requestEmail) {
         return authenticationService.chkEmailIsDuplicate(requestEmail);
     }
 
-
+    @PostMapping("/findid")
+    @Operation(summary = "아이디 찾기", description = "이메일 인증 후 해당 이메일로 아이디를 찾아서 반환")
+    public String findId(@RequestBody RequestEmail requestEmail) {
+        return authenticationService.findId(requestEmail);
+    }
 }

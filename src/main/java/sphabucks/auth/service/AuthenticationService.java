@@ -97,6 +97,12 @@ public class AuthenticationService {
     public Boolean chkEmailIsDuplicate(RequestEmail requestEmail) {
         return userRepository.existsByEmail(requestEmail.getEmail());
     }
+
+    public String findId(RequestEmail requestEmail) {
+        return userRepository.findByEmail(requestEmail.getEmail())
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                .getLoginId().toUpperCase();
+    }
 // 지욱
 
 
