@@ -1,14 +1,18 @@
-package sphabucks.auth;
+package sphabucks.auth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sphabucks.auth.vo.AuthenticationRequest;
+import sphabucks.auth.vo.AuthenticationResponse;
+import sphabucks.auth.service.AuthenticationService;
+import sphabucks.auth.vo.RefreshRequest;
+import sphabucks.auth.vo.RequestSignUp;
 import sphabucks.users.vo.RequestUser;
 
 @RestController
@@ -21,15 +25,10 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    @Operation(summary = "회원 가입")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원가입 성공"),
-            @ApiResponse(responseCode = "400", description = "회원가입 실패"),
-            @ApiResponse(responseCode = "500", description = "회원가입 실패")
-    })
-    public ResponseEntity<AuthenticationResponse> signup(
-            @RequestBody RequestUser signupRequest) {
-        return ResponseEntity.ok(authenticationService.signup(signupRequest));
+    @Operation(summary = "회원 가입", description = "이메일 인증 후 진행되는 api")
+    public ResponseEntity<HttpStatus> signup(
+            @RequestBody RequestSignUp requestSignUp) {
+        return ResponseEntity.ok(authenticationService.signup(requestSignUp));
     }
 
     @PostMapping("/authenticate")

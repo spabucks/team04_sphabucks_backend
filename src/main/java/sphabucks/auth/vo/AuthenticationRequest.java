@@ -1,4 +1,4 @@
-package sphabucks.auth;
+package sphabucks.auth.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class RefreshRequest {
+public class AuthenticationRequest {
 
-    private String refreshToken;
+    private String loginId;
+    private String pwd;
+
 }

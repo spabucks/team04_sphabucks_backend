@@ -1,12 +1,17 @@
-package sphabucks.auth;
+package sphabucks.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import sphabucks.auth.vo.AuthenticationRequest;
+import sphabucks.auth.vo.AuthenticationResponse;
+import sphabucks.auth.vo.RefreshRequest;
+import sphabucks.auth.vo.RequestSignUp;
 import sphabucks.config.JwtService;
 import sphabucks.email.RedisService;
 import sphabucks.error.BusinessException;
@@ -28,33 +33,23 @@ public class AuthenticationService {
         private final RedisService redis;
         private final AuthenticationManager authenticationManager;
         private final UserDetailsService userDetailsService;
-        public AuthenticationResponse signup(RequestUser signupRequest) {
+        public HttpStatus signup(RequestSignUp requestSignUp) {
 
             var user = User.builder()
-                    .loginId(signupRequest.getLoginId())
+                    .loginId(requestSignUp.getLoginId())
                     .userId(UUID.randomUUID().toString())
-                    .address(signupRequest.getAddress())
-                    .birth(signupRequest.getBirth())
-                    .grade(signupRequest.getGrade())
-                    .sex(signupRequest.isSex())
-                    .carNum(signupRequest.getCarNum())
-                    .nickname(signupRequest.getNickname())
-                    .phoneNum(signupRequest.getPhoneNum())
-                    .star(signupRequest.getStar())
-                    .name(signupRequest.getName())
-                    .pwd(passwordEncoder.encode(signupRequest.getPwd()))
-                    .email(signupRequest.getEmail())
+                    .birth(requestSignUp.getBirth())
+                    .name(requestSignUp.getUserName())
+                    .nickname(requestSignUp.getNickName())
+                    .phoneNum(requestSignUp.getPhoneNum())
+                    .pwd(passwordEncoder.encode(requestSignUp.getPwd()))
+                    .email(requestSignUp.getEmail())
                     .role(Role.USER)
                     .build();
-            userRepository.save(user);
-            var jwtToken = jwtService.generateToken(user);
-            var refreshToken = jwtService.refreshToken(jwtToken);
-            redis.createEmailCertification(user.getLoginId(), refreshToken);
 
-            return AuthenticationResponse.builder()
-                    .accessToken(jwtToken)
-                    .refreshToken(refreshToken)
-                    .build();
+            userRepository.save(user);
+
+            return HttpStatus.OK;
         }
 
         public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
