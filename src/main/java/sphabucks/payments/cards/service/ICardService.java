@@ -7,5 +7,4 @@ public interface ICardService {
     void addCard(RequestCard requestCard);
     ResponseCard getCard(Long id);
 
-    void test();
 }

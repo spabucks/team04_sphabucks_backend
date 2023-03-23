@@ -40,8 +40,4 @@ public class CardServiceImpl implements ICardService{
                 .build();
     }
 
-    @Override
-    public void test() {
-
-    }
 }
