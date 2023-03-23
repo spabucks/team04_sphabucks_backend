@@ -8,19 +8,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sphabucks.auth.vo.AuthenticationRequest;
-import sphabucks.auth.vo.AuthenticationResponse;
-import sphabucks.auth.vo.RefreshRequest;
-import sphabucks.auth.vo.RequestSignUp;
+import sphabucks.auth.vo.*;
 import sphabucks.config.JwtService;
 import sphabucks.email.RedisService;
-import sphabucks.email.RequestEmail;
+import sphabucks.email.service.EmailService;
+import sphabucks.email.vo.RequestEmail;
 import sphabucks.error.BusinessException;
 import sphabucks.error.ErrorCode;
 import sphabucks.users.model.Role;
 import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
-import sphabucks.users.vo.RequestUser;
 
 import java.util.UUID;
 
@@ -34,6 +31,7 @@ public class AuthenticationService {
     private final RedisService redis;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final EmailService emailService;
 
     public HttpStatus signup(RequestSignUp requestSignUp) {
 
@@ -94,8 +92,28 @@ public class AuthenticationService {
     }
 
 // 지욱
-    public Boolean chkEmailIsDuplicate(RequestEmail requestEmail) {
-        return userRepository.existsByEmail(requestEmail.getEmail());
+    public boolean chkEmailWhenSignUp(RequestEmail requestEmail) throws Exception {
+        if (userRepository.existsByEmail(requestEmail.getEmail())) {
+            return false;
+        } else {
+            emailService.sendSimpleMessage(requestEmail.getEmail());
+            return true;
+        }
+    }
+
+    public boolean chkEmailWhenFindId(RequestFindId requestFindId) throws Exception {
+        if (!userRepository.existsByEmailAndName(requestFindId.getEmail(), requestFindId.getUserName())) {
+            return false;
+        } else {
+            emailService.sendSimpleMessage(requestFindId.getEmail());
+            return true;
+        }
+    }
+
+    public String findId(RequestFindId requestFindId) {
+        return userRepository.findByNameAndEmail(requestFindId.getUserName(), requestFindId.getEmail())
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                .getLoginId().toUpperCase();
     }
 // 지욱
 
