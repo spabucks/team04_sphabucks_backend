@@ -13,6 +13,7 @@ import sphabucks.auth.vo.AuthenticationResponse;
 import sphabucks.auth.service.AuthenticationService;
 import sphabucks.auth.vo.RefreshRequest;
 import sphabucks.auth.vo.RequestSignUp;
+import sphabucks.email.RequestEmail;
 import sphabucks.users.vo.RequestUser;
 
 @RestController
@@ -43,6 +44,10 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.refresh(refreshRequest));
     }
 
+    @PostMapping("/chkemail")
+    public Boolean chkEmailIsDuplicate(@RequestBody RequestEmail requestEmail) {
+        return authenticationService.chkEmailIsDuplicate(requestEmail);
+    }
 
 
 }
