@@ -38,10 +38,16 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.refresh(refreshRequest));
     }
 
-    @PostMapping("/chkemail")
-    @Operation(summary = "이메일 중복 체크(유무 체크)", description = "회원가입 시에는 중복일 경우 진행 X, 그 외에는 중복일 때 진행 O")
-    public Boolean chkEmailIsDuplicate(@RequestBody RequestEmail requestEmail) {
-        return authenticationService.chkEmailIsDuplicate(requestEmail);
+    @PostMapping("/signup/chkemail")
+    @Operation(summary = "회원가입 시 이메일 중복 체크(유무 체크)", description = "회원가입 시 중복일 경우 진행 X")
+    public Boolean chkEmailIsDuplicate(@RequestBody RequestEmail requestEmail) throws Exception {
+        return authenticationService.chkEmailWhenSignUp(requestEmail);
+    }
+
+    @PostMapping("/findid/chkemail")
+    @Operation(summary = "아이디 찾기 시 이메일 중복 체크(유무 체크)", description = "중복이 아닐 경우 진행 X(이메일이 DB에 있어야함)")
+    public Boolean chkEmailIsDuplicate(@RequestBody RequestFindId requestFindId) throws Exception {
+        return authenticationService.chkEmailWhenFindId(requestFindId);
     }
 
     @PostMapping("/findid")

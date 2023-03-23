@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import sphabucks.auth.vo.*;
 import sphabucks.config.JwtService;
 import sphabucks.email.RedisService;
+import sphabucks.email.service.EmailService;
 import sphabucks.email.vo.RequestEmail;
 import sphabucks.error.BusinessException;
 import sphabucks.error.ErrorCode;
@@ -30,6 +31,7 @@ public class AuthenticationService {
     private final RedisService redis;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final EmailService emailService;
 
     public HttpStatus signup(RequestSignUp requestSignUp) {
 
@@ -90,8 +92,22 @@ public class AuthenticationService {
     }
 
 // 지욱
-    public Boolean chkEmailIsDuplicate(RequestEmail requestEmail) {
-        return userRepository.existsByEmail(requestEmail.getEmail());
+    public boolean chkEmailWhenSignUp(RequestEmail requestEmail) throws Exception {
+        if (userRepository.existsByEmail(requestEmail.getEmail())) {
+            return false;
+        } else {
+            emailService.sendSimpleMessage(requestEmail.getEmail());
+            return true;
+        }
+    }
+
+    public boolean chkEmailWhenFindId(RequestFindId requestFindId) throws Exception {
+        if (!userRepository.existsByEmailAndName(requestFindId.getEmail(), requestFindId.getUserName())) {
+            return false;
+        } else {
+            emailService.sendSimpleMessage(requestFindId.getEmail());
+            return true;
+        }
     }
 
     public String findId(RequestFindId requestFindId) {
