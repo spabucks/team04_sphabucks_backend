@@ -1,4 +1,4 @@
-package sphabucks.email;
+package sphabucks.email.service;
 
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
@@ -7,9 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import sphabucks.error.BusinessException;
-import sphabucks.error.ErrorCode;
-import sphabucks.users.model.User;
+import sphabucks.email.RedisService;
+import sphabucks.email.vo.RequestEmailCheck;
 import sphabucks.users.repository.IUserRepository;
 
 import java.util.*;

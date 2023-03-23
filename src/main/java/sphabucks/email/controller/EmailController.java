@@ -1,9 +1,12 @@
-package sphabucks.email;
+package sphabucks.email.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import sphabucks.email.service.EmailService;
+import sphabucks.email.vo.RequestEmail;
+import sphabucks.email.vo.RequestEmailCheck;
 
 @RequiredArgsConstructor
 @RestController

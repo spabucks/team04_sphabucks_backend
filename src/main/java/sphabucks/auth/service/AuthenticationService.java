@@ -8,19 +8,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sphabucks.auth.vo.AuthenticationRequest;
-import sphabucks.auth.vo.AuthenticationResponse;
-import sphabucks.auth.vo.RefreshRequest;
-import sphabucks.auth.vo.RequestSignUp;
+import sphabucks.auth.vo.*;
 import sphabucks.config.JwtService;
 import sphabucks.email.RedisService;
-import sphabucks.email.RequestEmail;
+import sphabucks.email.vo.RequestEmail;
 import sphabucks.error.BusinessException;
 import sphabucks.error.ErrorCode;
 import sphabucks.users.model.Role;
 import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
-import sphabucks.users.vo.RequestUser;
 
 import java.util.UUID;
 
@@ -98,8 +94,8 @@ public class AuthenticationService {
         return userRepository.existsByEmail(requestEmail.getEmail());
     }
 
-    public String findId(RequestEmail requestEmail) {
-        return userRepository.findByEmail(requestEmail.getEmail())
+    public String findId(RequestFindId requestFindId) {
+        return userRepository.findByNameAndEmail(requestFindId.getUserName(), requestFindId.getEmail())
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
                 .getLoginId().toUpperCase();
     }
