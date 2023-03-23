@@ -39,5 +39,4 @@ public class CardServiceImpl implements ICardService{
                 .money(card.getMoney())
                 .build();
     }
-
 }
