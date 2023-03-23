@@ -39,4 +39,9 @@ public class CardServiceImpl implements ICardService{
                 .money(card.getMoney())
                 .build();
     }
+
+    @Override
+    public void test2() {
+
+    }
 }
