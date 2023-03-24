@@ -124,7 +124,7 @@ public class ProductRepository {
         if (requestSearchParam.getPrice() != null) {
             for (int i = 0; i < requestSearchParam.getPrice().size(); i++) {
                 query.setParameter("price" + i, requestSearchParam.getPrice().get(i));
-                query.setParameter("price" + i + "plus10000", requestSearchParam.getPrice().get(i) + 10000);
+                query.setParameter("price" + i + "plus10000", requestSearchParam.getPrice().get(i) + 9999);
             }
         }
         if (requestSearchParam.getSmallCategory() != null) {

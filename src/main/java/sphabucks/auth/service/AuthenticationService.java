@@ -58,7 +58,7 @@ public class AuthenticationService {
 
         return HttpStatus.OK;
     }
-
+    
     public AuthenticationResponse Login(AuthenticationRequest authenticationRequest) {
         if(redis.getEmailCertification(authenticationRequest.getLoginId())!=null) {
             if (redis.getEmailCertification(authenticationRequest.getLoginId()).substring(0, 6).equals("logout")) {
