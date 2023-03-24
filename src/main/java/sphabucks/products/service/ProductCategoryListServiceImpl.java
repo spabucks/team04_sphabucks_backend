@@ -99,8 +99,11 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
         return_value.add(ResponseProductList.builder()
                 .id(1L)
                 .name(iEventRepository.findById(currentEventId)
-                        .orElseThrow(()-> new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode()))
+                        .orElseThrow(() -> new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode()))
                         .getSeason())
+                .description(iEventRepository.findById(currentEventId)
+                        .orElseThrow(() -> new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode()))
+                        .getDescription())
                 .data(iEventProductService.getProductsByEventId(currentEventId))
                 .build());
 
@@ -110,6 +113,7 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
         return_value.add(ResponseProductList.builder()
                 .id(2L)
                 .name("다른 고객이 함께 본 상품")
+                .description("다른 고객이 함께 본 상품")
                 .data(getProductsBySmallCategoryId(currentSmallCategoryId))
                 .build());
         return return_value;
