@@ -1,4 +1,4 @@
-package sphabucks.email;
+package sphabucks.email.vo;
 
 import lombok.Data;
 

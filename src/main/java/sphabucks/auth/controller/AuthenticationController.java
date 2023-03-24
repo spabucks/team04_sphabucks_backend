@@ -1,8 +1,6 @@
 package sphabucks.auth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.auth.vo.*;
 import sphabucks.auth.service.AuthenticationService;
+
 import sphabucks.email.RequestEmail;
 import sphabucks.users.vo.RequestUser;
+import sphabucks.email.vo.RequestEmail;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -44,6 +44,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.refresh(refreshRequest));
     }
 
+
     @PostMapping("/chkemail")
     @Operation(summary = "이메일 중복 체크", description = "이메일 중복 체크 (회원가입시 사용)")
     public Boolean chkEmailIsDuplicate(@RequestBody RequestEmail requestEmail) {
@@ -70,4 +71,22 @@ public class AuthenticationController {
 
 
 
+    @PostMapping("/signup/chkemail")
+    @Operation(summary = "회원가입 시 이메일 중복 체크(유무 체크)", description = "회원가입 시 중복일 경우 진행 X")
+    public Boolean chkEmailIsDuplicate(@RequestBody RequestEmail requestEmail) throws Exception {
+        return authenticationService.chkEmailWhenSignUp(requestEmail);
+    }
+
+    @PostMapping("/findid/chkemail")
+    @Operation(summary = "아이디 찾기 시 이메일 중복 체크(유무 체크)", description = "중복이 아닐 경우 진행 X(이메일이 DB에 있어야함)")
+    public Boolean chkEmailIsDuplicate(@RequestBody RequestFindId requestFindId) throws Exception {
+        return authenticationService.chkEmailWhenFindId(requestFindId);
+    }
+
+
+    @PostMapping("/findid")
+    @Operation(summary = "아이디 찾기", description = "이메일 인증 후 해당 이메일과 실명으로 아이디를 찾아서 반환")
+    public String findId(@RequestBody RequestFindId requestFindId) {
+        return authenticationService.findId(requestFindId);
+    }
 }
