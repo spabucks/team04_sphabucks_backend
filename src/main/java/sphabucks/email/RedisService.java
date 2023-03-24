@@ -52,9 +52,11 @@ public class RedisService {
         return Boolean.TRUE.equals(redisTemplate.hasKey(email));
     }
 
-    public void changeExpired(String userId, String accessToken){
+    public void changeExpired(String accessToken){
+
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        vop.set(userId, "logout"+accessToken, Duration.ofSeconds(ALIMIT_TIME));
+        vop.set(accessToken, "logout", Duration.ofSeconds(ALIMIT_TIME));
+
     }
 
 }
