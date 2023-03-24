@@ -60,11 +60,7 @@ public class AuthenticationService {
     }
     
     public AuthenticationResponse Login(AuthenticationRequest authenticationRequest) {
-        if(redis.getEmailCertification(authenticationRequest.getLoginId())!=null) {
-            if (redis.getEmailCertification(authenticationRequest.getLoginId()).substring(0, 6).equals("logout")) {
-                throw new BusinessException(ErrorCode.UNAUTHORIZED, ErrorCode.UNAUTHORIZED.getCode());
-            }
-        }
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.getLoginId(),
@@ -165,7 +161,6 @@ public class AuthenticationService {
 
         Authentication authentication = jwtService.getAuthentication(requestToken.getAccessToken());
 
-
         StringTokenizer st = new StringTokenizer(authentication.getCredentials().toString(),"=,");
         st.nextToken();
         String str = st.nextToken();
@@ -173,7 +168,7 @@ public class AuthenticationService {
         if(redis.getEmailCertification(str) != null){
             redis.removeUserId(requestToken.getUserId());
         }
-        redis.changeExpired(requestToken.getUserId(), requestToken.getAccessToken());
+        redis.changeExpired(requestToken.getAccessToken());
 
     }
 
