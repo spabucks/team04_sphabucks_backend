@@ -1,6 +1,7 @@
 package sphabucks.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,8 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import org.springframework.transaction.annotation.Transactional;
 import sphabucks.auth.vo.*;
 import sphabucks.config.JwtService;
+import sphabucks.email.EmailService;
 import sphabucks.email.RedisService;
 import sphabucks.email.service.EmailService;
 import sphabucks.email.vo.RequestEmail;
@@ -23,6 +27,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
     private final IUserRepository userRepository;
@@ -117,7 +122,37 @@ public class AuthenticationService {
     }
 // 지욱
 
+    // 영민
+    public String findPassword(RequestFindPassword requestFindPassword) {
+        Boolean result = userRepository.existsByEmailAndLoginIdAndName(
+                requestFindPassword.getEmail(),
+                requestFindPassword.getLoginId(),
+                requestFindPassword.getName());
 
+        if (!result) {
+            throw new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode());
+        } else {
+            try {
+                return emailService.sendSimpleMessage(requestFindPassword.getEmail());
+            } catch (Exception e) {
+                throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, ErrorCode.INTERNAL_SERVER_ERROR.getCode());
+            }
+        }
+    }
+
+    @Transactional
+    public void resetPassword(RequestResetPassword requestResetPassword) {
+
+        if (userRepository.findByLoginId(requestResetPassword.getLoginId()).isEmpty()) {
+            throw new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode());
+        } else {
+            userRepository.resetPassword(
+                    passwordEncoder.encode(requestResetPassword.getNewPassword()),
+                    requestResetPassword.getLoginId()
+            );
+        }
+    }
+    // 영민
 
 
 
