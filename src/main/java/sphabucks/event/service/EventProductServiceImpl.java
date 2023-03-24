@@ -69,6 +69,7 @@ public class EventProductServiceImpl implements IEventProductService{
                             .orElseThrow(()-> new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode()))
                             .getSeason())
                     .data(getProductsByEventId(eventId))
+                    .description(iEventRepository.findById(eventId).get().getDescription())
                     .build());
         });
 

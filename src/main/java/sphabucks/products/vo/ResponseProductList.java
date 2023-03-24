@@ -13,4 +13,5 @@ public class ResponseProductList {  // 특정 분류에 따라 해당되는 상�
     private Long id;
     private String name;    // 분류 기준 (ex. 이벤트 이름, 카테고리(대, 소) 이름)
     private List<ResponseProductSummary> data; // (관련된 상품 리스트(디테일 정보는 제외한 정보))
+    private String description;
 }

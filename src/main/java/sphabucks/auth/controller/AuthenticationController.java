@@ -78,6 +78,7 @@ public class AuthenticationController {
     @PostMapping("/findid")
     @Operation(summary = "아이디 찾기", description = "이메일 인증 후 해당 이메일과 실명으로 아이디를 찾아서 반환")
     public String findId(@RequestBody RequestFindId requestFindId) {
+
         return authenticationService.findId(requestFindId);
     }
 }
