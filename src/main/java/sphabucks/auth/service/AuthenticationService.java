@@ -1,16 +1,17 @@
 package sphabucks.auth.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import org.springframework.transaction.annotation.Transactional;
 import sphabucks.auth.vo.*;
 import sphabucks.config.JwtService;
 import sphabucks.email.RedisService;
@@ -22,6 +23,7 @@ import sphabucks.users.model.Role;
 import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
 
+import java.util.StringTokenizer;
 import java.util.UUID;
 
 @Service
@@ -36,6 +38,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final EmailService emailService;
+
 
     public HttpStatus signup(RequestSignUp requestSignUp) {
 
@@ -74,6 +77,7 @@ public class AuthenticationService {
                         .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
                         .getUserId())
                 .accessToken(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -95,7 +99,6 @@ public class AuthenticationService {
                 .build();
     }
 
-// 지욱
     public boolean chkEmailWhenSignUp(RequestEmail requestEmail) throws Exception {
         if (userRepository.existsByEmail(requestEmail.getEmail())) {
             return false;
@@ -119,9 +122,6 @@ public class AuthenticationService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
                 .getLoginId().toUpperCase();
     }
-// 지욱
-
-    // 영민
     public String findPassword(RequestFindPassword requestFindPassword) {
         Boolean result = userRepository.existsByEmailAndLoginIdAndName(
                 requestFindPassword.getEmail(),
@@ -141,7 +141,6 @@ public class AuthenticationService {
 
     @Transactional
     public void resetPassword(RequestResetPassword requestResetPassword) {
-
         if (userRepository.findByLoginId(requestResetPassword.getLoginId()).isEmpty()) {
             throw new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode());
         } else {
@@ -151,7 +150,27 @@ public class AuthenticationService {
             );
         }
     }
-    // 영민
+
+    @Transactional
+    public void Logout(RequestToken requestToken){
+        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtService.extractUsername(requestToken.getAccessToken()));
+        if(!jwtService.isTokenValid(requestToken.getAccessToken(), userDetails)){
+            throw new BusinessException(ErrorCode.TOKEN_NOT_EXISTS, ErrorCode.TOKEN_NOT_EXISTS.getCode());
+        }
+
+        Authentication authentication = jwtService.getAuthentication(requestToken.getAccessToken());
+
+
+        StringTokenizer st = new StringTokenizer(authentication.getCredentials().toString(),"=,");
+        st.nextToken();
+        String str = st.nextToken();
+
+        if(redis.getEmailCertification(str) != null){
+            redis.removeUserId(requestToken.getUserId());
+        }
+        redis.changeExpired(requestToken.getUserId(), requestToken.getAccessToken());
+
+    }
 
 
 

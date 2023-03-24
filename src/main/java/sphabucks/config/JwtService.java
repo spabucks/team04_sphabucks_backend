@@ -1,11 +1,13 @@
 package sphabucks.config;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${SECRET_KEY}")
-    private String SECRET_KEY;
-
+    private static final String SECRET_KEY = "42264528482B4D6251655468576D5A7134743777217A25432A462D4A404E6352";
     public String extractUsername(String jwt) {
         return extractClaim(jwt, Claims::getSubject);
     }
@@ -71,7 +71,7 @@ public class JwtService {
         return extractExpiration(jwt).before(new Date());
     }
 
-    private Date extractExpiration(String jwt) {
+    public Date extractExpiration(String jwt) {
         return extractClaim(jwt, Claims::getExpiration);
     }
 
@@ -89,4 +89,19 @@ public class JwtService {
 //        byte[] key = SECRET_KEY.getBytes();
         return Keys.hmacShaKeyFor(key);
     }
+
+    public Authentication getAuthentication(String token){
+        Claims claims = parseClaims(token);
+        return new UsernamePasswordAuthenticationToken(token, claims);
+    }
+
+
+    private Claims parseClaims(String token){
+        try{
+            return Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
+        }catch (ExpiredJwtException e){
+            return e.getClaims();
+        }
+    }
+
 }
