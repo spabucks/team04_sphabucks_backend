@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.auth.vo.*;
 import sphabucks.auth.service.AuthenticationService;
-
 import sphabucks.email.vo.RequestEmail;
+import sphabucks.users.vo.RequestUser;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -29,11 +29,11 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.signup(requestSignUp));
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인 시 access 토큰, uuid, userid(추가예정) 반환")
-    public ResponseEntity<AuthenticationResponse> authenticate(
+    public ResponseEntity<AuthenticationResponse> login(
             @RequestBody AuthenticationRequest authenticationRequest) {
-        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+        return ResponseEntity.ok(authenticationService.Login(authenticationRequest));
     }
 
     @PostMapping("/refresh")
@@ -42,7 +42,6 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.refresh(refreshRequest));
     }
 
-    // 영민 (비밀번호 찾기)
     @PostMapping("/findPassword")
     @Operation(summary = "비밀번호 찾기", description = "이름, loginId, email이 일치하는 회원이 있으면 메일 전송")
     public String findPassword(@RequestBody RequestFindPassword requestFindPassword) {
@@ -53,14 +52,14 @@ public class AuthenticationController {
     @Operation(summary = "비밀번호 재설정", description = "비밀번호 재설정, 비밀번호 변경할 유저 loginId도 함께 줘야 함")
     public void resetPassword(@RequestBody RequestResetPassword requestResetPassword) {
 
-        log.info("@@@@@@@@@@@@@@@@@@{}", requestResetPassword);
 
         authenticationService.resetPassword(requestResetPassword);
     }
 
-    // 영민
-
-
+    @PostMapping("/logout")
+    public void logout(@RequestBody RequestToken requestToken){
+        authenticationService.Logout(requestToken);
+    }
 
     @PostMapping("/signup/chkemail")
     @Operation(summary = "회원가입 시 이메일 중복 체크(유무 체크)", description = "회원가입 시 중복일 경우 진행 X")

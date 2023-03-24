@@ -8,7 +8,7 @@ public enum ErrorCode {
     UNAUTHORIZED(401, "ACCOUNT-002", "인증에 실패한 경우"),
     ACCOUNT_NOT_FOUND(204, "ACCOUNT-003", "계정을 찾을 수 없는 경우"),
     ROLE_NOT_EXISTS(403, "ACCOUNT-004", "권한이 부족한 경우"),
-    TOKEN_NOT_EXISTS(204, "ACCOUNT-005", "해당 key의 인증 토큰이 존재하지 않는 경우"),
+    TOKEN_NOT_EXISTS(403, "ACCOUNT-005", "해당 key의 인증 토큰이 존재하지 않는 경우"),
     DUPLICATE_EMAIL(400, "ACCOUNT-006", "이메일이 중복된 경우"),
 
     CART_NOT_EXISTS(404, "CART-001","해당 카트가 존재하지 않는 경우"),
