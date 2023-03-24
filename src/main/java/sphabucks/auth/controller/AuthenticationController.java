@@ -29,11 +29,11 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.signup(requestSignUp));
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인 시 access 토큰, uuid, userid(추가예정) 반환")
-    public ResponseEntity<AuthenticationResponse> authenticate(
+    public ResponseEntity<AuthenticationResponse> login(
             @RequestBody AuthenticationRequest authenticationRequest) {
-        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+        return ResponseEntity.ok(authenticationService.Login(authenticationRequest));
     }
 
     @PostMapping("/refresh")

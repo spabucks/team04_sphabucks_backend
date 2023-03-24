@@ -59,7 +59,10 @@ public class AuthenticationService {
         return HttpStatus.OK;
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
+    public AuthenticationResponse Login(AuthenticationRequest authenticationRequest) {
+        if(redis.hasKey(authenticationRequest.getLoginId())){
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, ErrorCode.UNAUTHORIZED.getCode());
+        }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.getLoginId(),
