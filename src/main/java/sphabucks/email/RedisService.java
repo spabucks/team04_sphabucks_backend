@@ -54,7 +54,7 @@ public class RedisService {
 
     public void changeExpired(String userId, String accessToken){
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        vop.set(userId, accessToken, Duration.ofSeconds(ALIMIT_TIME));
+        vop.set(userId, "logout"+accessToken, Duration.ofSeconds(ALIMIT_TIME));
     }
 
 }

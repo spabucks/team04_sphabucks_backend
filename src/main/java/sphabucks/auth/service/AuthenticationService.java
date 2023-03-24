@@ -60,8 +60,10 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse Login(AuthenticationRequest authenticationRequest) {
-        if(redis.hasKey(authenticationRequest.getLoginId())){
-            throw new BusinessException(ErrorCode.UNAUTHORIZED, ErrorCode.UNAUTHORIZED.getCode());
+        if(redis.getEmailCertification(authenticationRequest.getLoginId())!=null) {
+            if (redis.getEmailCertification(authenticationRequest.getLoginId()).substring(0, 6).equals("logout")) {
+                throw new BusinessException(ErrorCode.UNAUTHORIZED, ErrorCode.UNAUTHORIZED.getCode());
+            }
         }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
