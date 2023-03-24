@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import sphabucks.auth.vo.*;
 import sphabucks.auth.service.AuthenticationService;
 
-import sphabucks.email.RequestEmail;
-import sphabucks.users.vo.RequestUser;
 import sphabucks.email.vo.RequestEmail;
 
 @RestController
@@ -44,13 +42,6 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.refresh(refreshRequest));
     }
 
-
-    @PostMapping("/chkemail")
-    @Operation(summary = "이메일 중복 체크", description = "이메일 중복 체크 (회원가입시 사용)")
-    public Boolean chkEmailIsDuplicate(@RequestBody RequestEmail requestEmail) {
-        return authenticationService.chkEmailIsDuplicate(requestEmail);
-    }
-
     // 영민 (비밀번호 찾기)
     @PostMapping("/findPassword")
     @Operation(summary = "비밀번호 찾기", description = "이름, loginId, email이 일치하는 회원이 있으면 메일 전송")
@@ -73,13 +64,13 @@ public class AuthenticationController {
 
     @PostMapping("/signup/chkemail")
     @Operation(summary = "회원가입 시 이메일 중복 체크(유무 체크)", description = "회원가입 시 중복일 경우 진행 X")
-    public Boolean chkEmailIsDuplicate(@RequestBody RequestEmail requestEmail) throws Exception {
+    public Boolean chkEmailWhenSignUp(@RequestBody RequestEmail requestEmail) throws Exception {
         return authenticationService.chkEmailWhenSignUp(requestEmail);
     }
 
     @PostMapping("/findid/chkemail")
     @Operation(summary = "아이디 찾기 시 이메일 중복 체크(유무 체크)", description = "중복이 아닐 경우 진행 X(이메일이 DB에 있어야함)")
-    public Boolean chkEmailIsDuplicate(@RequestBody RequestFindId requestFindId) throws Exception {
+    public Boolean chkEmailWhenFindId(@RequestBody RequestFindId requestFindId) throws Exception {
         return authenticationService.chkEmailWhenFindId(requestFindId);
     }
 

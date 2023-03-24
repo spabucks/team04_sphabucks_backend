@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sphabucks.auth.vo.*;
 import sphabucks.config.JwtService;
-import sphabucks.email.EmailService;
 import sphabucks.email.RedisService;
 import sphabucks.email.service.EmailService;
 import sphabucks.email.vo.RequestEmail;
