@@ -19,7 +19,6 @@ public class ProductTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name ="product")
     private Product product;
     @ManyToOne
     private Tag tag;

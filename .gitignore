@@ -240,3 +240,4 @@ out/
 build/tmp/compileJava/previous-compilation-data.bin
 
 *.properties
+banner.txt

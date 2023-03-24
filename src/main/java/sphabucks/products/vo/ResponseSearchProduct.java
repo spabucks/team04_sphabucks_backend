@@ -14,11 +14,12 @@ public class ResponseSearchProduct {
     private String tag;
     private String productName;
     private String imgUrl;
-    private Integer price;
+    private Long price;
     private String size;
     private Long amount;
     private Boolean isNew;
     private Boolean isBest;
+    private Long likeCount;
 
 
 }

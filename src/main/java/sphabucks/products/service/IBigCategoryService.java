@@ -8,6 +8,6 @@ import java.util.List;
 public interface IBigCategoryService {
 
     void addBigCategory(RequestBigCategory requestBigCategory);
-    BigCategory getBigCategory(Integer bigCategoryId);
+    BigCategory getBigCategory(Long bigCategoryId);
     List<BigCategory> getAll();
 }

@@ -2,6 +2,8 @@ package sphabucks.tag.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
 import sphabucks.productimage.model.ProductImage;
 import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
@@ -29,9 +31,16 @@ public class ProductTagServiceImpl implements IProductTagService {
 
     @Override
     public void addProductTag(RequestProductTag requestProductTag) {
+
+        if(iProductTagRepository.findByProductIdAndTagId(requestProductTag.getProductId(), requestProductTag.getTagId()).isPresent()){
+            throw new BusinessException(ErrorCode.DUPLICATE_TAG, ErrorCode.DUPLICATE_TAG.getCode());
+        }
+
         ProductTag productTag = ProductTag.builder()
-                .product(iProductRepository.findById(requestProductTag.getProductId()).get())
-                .tag(iTagRepository.findById(requestProductTag.getTagId()).get())
+                .product(iProductRepository.findById(requestProductTag.getProductId())
+                        .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode())))
+                .tag(iTagRepository.findById(requestProductTag.getTagId())
+                        .orElseThrow(()-> new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode())))
                 .build();
 
         iProductTagRepository.save(productTag);
@@ -39,6 +48,9 @@ public class ProductTagServiceImpl implements IProductTagService {
 
     @Override
     public List<ProductTag> getProductId(Long productId) {
+        if(iProductTagRepository.findAllByProductId(productId).isEmpty()){
+            throw new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode());
+        }
         return iProductTagRepository.findAllByProductId(productId);
     }
 
@@ -46,8 +58,11 @@ public class ProductTagServiceImpl implements IProductTagService {
     public List<ResponseProductTag> getAll() {
 
         List<ResponseProductTag> responseProductTags = new ArrayList<>();                             // 최종 반환되는 객체
-        List<ProductTag> productTagList = iProductTagRepository.findAll();
 
+        if(iProductTagRepository.findAll().isEmpty()){
+            throw new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode());
+        }
+        List<ProductTag> productTagList = iProductTagRepository.findAll();
 
         for (int i = 0; i < iTagRepository.count(); i++) {
             List<ResponseExhibitionProduct> responseExhibitionProducts = new ArrayList<>();
@@ -55,13 +70,17 @@ public class ProductTagServiceImpl implements IProductTagService {
                 Long productId = productTagList.get(j).getProduct().getId();
                 Long ptagId = productTagList.get(j).getTag().getId();
 
+                if(iProductImageRepo.findAllByProductIdAndChk(productId, 1).isEmpty()){
+                    throw new BusinessException(ErrorCode.IMAGE_NOT_EXISTS, ErrorCode.IMAGES_NOT_EXISTS.getCode());
+                }
                 List<ProductImage> productImageList = iProductImageRepo.findAllByProductIdAndChk(productId, 1);
 
                 ExhibitionProductImage exhibitionProductImage = new ExhibitionProductImage();
                 exhibitionProductImage.setImage(productImageList.get(0).getImage());
 
                 if ((ptagId - 1) == i) {
-                    Product product = iProductRepository.findById(productId).get();
+                    Product product = iProductRepository.findById(productId)
+                            .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
                     responseExhibitionProducts.add(ResponseExhibitionProduct.builder()
                             .price(product.getPrice())
                             .title(product.getName())
@@ -74,6 +93,9 @@ public class ProductTagServiceImpl implements IProductTagService {
                 }
             }
 
+            if(iTagRepository.findAll().isEmpty()){
+                throw new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode());
+            }
             Long tagId = iTagRepository.findAll().get(i).getId();
             responseProductTags.add(ResponseProductTag.builder()
                     .id(tagId)
@@ -90,6 +112,9 @@ public class ProductTagServiceImpl implements IProductTagService {
     public ResponseProductTag getTagId(Long tagId) {
 
         ResponseProductTag responseProductTagList = new ResponseProductTag();
+        if(iProductTagRepository.findAll().isEmpty()){
+            throw new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode());
+        }
         List<ProductTag> productTagList = iProductTagRepository.findAll();
 
         List<ResponseExhibitionProduct> responseExhibitionProducts = new ArrayList<>();
@@ -97,13 +122,17 @@ public class ProductTagServiceImpl implements IProductTagService {
             Long productId = productTagList.get(j).getProduct().getId();
             Long ptagId = productTagList.get(j).getTag().getId();
 
+            if(iProductImageRepo.findAllByProductIdAndChk(productId, 1).isEmpty()){
+                throw new BusinessException(ErrorCode.IMAGE_NOT_EXISTS, ErrorCode.IMAGES_NOT_EXISTS.getCode());
+            }
             List<ProductImage> productImageList = iProductImageRepo.findAllByProductIdAndChk(productId, 1);
 
             ExhibitionProductImage exhibitionProductImage = new ExhibitionProductImage();
             exhibitionProductImage.setImage(productImageList.get(0).getImage());
 
             if (ptagId.equals(tagId)) {
-                Product product = iProductRepository.findById(productId).get();
+                Product product = iProductRepository.findById(productId)
+                        .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
                 responseExhibitionProducts.add(ResponseExhibitionProduct.builder()
                         .price(product.getPrice())
                         .title(product.getName())
@@ -114,6 +143,10 @@ public class ProductTagServiceImpl implements IProductTagService {
                         .imgUrl(productImageList.get(0).getImage())
                         .build());
             }
+        }
+
+        if(iTagRepository.findAll().isEmpty()){
+            throw new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode());
         }
 
         responseProductTagList = ResponseProductTag.builder()

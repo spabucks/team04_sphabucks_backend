@@ -2,6 +2,7 @@ package sphabucks.products.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import sphabucks.utility.BaseTimeEntity;
 
 import java.util.Date;
@@ -17,7 +18,7 @@ public class Product extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    // 상품 id
     @Column(nullable = false)
-    private Integer price;  // 가격
+    private Long price;  // 가격
     @Column(nullable = false)
     private Long amount;  // 잔여 개수
     @Column(nullable = false)
@@ -29,4 +30,5 @@ public class Product extends BaseTimeEntity {
     private String size;  // 용량
     private Boolean isBest;   // 베스트
     private Boolean isNew;
+    private Long likeCount;
 }

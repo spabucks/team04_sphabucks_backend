@@ -14,6 +14,7 @@ public class ResponseProduct {
     private String title;
     private String imgUrl;
     private String description;
-    private Integer price;
+    private Long price;
     private List<String> productDetailImgUrl;
+    private Long likeCount;
 }

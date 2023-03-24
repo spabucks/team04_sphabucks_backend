@@ -3,6 +3,8 @@ package sphabucks.products.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
 import sphabucks.products.model.BigCategory;
 import sphabucks.products.model.SmallCategory;
 import sphabucks.products.repository.IBigCategoryRepository;
@@ -22,8 +24,14 @@ public class SmallCategoryServiceImpl implements ISmallCategoryService{
 
     @Override
     public void addSmallCategory(RequestSmallCategory requestSmallCategory) {
+
+        if(iSmallCategoryRepository.findByName(requestSmallCategory.getName()).isPresent()){
+            throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+        }
+
         SmallCategory smallCategory = SmallCategory.builder()
-                .bigCategory(iBigCategoryRepository.findById(requestSmallCategory.getBigCategoryId()).get())
+                .bigCategory(iBigCategoryRepository.findById(requestSmallCategory.getBigCategoryId())
+                        .orElseThrow(()-> new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode())))
                 .name(requestSmallCategory.getName())
                 .build();
 
@@ -31,18 +39,31 @@ public class SmallCategoryServiceImpl implements ISmallCategoryService{
     }
 
     @Override
-    public SmallCategory getSmallCategory(Integer smallCategoryId) {
+    public SmallCategory getSmallCategory(Long smallCategoryId) {
 
-        return iSmallCategoryRepository.findById(smallCategoryId).get();
+        SmallCategory smallCategory = iSmallCategoryRepository.findById(smallCategoryId)
+                .orElseThrow(()-> new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode()));
+
+        return smallCategory;
     }
 
     @Override
     public List<SmallCategory> getAll() {
+
+        if(iSmallCategoryRepository.findAll().isEmpty()){
+            throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+        }
+
         return iSmallCategoryRepository.findAll();
     }
 
     @Override
     public List<SmallCategory> getAllByType(BigCategory bigCategory) {
+
+        if(iSmallCategoryRepository.findById(bigCategory).isEmpty()){
+            throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
+        }
+
         return iSmallCategoryRepository.findById(bigCategory);
     }
 }

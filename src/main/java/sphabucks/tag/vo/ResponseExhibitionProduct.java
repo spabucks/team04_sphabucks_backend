@@ -17,7 +17,7 @@ public class ResponseExhibitionProduct {
 //    Long tagId;
     Long id;
     String title;            // 상품 이름
-    Integer price;
+    Long price;
 //    ExhibitionProductImage productImage;    // 상품 사진
     String imgUrl;
     Boolean isNew;

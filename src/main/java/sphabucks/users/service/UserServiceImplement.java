@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import sphabucks.error.*;
+import sphabucks.exception.ErrorHandler;
 import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
+import sphabucks.users.vo.RequestLoginIdCheck;
 import sphabucks.users.vo.RequestUser;
 import sphabucks.users.vo.ResponseUser;
 
@@ -24,21 +27,25 @@ public class UserServiceImplement implements IUserService{
     @Override
     public void adduser(RequestUser requestUser) {
 
+        // addUser는 사용하지 않는 메서드라서 에러처리 안해줬음,,
         ModelMapper modelMapper = new ModelMapper();
         User user = modelMapper.map(requestUser,User.class);
         user.setUserId(UUID.randomUUID().toString());
         iUserRepository.save(user);
+
     }
 
     @Override
     public ResponseUser getUser(Long id) {
-        User user = iUserRepository.findById(id).get();
+        User user = iUserRepository.findById(id)
+                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
         ResponseUser responseUser = ResponseUser.builder()
                 .Id(user.getId())
                 .nickname(user.getNickname())
                 .name(user.getName())
                 .email(user.getEmail())
+                .userId(user.getUserId())
                 .build();
 
         return responseUser;
@@ -46,17 +53,25 @@ public class UserServiceImplement implements IUserService{
 
     @Override
     public List<User> getAll() {
+
+        if(iUserRepository.findAll().isEmpty()){
+            throw new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode());
+        }
+
         return iUserRepository.findAll();
     }
 
     @Override
     public ResponseUser getUserByEmail(String email) {
-        Optional<User> user = iUserRepository.findByEmail(email);
+        iUserRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND, ErrorCode.ACCOUNT_NOT_FOUND.getCode()));
+        User user = iUserRepository.findByEmail(email)
+                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
         ResponseUser responseUser = ResponseUser.builder()
-                .Id(user.get().getId())
-                .email(user.get().getEmail())
-                .name(user.get().getName())
-                .nickname(user.get().getNickname())
+                .Id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .nickname(user.getNickname())
                 .build();
 
         return responseUser;
@@ -64,14 +79,20 @@ public class UserServiceImplement implements IUserService{
 
     @Override
     public ResponseUser getUserByLoginId(String loginId) {
-        Optional<User> user = iUserRepository.findByEmail(loginId);
+        User user = iUserRepository.findByEmail(loginId)
+                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
         ResponseUser responseUser = ResponseUser.builder()
-                .Id(user.get().getId())
-                .email(user.get().getEmail())
-                .name(user.get().getName())
-                .nickname(user.get().getNickname())
+                .Id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .nickname(user.getNickname())
                 .build();
 
         return responseUser;
+    }
+
+    @Override
+    public Boolean existByLoginId(RequestLoginIdCheck requestLoginIdCheck) {
+        return iUserRepository.existsByLoginId(requestLoginIdCheck.getLoginId());
     }
 }

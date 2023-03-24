@@ -1,16 +1,12 @@
-name: Java CI with Gradle
-
+name: Java CI with Gradle and push Docker Hub
 on:
   push:
     branches: [ "main", "develop" ]
-
 permissions:
   contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 19
@@ -18,24 +14,30 @@ jobs:
       with:
         java-version: '19'
         distribution: 'adopt'
-    
+
     - uses: actions/checkout@v3
     - run: mkdir ./src/main/resources
     - run: touch ./src/main/resources/application.yml
     - run: echo "${{ secrets.APPLICATION_DEV }}" > ./src/main/resources/application.yml
     - run: cat ./src/main/resources/application.yml
-
+    
+    - run: touch ./src/main/resources/email.properties
+    - run: echo "${{ secrets.EMAIL_PROPERTIES }}" > ./src/main/resources/email.properties
+    - run: cat ./src/main/resources/email.properties
+    
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+      
     - name: Build with Gradle
       run: ./gradlew build --exclude-task test
+      
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
         username: ${{secrets.DOCKERHUB_USERNAME}}
         password: ${{secrets.DOCKERHUB_TOKEN}}
+        
     - name: Docker build
       run: |
-       docker build -t sphabucks .
-       docker tag sphabucks nightsky0/sphabucks:${GITHUB_SHA::7}
-       docker push nightsky0/sphabucks:${GITHUB_SHA::7}
+       docker build -t nightsky0/docker .
+       docker push nightsky0/docker

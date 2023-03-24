@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class SmallCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Column(nullable = false)
     private String name; // 소분류 카테고리명
     @ManyToOne

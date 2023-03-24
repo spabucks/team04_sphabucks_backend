@@ -18,10 +18,6 @@ public interface IEventService {
     Event getEvent(Long id);
     List<Event> getEventAll();
 
-    // 이벤트상품리스트
-    EventProductList addEventProductList(RequestEventProductList requestEventProductList);
-    EventProductList getEventProductList(Long id);
-
     // 이벤트이미지
     EventImage addEventImage(RequestEventImage requestEventImage);
     EventImage getEventImage(Long id);

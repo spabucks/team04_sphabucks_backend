@@ -8,10 +8,8 @@ jar {
 	enabled = false
 }
 
-bootJar{
-	archivesBaseName = 'app'
+bootJar {
 	archiveFileName = 'app.jar'
-	archiveVersion = "0.0.0"
 }
 
 configurations {
@@ -34,12 +32,16 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.2'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
 
 }
 

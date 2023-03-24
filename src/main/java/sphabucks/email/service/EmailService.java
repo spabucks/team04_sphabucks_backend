@@ -1,4 +1,4 @@
-package sphabucks.email;
+package sphabucks.email.service;
 
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import sphabucks.users.model.User;
+import sphabucks.email.RedisService;
+import sphabucks.email.vo.RequestEmailCheck;
 import sphabucks.users.repository.IUserRepository;
 
 import java.util.*;
@@ -59,12 +60,9 @@ public class EmailService {
         return ePw.substring(0, 3) + ePw.substring(3, 6);
     }
 
+
     // 메세지 전송
     public String sendSimpleMessage(String to) throws Exception{
-        Optional<User> user = iUserRepository.findByEmail(to);
-        if (!user.isEmpty()) {
-            return "이메일 중복";
-        }
 
         String code = createCode(ePw);
         MimeMessage message= createMessage(to, code);
@@ -92,7 +90,4 @@ public class EmailService {
         }
         return false; // 인증 실패
     }
-
-
-
 }

@@ -2,20 +2,17 @@ package sphabucks.carts.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import sphabucks.carts.model.Cart;
 import sphabucks.carts.repository.ICartRepo;
-import sphabucks.carts.vo.RequestCart;
-import sphabucks.carts.vo.ResponseCart;
-import sphabucks.carts.vo.ResponseCategoryList;
-import sphabucks.payments.cards.vo.ResponseCard;
+import sphabucks.carts.vo.*;
+import sphabucks.error.BusinessException;
+import sphabucks.error.ErrorCode;
+import sphabucks.productimage.repository.IProductImageRepo;
 import sphabucks.products.model.Product;
 import sphabucks.products.repository.IProductCategoryListRepository;
 import sphabucks.products.repository.IProductRepository;
-import sphabucks.users.model.User;
 import sphabucks.users.repository.IUserRepository;
 
 import java.util.ArrayList;
@@ -23,79 +20,155 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements ICartService{
     private final ICartRepo iCartRepo;
     private final IUserRepository iUserRepository;
     private final IProductRepository iProductRepository;
     private final IProductCategoryListRepository iProductCategoryListRepository;
+    private final IProductImageRepo iProductImageRepo;
 
     @Override
-    public void addCart(RequestCart requestCart) {
-        if(!iCartRepo.existsByProductId(requestCart.getProductId())){
+    @Transactional
+    public Long addCart(RequestCart requestCart) {
+
+        // 해당 상품이 고객의 장바구니에 담겼던 이력이 있는지 없는지
+        if (iCartRepo.existsByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId())) {    // 장바구니에 저장되었던 이력이 있다면
+            // 해당하는 이력을 조회
+            Cart cart = iCartRepo.findByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId())
+                    .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
+
+            if (cart.getAmount() + requestCart.getAmount() <= 5) {  // 한 상품을 최대 5개 까지 담을 수 있음
+                // 기존에 있던 개수 + 새로 담는 개수를 저장함
+                cart.setAmount(cart.getAmount() + requestCart.getAmount());
+                // 상품이 장바구니에 추가되었으므로 isDelete = false
+                cart.setIsDelete(false);
+            } else {    // 기존에 담겨있던 개수 + 새로 담은 개수 > 5 인 경우
+                return (5 - cart.getAmount());  // 담을 수 있는 최대 개수를 반환 (5 - 현재 장바구니에 담긴 개수)
+            }
+        } else { // 한 번도 장바구니에 추가되었던 이력이 없는 제품이라면
+
+            Product product = iProductRepository.findById(requestCart.getProductId())
+                    .orElseThrow(()->new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
             iCartRepo.save(Cart.builder()
-                    .product(iProductRepository.findById(requestCart.getProductId()).get())
-                    .user(iUserRepository.findById(requestCart.getUserId()).get())
-                    .categoryId(iProductCategoryListRepository.findAllByProductId(requestCart.getProductId()).get(0).getBigCategory().getId())
+                    .product(product)
+                    .user(iUserRepository.findByUserId(requestCart.getUserId())
+                            .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
+                    .categoryId(iProductCategoryListRepository.findByProductId(requestCart.getProductId()).getBigCategory().getId())
                     .amount(requestCart.getAmount())
-                    .price(iProductRepository.findById(requestCart.getProductId()).get().getPrice())
-                    .name(iProductRepository.findById(requestCart.getProductId()).get().getName())
+                    .price(product.getPrice())
+                    .name(product.getName())
                     .isDelete(false)
                     .build());
-        }else{
-            Cart cart = iCartRepo.findAllByProductId(requestCart.getProductId()).get(0);
-            cart.setAmount(cart.getAmount() + requestCart.getAmount());
-            cart.setIsDelete(false);
-            iCartRepo.save(cart);
+        }
+        return 200L;
+    }
+
+    @Override
+    public List<ResponseGetCart> getCart(String userId) {  // userId : user.uuid
+
+        List<ResponseGetCart> responseGetCartList = new ArrayList<>();
+
+        if(iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId).isEmpty()){
+            throw new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode());
         }
 
+        // 고객의 장바구니 속 isDelete = false 인 제품들만 가져옴
+        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
+
+        cartList.forEach(cart -> responseGetCartList.add(ResponseGetCart.builder()
+                .cartId(cart.getId())
+                .productId(cart.getProduct().getId())
+                .bigCategoryId(cart.getCategoryId())
+                .count(cart.getAmount())
+                .build()));
+        return responseGetCartList;
     }
 
     @Override
-    public List<Cart> getCart(Long userId) {
-        // userId 를 통해 카드에 들어잇는 상품들의 리스트를 받아온다.
-        List<Cart> cartList = iCartRepo.findAllByUserId(userId);
-
-        // List 화 해서 가져와야한다.
-        List<ResponseCart> responseCartList = new ArrayList<>();
-
-        // 카테고리가 케이크인지 아닌지
-        // product 별로 개수 출력
-        // isDelete가 true가 아닌 것들만 출력
-        return cartList;
+    public ResponseGetCartProduct getCartProduct(Long productId) {
+        Product product = iProductRepository.findById(productId)
+                .orElseThrow(()->new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
+        return ResponseGetCartProduct.builder()
+                .productName(product.getName())
+                .price(product.getPrice())
+                .imgUrl(iProductImageRepo.findAllByProductIdAndChk(productId, 1).get(0).getImage())
+                .build();
     }
 
     @Override
-    public Cart updateCart(RequestCart requestCart) {
-        Cart cart = iCartRepo.findAllByProductIdAndUserId(requestCart.getProductId(), requestCart.getUserId()).get(0);
-        cart.setAmount(requestCart.getAmount());
-        iCartRepo.save(cart);
+    public List<ResponseCartV2> getCartV2(String userId) {
+        // 유저의 모든 카트를 불러옴(삭제된 상품 카트는 불러오지 않음)
+        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
+        if (cartList.isEmpty()) {
+            throw new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode());
+        }
 
-        return cart;
+        List<ResponseCartV2> responseCartV2List = new ArrayList<>();
+        cartList.forEach(cart -> {
+            // 해당 상품 카트의 상품정보를 불러옴
+            Product product = iProductRepository.findById(cart.getProduct().getId()).orElseThrow(() ->
+                    new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
+
+            // 해당 상품의 이미지 정보(썸네일)를 불러옴
+            String imgUrl = iProductImageRepo.findAllByProductIdAndChk(product.getId(), 1).get(0).getImage();
+            responseCartV2List.add(ResponseCartV2.builder()
+                    .cartId(cart.getId())
+                    .productId(product.getId())
+                    .bigCategoryId(cart.getCategoryId())
+                    .count(cart.getAmount())
+                    .productName(product.getName())
+                    .imgUrl(imgUrl)
+                    .price(product.getPrice())
+                    .check(false)
+                    .build());
+        });
+
+        return responseCartV2List;
     }
 
     @Override
     @Transactional
-    public void deleteCart(RequestCart requestCart) {
-        List<Cart> cartlist = iCartRepo.findAllByUserId(requestCart.getUserId());
-        Cart cart = null;
-        for(int i=0;i<cartlist.size();i++){
-            if(cartlist.get(i).getProduct().getId().equals(requestCart.getProductId())){
-                cart = cartlist.get(i);
-            }
-        }
-        if (cart != null) {
+    public void updateCart(RequestUpdateCart request) {
+        Cart cart = iCartRepo.findById(request.getCartId())
+                .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
+        cart.setAmount(request.getAmount());
+    }
+
+    @Override
+    @Transactional
+    public void deleteCart(Long id) {
+        Cart cart = iCartRepo.findById(id)
+                .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
+        cart.setAmount(0L);
+        cart.setIsDelete(true);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSelectedCart(List<RequestDeleteSelectedCart> requestList) {
+        requestList.forEach(request -> {
+            Cart cart = iCartRepo.findById(request.getCartId())
+                    .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
+            cart.setAmount(0L);
             cart.setIsDelete(true);
-        }
+        });
     }
 
     @Override
     @Transactional
-    public void deleteAll(RequestCart requestCart) {
-        List<Cart> cartList = iCartRepo.findAllByUserId(requestCart.getUserId());
+    public void deleteAll(String userId) {
+        // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
+
+        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId)
+                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                .getId());
+        if(cartList.isEmpty()){
+            throw new BusinessException(ErrorCode.CARTS_NOT_EXISTS, ErrorCode.CARTS_NOT_EXISTS.getCode());
+        }
         for(Cart cart:cartList){
+            cart.setAmount(0L);
             cart.setIsDelete(true);
         }
     }
-
-
 }

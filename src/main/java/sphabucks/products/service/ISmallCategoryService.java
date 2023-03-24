@@ -9,7 +9,7 @@ import java.util.List;
 public interface ISmallCategoryService {
 
     void addSmallCategory(RequestSmallCategory requestSmallCategory);
-    SmallCategory getSmallCategory(Integer smallCategoryId);
+    SmallCategory getSmallCategory(Long smallCategoryId);
     List<SmallCategory> getAll();
     List<SmallCategory> getAllByType(BigCategory bigCategory);
 }

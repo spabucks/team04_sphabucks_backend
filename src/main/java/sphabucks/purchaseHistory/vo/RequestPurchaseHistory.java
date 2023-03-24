@@ -1,15 +1,15 @@
 package sphabucks.purchaseHistory.vo;
 
-import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class RequestPurchaseHistory {
-    private String category;
     private String productName;
     private Long amount;
     private Long sum;
-    private String payment_num;
+    private String paymentNum;
     private Long userId;
     private Boolean type;
     private String sp_status;

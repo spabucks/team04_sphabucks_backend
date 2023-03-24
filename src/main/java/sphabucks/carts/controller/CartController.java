@@ -1,43 +1,69 @@
 package sphabucks.carts.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.carts.model.Cart;
 import sphabucks.carts.service.ICartService;
-import sphabucks.carts.vo.RequestCart;
+import sphabucks.carts.vo.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/cart")
+@Tag(name = "장바구니(카트)")
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
+@Slf4j
 public class CartController {
 
     private final ICartService iCartService;
 
     @PostMapping("/add")
-    void addCart(@RequestBody RequestCart requestCart){
-        iCartService.addCart(requestCart);
+    @Operation(summary = "장바구니 담기")
+    Long addCart(@RequestBody RequestCart requestCart){
+        return iCartService.addCart(requestCart);
     }
 
     @GetMapping("/get/{userId}")
-    List<Cart> getCart(@PathVariable Long userId){
+    @Operation(summary = "장바구니 조회", description = "uuid 사용")
+    List<ResponseGetCart> getCart(@PathVariable String userId){
         return iCartService.getCart(userId);
     }
 
-    @GetMapping("/update")
-    Cart updateCart(@RequestBody RequestCart requestCart){
-        return iCartService.updateCart(requestCart);
+    @GetMapping("/get/v2/{userId}")
+    @Operation(summary = "장바구니 조회 v2", description = "유저의 카트 속 모든 정보를 한번에 반환해줌")
+    List<ResponseCartV2> getCartV2(@PathVariable String userId) {
+        return iCartService.getCartV2(userId);
     }
 
-    @GetMapping("/delete")
-    void deleteCart(@RequestBody RequestCart requestCart){
-        iCartService.deleteCart(requestCart);
+    @GetMapping("/get/product/{id}")
+    public ResponseGetCartProduct getCartProduct(@PathVariable Long id) {
+        return iCartService.getCartProduct(id);
     }
 
-    @GetMapping("/delete/all")
-    void deleteAll(@RequestBody RequestCart requestCart){
-        iCartService.deleteAll(requestCart);
+    @PatchMapping("/update")
+    @Operation(summary = "장바구니 수정")
+    void updateCart(@RequestBody RequestUpdateCart request){
+        iCartService.updateCart(request);
+    }
+
+    @PatchMapping("/delete")
+    @Operation(summary = "장바구니에서 선택 상품 삭제")
+    void deleteCart(@RequestBody RequestDeleteCart request){
+        iCartService.deleteCart(request.getCartId());
+    }
+
+    @PutMapping("/selectedDelete")
+    @Operation(summary = "장바구니에서 선택 상품 여러개 삭제")
+    void selectedDeleteCart(@RequestBody List<RequestDeleteSelectedCart> request) {
+        iCartService.deleteSelectedCart(request);
+    }
+
+    @PutMapping("/delete/all")
+    @Operation(summary = "장바구니 전체 삭제")
+    void deleteAll(@RequestBody RequestDeleteAll request){
+        iCartService.deleteAll(request.getUserId());
     }
 }
