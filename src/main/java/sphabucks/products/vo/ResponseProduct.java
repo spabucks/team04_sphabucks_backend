@@ -17,4 +17,6 @@ public class ResponseProduct {
     private Long price;
     private List<String> productDetailImgUrl;
     private Long likeCount;
+    private Boolean isBest;
+    private Boolean isNew;
 }

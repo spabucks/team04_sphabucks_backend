@@ -162,6 +162,8 @@ public class ProductServiceImpl implements IProductService{
                     .price(productList.getProduct().getPrice())
                     .productDetailImgUrl(productDetailImage)
                     .likeCount(productList.getProduct().getLikeCount())
+                    .isBest(productList.getProduct().getIsBest())
+                    .isNew(productList.getProduct().getIsNew())
                     .build());
         });
 
