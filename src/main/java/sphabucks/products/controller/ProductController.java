@@ -78,6 +78,7 @@ public class ProductController {
                                                              @RequestParam(required = false) List<Long> price,
                                                              @RequestParam(required = false) List<Long> smallCategory,
                                                              @RequestParam(required = false) List<Long> season,
+                                                             @RequestParam(required = false) Long sorting,
 
                                                              @RequestParam(required = false) Long page){
 
@@ -106,6 +107,7 @@ public class ProductController {
                     .price(price)
                     .smallCategory(smallCategory)
                     .season(season)
+                    .sorting(sorting)
                     .build();
 
             return iProductService.searchProduct(requestSearchParam, page);
@@ -117,6 +119,7 @@ public class ProductController {
                     .price(price)
                     .smallCategory(smallCategory)
                     .season(season)
+                    .sorting(sorting)
                     .build();
 
             return iProductService.searchProduct(requestSearchParam, page);

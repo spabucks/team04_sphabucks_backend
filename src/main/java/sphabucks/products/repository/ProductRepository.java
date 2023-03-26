@@ -80,9 +80,16 @@ public class ProductRepository {
             jpql += " )";
         }
 
-
-
-
+        // sorting 추가
+        if (requestSearchParam.getSorting() != null) {
+            if (requestSearchParam.getSorting() == 1L) { // 좋아요순
+                jpql += " order by p.product.likeCount desc";
+            } else if(requestSearchParam.getSorting() == 2L) { // 낮은가격순
+                jpql += " order by p.product.price asc";
+            } else if(requestSearchParam.getSorting() == 3L) { // 높은가격순
+                jpql += " order by p.product.price desc";
+            }
+        }
 
         if (requestSearchParam.getSmallCategory() != null) {
             if (isFirst) {
