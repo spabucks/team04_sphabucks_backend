@@ -17,10 +17,10 @@ public interface IProductService {
     List<ResponseProduct> getBestBigCategory(Long bigCategoryId);
 
     // 상품 검색 메서드 (키워드 검색)
-    List<ResponseSearchProduct> searchProductKeyword(String keyword, Pageable pageable);
+    List<ResponseSearchProduct> searchProductKeyword(String keyword);
 
     // 상품 검색 상단 메뉴 호출 (키워드 검색)
-    List<ResponseBigCategory> searchProductKeywordMenu(String keyword, Pageable pageable);
+    List<ResponseBigCategory> searchProductKeywordMenu(String keyword);
 
     // 빅 카테고리 메뉴 호출
     List<ResponseBigCategory> getAllBigCategory();

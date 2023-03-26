@@ -63,9 +63,9 @@ public class ProductController {
     @GetMapping("/search")
     @Operation(summary = "키워드 검색", description = "돋보기 아이콘 클릭을 통해 들어간 검색창에서 키워드로 검색")
     @Tag(name = "검색")
-    public List<ResponseSearchProduct> searchProductKeyword(@RequestParam("keyword") String keyword, @PageableDefault(size = 10, sort = {"index"}, direction = Sort.Direction.ASC) Pageable pageable){
+    public List<ResponseSearchProduct> searchProductKeyword(@RequestParam("keyword") String keyword){
 
-        return iProductService.searchProductKeyword(keyword, pageable);
+        return iProductService.searchProductKeyword(keyword);
     }
 
     @GetMapping("/search2")
@@ -131,8 +131,8 @@ public class ProductController {
     @GetMapping("/search-menu")
     @Operation(summary = "키워드 검색 시 필터메뉴", description = "키워드로 검색할 시 필터메뉴목록 출력")
     @Tag(name = "검색")
-    public List<ResponseBigCategory> searchProductKeywordMenu(@RequestParam("keyword") String keyword,@PageableDefault(size = 10, sort = {"index"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        return iProductService.searchProductKeywordMenu(keyword, pageable);
+    public List<ResponseBigCategory> searchProductKeywordMenu(@RequestParam("keyword") String keyword) {
+        return iProductService.searchProductKeywordMenu(keyword);
     }
 
     @GetMapping("/getBigCategory")
