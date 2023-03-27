@@ -1,11 +1,10 @@
 package sphabucks.domain.carts.vo;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CartCategory {
     private Long categoryId;
 }

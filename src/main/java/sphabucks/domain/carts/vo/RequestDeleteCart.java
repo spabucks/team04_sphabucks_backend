@@ -1,8 +1,12 @@
 package sphabucks.domain.carts.vo;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RequestDeleteCart {
     private Long cartId;
 }

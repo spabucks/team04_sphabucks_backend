@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import sphabucks.domain.carts.model.Cart;
 import sphabucks.domain.carts.repository.ICartRepo;
-import sphabucks.carts.vo.*;
 import sphabucks.domain.carts.vo.*;
 import sphabucks.domain.productimage.repository.IProductImageRepo;
 import sphabucks.domain.products.model.Product;
@@ -130,37 +129,40 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public void updateCart(RequestUpdateCart request) {
+    public Boolean updateCart(RequestUpdateCart request) {
         Cart cart = iCartRepo.findById(request.getCartId())
                 .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
         cart.setAmount(request.getAmount());
+        return true;
     }
 
     @Override
     @Transactional
-    public void deleteCart(Long id) {
+    public Boolean deleteCart(Long id) {
         Cart cart = iCartRepo.findById(id)
                 .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
         cart.setAmount(0L);
         cart.setIsDelete(true);
+        return true;
     }
 
     @Override
     @Transactional
-    public void deleteSelectedCart(List<RequestDeleteSelectedCart> requestList) {
+    public Boolean deleteSelectedCart(List<RequestDeleteSelectedCart> requestList) {
         requestList.forEach(request -> {
             Cart cart = iCartRepo.findById(request.getCartId())
                     .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
             cart.setAmount(0L);
             cart.setIsDelete(true);
         });
+        return true;
     }
 
     @Override
     @Transactional
-    public void deleteAll(String userId) {
-        // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
+    public Boolean deleteAll(String userId) {
 
+        // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
         List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId)
                 .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
                 .getId());
@@ -171,5 +173,6 @@ public class CartServiceImpl implements ICartService{
             cart.setAmount(0L);
             cart.setIsDelete(true);
         }
+        return true;
     }
 }
