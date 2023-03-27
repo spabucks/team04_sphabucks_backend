@@ -26,7 +26,7 @@ public class BigCategoryController {
     @Operation(summary = "상품에 대분류 물리기", description = "어드민 권한 - 삭제 예정?")
     public ResponseEntity<Object> addBigCategory(@RequestBody RequestBigCategory requestBigCategory){
         iBigCategoryService.addBigCategory(requestBigCategory);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get/{bigCategoryId}")
