@@ -1,12 +1,12 @@
 package sphabucks.domain.carts.vo;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Builder
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResponseGetCartProduct {
     private String productName;
     private Long price;
