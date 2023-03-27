@@ -79,6 +79,7 @@ public class AuthenticationService {
                         .getUserId())
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .nickName(user.getNickname())
                 .build();
     }
 
