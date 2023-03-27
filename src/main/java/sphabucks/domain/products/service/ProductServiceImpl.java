@@ -18,9 +18,6 @@ import sphabucks.global.exception.ErrorCode;
 import sphabucks.domain.productimage.model.ProductImage;
 import sphabucks.domain.productimage.repository.IProductImageRepo;
 import sphabucks.domain.productimage.service.IProductImageService;
-import sphabucks.products.model.*;
-import sphabucks.products.repository.*;
-import sphabucks.products.vo.*;
 
 import java.util.*;
 
