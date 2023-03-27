@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.purchaseHistory.vo.ResponsePurchaseHistoryList;
 import sphabucks.domain.purchaseHistory.service.IPurchaseHistoryService;
@@ -22,18 +24,17 @@ public class PurchaseHistoryController {
 
     @PostMapping("/add")
     @Operation(summary = "구매 내역 추가", description = "폼태그로 데이터 어떻게 넘어오는지 확인 후 수정 필요할 듯")
-    public void addPurchaseHistory(@RequestBody List<Long> selected, @RequestHeader String userId){
+    public ResponseEntity<Object> addPurchaseHistory(@RequestBody List<Long> selected, @RequestHeader String userId){
 
         iPurchaseHistoryService.addPurchaseHistory(selected, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get")
     @Operation(summary = "구매 내역 조회", description = "프론트와 테스트 후 수정 필요")
-    public List<ResponsePurchaseHistoryList> getPurchaseHistory(@RequestHeader String userId) {
+    public ResponseEntity<Object> getPurchaseHistory(@RequestHeader String userId) {
 
-
-
-        return iPurchaseHistoryService.getPurchaseHistoryList(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(iPurchaseHistoryService.getPurchaseHistoryList(userId));
     }
 
 
