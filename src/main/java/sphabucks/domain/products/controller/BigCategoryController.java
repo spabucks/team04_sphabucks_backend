@@ -26,19 +26,22 @@ public class BigCategoryController {
     @Operation(summary = "상품에 대분류 물리기", description = "어드민 권한 - 삭제 예정?")
     public ResponseEntity<Object> addBigCategory(@RequestBody RequestBigCategory requestBigCategory){
         iBigCategoryService.addBigCategory(requestBigCategory);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get/{bigCategoryId}")
     @Operation(summary = "대분류 조회", description = "상품 조회도 아닌 단순한 대분류 정보 조회 - 삭제 예정?")
     public ResponseEntity<Object> getBigCategory(@PathVariable Long bigCategoryId){
-        return ResponseEntity.ok(new ResponseDTO(HttpStatus.OK,iBigCategoryService.getBigCategory(bigCategoryId)));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,
+                iBigCategoryService.getBigCategory(bigCategoryId)));
     }
 
     @GetMapping("/get/all")
     @Operation(summary = "모든 대분류 조회")
-    public List<BigCategory> getAll(){
-        return iBigCategoryService.getAll();
+    public ResponseEntity<Object> getAll(){
+        iBigCategoryService.getAll();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iBigCategoryService.getAll()));
     }
 
 }
