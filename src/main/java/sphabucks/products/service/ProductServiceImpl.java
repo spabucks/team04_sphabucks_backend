@@ -162,6 +162,8 @@ public class ProductServiceImpl implements IProductService{
                     .price(productList.getProduct().getPrice())
                     .productDetailImgUrl(productDetailImage)
                     .likeCount(productList.getProduct().getLikeCount())
+                    .isBest(productList.getProduct().getIsBest())
+                    .isNew(productList.getProduct().getIsNew())
                     .build());
         });
 
@@ -170,12 +172,12 @@ public class ProductServiceImpl implements IProductService{
 
 
     // 상품 검색 기능
-    public List<ResponseSearchProduct> searchProductKeyword(String keyword, Pageable pageable) {
+    public List<ResponseSearchProduct> searchProductKeyword(String keyword) {
 
-        if(iProductRepository.findByNameContains(keyword, pageable).isEmpty()){
+        if(iProductRepository.findByNameContains(keyword).isEmpty()){
             throw new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode());
         }
-        Page<Product> productList = iProductRepository.findByNameContains(keyword, pageable);
+        List<Product> productList = iProductRepository.findByNameContains(keyword);
 
         List<ResponseSearchProduct> responseSearchProductList = new ArrayList<>();
 
@@ -211,8 +213,8 @@ public class ProductServiceImpl implements IProductService{
 
     // 상품 검색시 상단 메뉴 호출 (키워드 검색)
     @Override
-    public List<ResponseBigCategory> searchProductKeywordMenu(String keyword, Pageable pageable) {
-        List<ResponseSearchProduct> responseSearchProductList = searchProductKeyword(keyword, pageable);
+    public List<ResponseBigCategory> searchProductKeywordMenu(String keyword) {
+        List<ResponseSearchProduct> responseSearchProductList = searchProductKeyword(keyword);
 
         HashSet<String> nameSet = new HashSet<>();
 

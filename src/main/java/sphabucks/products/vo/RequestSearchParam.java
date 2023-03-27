@@ -15,6 +15,7 @@ public class RequestSearchParam {
     private List<Long> price;
     private List<Long> smallCategory;
     private List<Long> season;
+    private Long sorting;
 
 
 
