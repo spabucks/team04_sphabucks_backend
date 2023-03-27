@@ -18,7 +18,6 @@ import java.util.*;
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
-    public static final String ePw = createKey();
     private final RedisService redisService;
     private final IUserRepository iUserRepository;
 
@@ -64,6 +63,7 @@ public class EmailService {
     // 메세지 전송
     public String sendSimpleMessage(String to) throws Exception{
 
+        String ePw = createKey();
         String code = createCode(ePw);
         MimeMessage message= createMessage(to, code);
         redisService.createEmailCertification(to, ePw);
