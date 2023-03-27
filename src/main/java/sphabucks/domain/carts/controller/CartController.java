@@ -25,48 +25,48 @@ public class CartController {
 
     @PostMapping("/add")
     @Operation(summary = "장바구니 담기")
-    ResponseEntity<Object> addCart(@RequestBody RequestCart requestCart){
+    public ResponseEntity<Object> addCart(@RequestBody RequestCart requestCart){
         return ResponseEntity.ok(new ResponseDTO(HttpStatus.OK, iCartService.addCart(requestCart)));
     }
 
     @GetMapping("/get/{userId}")
     @Operation(summary = "장바구니 조회", description = "uuid 사용")
-    ResponseEntity<Object> getCart(@PathVariable String userId){
+    public ResponseEntity<Object> getCart(@PathVariable String userId){
         return ResponseEntity.ok(new ResponseDTO(HttpStatus.OK, iCartService.getCart(userId)));
     }
 
     @GetMapping("/get/v2/{userId}")
     @Operation(summary = "장바구니 조회 v2", description = "유저의 카트 속 모든 정보를 한번에 반환해줌")
-    ResponseEntity<Object> getCartV2(@PathVariable String userId) {
+    public ResponseEntity<Object> getCartV2(@PathVariable String userId) {
         return ResponseEntity.ok(new ResponseDTO(HttpStatus.OK, iCartService.getCartV2(userId)));
     }
 
     @GetMapping("/get/product/{id}")
-    ResponseEntity<Object> getCartProduct(@PathVariable Long id) {
+    public ResponseEntity<Object> getCartProduct(@PathVariable Long id) {
         return ResponseEntity.ok(new ResponseDTO(HttpStatus.OK, iCartService.getCartProduct(id)));
     }
 
     @PatchMapping("/update")
     @Operation(summary = "장바구니 수정")
-    ResponseEntity<Object> updateCart(@RequestBody RequestUpdateCart request){
+    public ResponseEntity<Object> updateCart(@RequestBody RequestUpdateCart request){
         return ResponseEntity.ok(new ResponseDTO(HttpStatus.OK, iCartService.updateCart(request)));
     }
 
     @PatchMapping("/delete")
     @Operation(summary = "장바구니에서 선택 상품 삭제")
-    ResponseEntity<Object> deleteCart(@RequestBody RequestDeleteCart request){
+    public ResponseEntity<Object> deleteCart(@RequestBody RequestDeleteCart request){
         return ResponseEntity.ok(new ResponseDTO(HttpStatus.OK, iCartService.deleteCart(request.getCartId())));
     }
 
     @PutMapping("/selectedDelete")
     @Operation(summary = "장바구니에서 선택 상품 여러개 삭제")
-    ResponseEntity<Object> selectedDeleteCart(@RequestBody List<RequestDeleteSelectedCart> request) {
+    public ResponseEntity<Object> selectedDeleteCart(@RequestBody List<RequestDeleteSelectedCart> request) {
         return ResponseEntity.ok(new ResponseDTO(HttpStatus.OK, iCartService.deleteSelectedCart(request)));
     }
 
     @PutMapping("/delete/all")
     @Operation(summary = "장바구니 전체 삭제")
-    ResponseEntity<Object> deleteAll(@RequestBody RequestDeleteAll request){
+    public ResponseEntity<Object> deleteAll(@RequestBody RequestDeleteAll request){
         return ResponseEntity.ok(new ResponseDTO(HttpStatus.OK, iCartService.deleteAll(request.getUserId())));
     }
 }
