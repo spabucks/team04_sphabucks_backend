@@ -3,6 +3,8 @@ package sphabucks.domain.carts.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sphabucks.domain.carts.model.Cart;
 import sphabucks.domain.carts.repository.ICartRepo;
@@ -30,7 +32,7 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public Long addCart(RequestCart requestCart) {
+    public ResponseEntity<Object> addCart(RequestCart requestCart) {
 
         // 해당 상품이 고객의 장바구니에 담겼던 이력이 있는지 없는지
         if (iCartRepo.existsByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId())) {    // 장바구니에 저장되었던 이력이 있다면
@@ -44,7 +46,7 @@ public class CartServiceImpl implements ICartService{
                 // 상품이 장바구니에 추가되었으므로 isDelete = false
                 cart.setIsDelete(false);
             } else {    // 기존에 담겨있던 개수 + 새로 담은 개수 > 5 인 경우
-                return (5 - cart.getAmount());  // 담을 수 있는 최대 개수를 반환 (5 - 현재 장바구니에 담긴 개수)
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body((5 - cart.getAmount()));  // 담을 수 있는 최대 개수를 반환 (5 - 현재 장바구니에 담긴 개수)
             }
         } else { // 한 번도 장바구니에 추가되었던 이력이 없는 제품이라면
 
@@ -61,7 +63,7 @@ public class CartServiceImpl implements ICartService{
                     .isDelete(false)
                     .build());
         }
-        return 200L;
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override
