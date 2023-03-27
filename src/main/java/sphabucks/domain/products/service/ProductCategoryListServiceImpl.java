@@ -14,7 +14,6 @@ import sphabucks.global.exception.ErrorCode;
 import sphabucks.domain.event.service.IEventProductService;
 import sphabucks.domain.productimage.repository.IProductImageRepo;
 import sphabucks.domain.products.model.ProductCategoryList;
-import sphabucks.products.repository.*;
 import sphabucks.domain.products.vo.RequestProductCategoryList;
 import sphabucks.domain.products.vo.ResponseProductList;
 import sphabucks.domain.products.vo.ResponseProductSummary;

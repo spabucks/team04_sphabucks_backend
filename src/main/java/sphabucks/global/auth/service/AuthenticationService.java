@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import sphabucks.auth.vo.*;
 import sphabucks.global.config.JwtService;
 import sphabucks.global.email.RedisService;
 import sphabucks.global.email.service.EmailService;
