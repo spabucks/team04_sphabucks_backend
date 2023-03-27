@@ -3,12 +3,15 @@ package sphabucks.domain.users.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.users.vo.RequestLoginIdCheck;
 import sphabucks.domain.users.model.User;
 import sphabucks.domain.users.service.IUserService;
 import sphabucks.domain.users.vo.RequestUser;
 import sphabucks.domain.users.vo.ResponseUser;
+import sphabucks.global.responseEntity.ResponseDTO;
 
 import java.util.List;
 
@@ -22,39 +25,40 @@ public class UserController {
 
     @PostMapping("/add")
     @Operation(summary = "고객 정보 추가", description = "회원가입이 있으므로 마이페이지에서 정보수정 등으로 교체 예정")
-    public void addUser(@RequestBody RequestUser requestUser) {
-
+    public ResponseEntity<Object> addUser(@RequestBody RequestUser requestUser) {
         iUserService.adduser(requestUser);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get/{id}")
     @Operation(summary = "고객 정보 조회", description = "필요 없어 보임")
-    public ResponseUser getUser(@PathVariable Long id) {
-        return iUserService.getUser(id);
+    public ResponseEntity<Object> getUser(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserService.getUser(id)));
     }
 
     @GetMapping("/get/email/{email}")
     @Operation(summary = "이메일로 고객 찾기", description = "필요 없어 보임")
-    public ResponseUser getUserByEmail(@PathVariable String email) {
-        return iUserService.getUserByEmail(email);
+    public ResponseEntity<Object> getUserByEmail(@PathVariable String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserService.getUserByEmail(email)));
     }
 
     @GetMapping("/get/loginId/{loginId}")
     @Operation(summary = "로그인 아이디로 고객 찾기", description = "필요 없어 보임")
-    public ResponseUser getUserByLoginId(@PathVariable String loginId) {
-        return iUserService.getUserByLoginId(loginId);
+    public ResponseEntity<Object> getUserByLoginId(@PathVariable String loginId) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserService.getUserByLoginId(loginId)));
     }
 
     @GetMapping("get/all")
     @Operation(summary = "모든 고객 정보 조회", description = "어드민 권한 - 삭제 예정")
-    public List<User> getAll(){
-        return iUserService.getAll();
+    public ResponseEntity getAll(){
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserService.getAll()));
     }
 
     @PostMapping("/check/loginId")
     @Operation(summary = "아이디 중복 체크", description = "회원가입시 아이디 중복체크")
-    public Boolean checkLoginId(@RequestBody RequestLoginIdCheck requestLoginIdCheck) {
-        return iUserService.existByLoginId(requestLoginIdCheck);
+    public ResponseEntity<Object> checkLoginId(@RequestBody RequestLoginIdCheck requestLoginIdCheck) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserService.existByLoginId(requestLoginIdCheck)));
     }
 
 }
