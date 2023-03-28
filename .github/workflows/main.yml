@@ -2,6 +2,7 @@ name: Java CI with Gradle and push Docker Hub
 on:
   push:
     branches: [ "main", "develop" ]
+    
 permissions:
   contents: read
 jobs:
