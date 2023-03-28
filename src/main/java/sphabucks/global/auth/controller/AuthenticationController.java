@@ -26,20 +26,20 @@ public class AuthenticationController {
     @Operation(summary = "회원 가입", description = "이메일 인증 후 진행되는 api")
     public ResponseEntity<HttpStatus> signup(
             @RequestBody RequestSignUp requestSignUp) {
-        return ResponseEntity.status(authenticationService.signup(requestSignUp)).build();
+        return ResponseEntity.ok(authenticationService.signup(requestSignUp));
     }
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인 시 access 토큰, uuid, userid(추가예정) 반환")
     public ResponseEntity<AuthenticationResponse> login(
             @RequestBody AuthenticationRequest authenticationRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(authenticationService.Login(authenticationRequest));
+        return ResponseEntity.ok(authenticationService.Login(authenticationRequest));
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refresh(
             @RequestBody RefreshRequest refreshRequest){
-        return ResponseEntity.status(HttpStatus.OK).body(authenticationService.refresh(refreshRequest));
+        return ResponseEntity.ok(authenticationService.refresh(refreshRequest));
     }
 
     @PostMapping("/findPassword")
@@ -50,14 +50,14 @@ public class AuthenticationController {
 
     @PutMapping("/resetPassword")
     @Operation(summary = "비밀번호 재설정", description = "비밀번호 재설정, 비밀번호 변경할 유저 loginId도 함께 줘야 함")
-    public ResponseEntity<HttpStatus> resetPassword(@RequestBody RequestResetPassword requestResetPassword) {
+    public ResponseEntity resetPassword(@RequestBody RequestResetPassword requestResetPassword) {
 
         authenticationService.resetPassword(requestResetPassword);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<HttpStatus> logout(@RequestBody RequestToken requestToken){
+    public ResponseEntity logout(@RequestBody RequestToken requestToken){
         authenticationService.Logout(requestToken);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
