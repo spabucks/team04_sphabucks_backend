@@ -79,6 +79,7 @@ public class AuthenticationService {
                         .getUserId())
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .nickName(user.getNickname())
                 .build();
     }
 
@@ -104,7 +105,7 @@ public class AuthenticationService {
         if (userRepository.existsByEmail(requestEmail.getEmail())) {
             return false;
         } else {
-            emailService.sendSimpleMessage(requestEmail.getEmail());
+//            emailService.sendSimpleMessage(requestEmail.getEmail());
             return true;
         }
     }
@@ -113,7 +114,7 @@ public class AuthenticationService {
         if (!userRepository.existsByEmailAndName(requestFindId.getEmail(), requestFindId.getUserName())) {
             return false;
         } else {
-            emailService.sendSimpleMessage(requestFindId.getEmail());
+//            emailService.sendSimpleMessage(requestFindId.getEmail());
             return true;
         }
     }

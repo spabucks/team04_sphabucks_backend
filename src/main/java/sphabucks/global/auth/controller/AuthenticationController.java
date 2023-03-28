@@ -47,7 +47,7 @@ public class AuthenticationController {
         return authenticationService.findPassword(requestFindPassword);
     }
 
-    @PostMapping("/resetPassword")
+    @PutMapping("/resetPassword")
     @Operation(summary = "비밀번호 재설정", description = "비밀번호 재설정, 비밀번호 변경할 유저 loginId도 함께 줘야 함")
     public void resetPassword(@RequestBody RequestResetPassword requestResetPassword) {
 
