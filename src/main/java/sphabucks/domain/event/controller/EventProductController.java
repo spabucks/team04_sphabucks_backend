@@ -3,13 +3,12 @@ package sphabucks.domain.event.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.event.model.EventProductList;
 import sphabucks.domain.event.service.IEventProductService;
 import sphabucks.domain.event.vo.RequestEventProductList;
-import sphabucks.domain.products.vo.ResponseProductList;
-
-import java.util.List;
+import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
 @RequestMapping("/api/v1/event-products")
@@ -21,19 +20,21 @@ public class EventProductController {
 
     @GetMapping("/get/recommendMD")
     @Operation(summary = "메인페이지 추천 MD")
-    public List<ResponseProductList> getRecommendMD() {
-        return iEventProductService.recommendMD();
+    public ResponseEntity<Object> getRecommendMD() {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iEventProductService.recommendMD()));
     }
 
     @PostMapping("/addProductList")
     @Operation(summary = "이벤트 상품 추가", description = "어드민 권한 - 아마 삭제될 수도?")
-    public EventProductList addEventProductList(@RequestBody RequestEventProductList requestEventProductList) {
-        return iEventProductService.addEventProductList(requestEventProductList);
+    public ResponseEntity<Object> addEventProductList(@RequestBody RequestEventProductList requestEventProductList) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,
+                iEventProductService.addEventProductList(requestEventProductList)));
     }
 
     @GetMapping("/getProductList/{id}")
     @Operation(summary = "이벤트 상품 조회")
-    public EventProductList getEventProductList(@PathVariable Long id) {
-        return iEventProductService.getEventProductList(id);
+    public ResponseEntity<Object> getEventProductList(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,
+                iEventProductService.getEventProductList(id)));
     }
 }

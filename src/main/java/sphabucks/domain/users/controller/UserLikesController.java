@@ -3,12 +3,12 @@ package sphabucks.domain.users.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.users.vo.RequestUserLikes;
-import sphabucks.domain.users.model.UserLikes;
 import sphabucks.domain.users.service.IUserLikesService;
-
-import java.util.List;
+import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
 @RequestMapping("/api/v1/user-likes")
@@ -21,20 +21,22 @@ public class UserLikesController {
 
     @PutMapping("/push")
     @Operation(summary = "좋아요 클릭", description = "다시 한번 눌리면 좋아요 취소")
-    void pushUserLikes(@RequestBody RequestUserLikes requestUserLikes, @RequestHeader String userId){
+    ResponseEntity<Object> pushUserLikes(@RequestBody RequestUserLikes requestUserLikes, @RequestHeader String userId){
         requestUserLikes.setUserId(userId);
         iUserLikesService.pushUserLikes(requestUserLikes);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get")
-    @Operation(summary = "좋아요 클릭한 상품 조회", description = "")
-    List<UserLikes> getUserLikes(@RequestHeader String userId){
-        return iUserLikesService.getUserLikes(userId);
+    @Operation(summary = "좋아요 클릭한 상품 조회")
+    ResponseEntity<Object> getUserLikes(@RequestHeader String userId){
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserLikesService.getUserLikes(userId)));
     }
 
     @GetMapping("/get/all")
     @Operation(summary = "고객이 좋아요를 누른 모든 상품 조회", description = "어드민 권한 - 삭제 예정?")
-    List<UserLikes> getAll(){
-        return iUserLikesService.getAll();
+    ResponseEntity<Object> getAll(){
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserLikesService.getAll()));
     }
 }
