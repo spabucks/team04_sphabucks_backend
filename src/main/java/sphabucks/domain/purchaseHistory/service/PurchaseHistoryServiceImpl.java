@@ -43,7 +43,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
 
         // 주문번호 생성
         String paymentNum = createPaymentNum();
-        if(iPurchaseHistoryRepository.findByPaymentNum(paymentNum).isEmpty()){
+        if(iPurchaseHistoryRepository.findByPaymentNum(paymentNum).isPresent()){
             throw new BusinessException(ErrorCode.DUPLICATE_HISTORY, ErrorCode.DUPLICATE_HISTORY.getCode());
         }
 
@@ -61,7 +61,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                     .sum(
                             cart.getPrice() * cart.getAmount()
                     )
-                    .paymentNum(paymentNum.toString())
+                    .paymentNum(paymentNum)
                     .type(false)
                     .spStatus("1")
                     .orStatus("1")
