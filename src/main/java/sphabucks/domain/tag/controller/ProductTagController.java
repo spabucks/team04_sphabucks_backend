@@ -8,10 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.tag.service.IProductTagService;
 import sphabucks.domain.tag.vo.RequestProductTag;
-import sphabucks.domain.tag.vo.ResponseProductTag;
-import sphabucks.domain.tag.model.ProductTag;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product-tag")

@@ -7,11 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.users.vo.RequestUserLikes;
-import sphabucks.domain.users.model.UserLikes;
 import sphabucks.domain.users.service.IUserLikesService;
 import sphabucks.global.responseEntity.ResponseDTO;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user-likes")
@@ -24,7 +21,7 @@ public class UserLikesController {
 
     @PutMapping("/push")
     @Operation(summary = "좋아요 클릭", description = "다시 한번 눌리면 좋아요 취소")
-    ResponseEntity pushUserLikes(@RequestBody RequestUserLikes requestUserLikes, @RequestHeader String userId){
+    ResponseEntity<Object> pushUserLikes(@RequestBody RequestUserLikes requestUserLikes, @RequestHeader String userId){
         requestUserLikes.setUserId(userId);
         iUserLikesService.pushUserLikes(requestUserLikes);
 
@@ -32,7 +29,7 @@ public class UserLikesController {
     }
 
     @GetMapping("/get")
-    @Operation(summary = "좋아요 클릭한 상품 조회", description = "")
+    @Operation(summary = "좋아요 클릭한 상품 조회")
     ResponseEntity<Object> getUserLikes(@RequestHeader String userId){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserLikesService.getUserLikes(userId)));
     }

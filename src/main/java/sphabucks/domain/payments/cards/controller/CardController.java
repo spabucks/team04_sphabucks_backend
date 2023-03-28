@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.payments.cards.service.ICardService;
-import sphabucks.domain.payments.cards.vo.ResponseCard;
 import sphabucks.domain.payments.cards.vo.RequestCard;
 
 @RestController

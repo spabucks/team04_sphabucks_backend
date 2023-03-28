@@ -7,15 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.event.model.Event;
-import sphabucks.domain.event.model.EventImage;
 import sphabucks.domain.event.service.IEventService;
 import sphabucks.domain.event.vo.RequestEvent;
 import sphabucks.domain.event.vo.RequestEventImage;
-import sphabucks.domain.event.vo.ResponseEventBanner;
 import sphabucks.global.responseEntity.ResponseDTO;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/event")
@@ -29,7 +24,7 @@ public class EventController {
 
     @PostMapping("/add")
     @Operation(summary = "이벤트 추가", description = "어드민 권한 - 아마 삭제될 수도?")
-    public ResponseEntity addEvent(@RequestBody RequestEvent requestEvent){
+    public ResponseEntity<Object> addEvent(@RequestBody RequestEvent requestEvent){
         iEventService.addEvent(requestEvent);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();

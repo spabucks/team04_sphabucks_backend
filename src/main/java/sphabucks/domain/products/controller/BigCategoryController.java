@@ -6,12 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.products.model.BigCategory;
 import sphabucks.domain.products.service.IBigCategoryService;
 import sphabucks.domain.products.vo.RequestBigCategory;
 import sphabucks.global.responseEntity.ResponseDTO;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*" , allowedHeaders = "*")

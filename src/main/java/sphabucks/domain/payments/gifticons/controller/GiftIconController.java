@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.payments.gifticons.vo.RequestGiftIcon;
-import sphabucks.domain.payments.gifticons.vo.ResponseGiftIcon;
-import sphabucks.domain.payments.gifticons.service.IGiftIconListService;
 import sphabucks.domain.payments.gifticons.service.IGiftIconService;
 
 @RestController
@@ -18,7 +16,6 @@ import sphabucks.domain.payments.gifticons.service.IGiftIconService;
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class GiftIconController {
     private final IGiftIconService iGiftIconService;
-    private final IGiftIconListService iGiftIconListService;
 
     @PostMapping("/add")
     @Operation(summary = "기프티콘 정보 등록", description = "어드민 권한 - 삭제 예정?")

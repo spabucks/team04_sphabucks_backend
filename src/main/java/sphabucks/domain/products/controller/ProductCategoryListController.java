@@ -7,12 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.products.service.IProductCategoryListService;
-import sphabucks.domain.products.model.ProductCategoryList;
 import sphabucks.domain.products.vo.RequestProductCategoryList;
-import sphabucks.domain.products.vo.ResponseProductList;
 import sphabucks.global.responseEntity.ResponseDTO;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product-category")

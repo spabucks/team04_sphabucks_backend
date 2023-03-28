@@ -6,11 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.payments.coupons.model.CouponList;
 import sphabucks.domain.payments.coupons.service.ICouponListService;
 import sphabucks.domain.payments.coupons.vo.RequestCouponList;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/coupon-list")
@@ -20,7 +17,7 @@ import java.util.List;
 public class CouponListController {
     private final ICouponListService iCouponListService;
 
-    @PostMapping("/add/user")    // 사용자id과 쿠폰id를 이용하여 쿠폰 리스트에 정보 추가
+    @PostMapping("/add/user")    // 사용자 id와 쿠폰 id를 이용하여 쿠폰 리스트에 정보 추가
     @Operation(summary = "고객이 자신의 계정이 쿠폰 등록", description = "구현 X")
     public ResponseEntity<Object> addCoupon2User(@RequestBody RequestCouponList requestCouponList) {
         iCouponListService.addCoupon2User(requestCouponList);

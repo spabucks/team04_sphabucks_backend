@@ -6,11 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.payments.cards.model.CardList;
 import sphabucks.domain.payments.cards.service.ICardListService;
 import sphabucks.domain.payments.cards.vo.RequestCardList;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/card-list")

@@ -10,7 +10,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.products.model.Product;
 import sphabucks.domain.products.service.IProductService;
 import sphabucks.domain.products.vo.*;
 import sphabucks.global.responseEntity.ResponseDTO;
@@ -29,7 +28,7 @@ public class ProductController {
 
     @PostMapping("/add")
     @Operation(summary = "상품 추가", description = "어드민 권한 - 삭제 예정?")
-    public ResponseEntity addProduct(@RequestBody RequestProduct requestProduct) {
+    public ResponseEntity<Object> addProduct(@RequestBody RequestProduct requestProduct) {
         iProductService.addProduct(requestProduct);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -37,7 +36,9 @@ public class ProductController {
     @GetMapping("/get/{productId}")
     @Operation(summary = "상품 조회", description = "상품을 클릭했을 때 뜨는 상세정보")
     public ResponseEntity<Object> getProduct(@PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iProductService.getProduct(productId)));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK, iProductService.getProduct(productId)));
     }
 
     @GetMapping("/get/all")
@@ -50,7 +51,9 @@ public class ProductController {
     @GetMapping("/get/allProduct")
     @Operation(summary = "전체상품조회(카테고리포함)", description = "구현 중 ")
     public ResponseEntity<Object> getAllProduct(@PageableDefault(size = 10, sort = {"index"}, direction = Sort.Direction.ASC) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iProductService.getAllProducts(pageable)));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK, iProductService.getAllProducts(pageable)));
     }
 
     // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)

@@ -7,15 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.products.model.BigCategory;
-import sphabucks.domain.products.model.SmallCategory;
 import sphabucks.domain.products.service.ISmallCategoryService;
 import sphabucks.domain.products.vo.RequestSmallCategory;
 import sphabucks.global.responseEntity.ResponseDTO;
 
-import java.util.List;
-
 @RestController
-
 @RequestMapping("/api/v1/smallCategory")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*" , allowedHeaders = "*")

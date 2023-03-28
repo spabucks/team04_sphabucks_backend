@@ -7,13 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.users.vo.RequestLoginIdCheck;
-import sphabucks.domain.users.model.User;
 import sphabucks.domain.users.service.IUserService;
 import sphabucks.domain.users.vo.RequestUser;
-import sphabucks.domain.users.vo.ResponseUser;
 import sphabucks.global.responseEntity.ResponseDTO;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -51,7 +47,7 @@ public class UserController {
 
     @GetMapping("get/all")
     @Operation(summary = "모든 고객 정보 조회", description = "어드민 권한 - 삭제 예정")
-    public ResponseEntity getAll(){
+    public ResponseEntity<Object> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserService.getAll()));
     }
 

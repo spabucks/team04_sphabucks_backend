@@ -6,13 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.payments.coupons.model.Coupon;
-import sphabucks.domain.payments.coupons.service.ICouponListService;
 import sphabucks.domain.payments.coupons.service.ICouponService;
 import sphabucks.domain.payments.coupons.vo.RequestCoupon;
-import sphabucks.domain.payments.coupons.vo.ResponseCoupon;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/coupon")
@@ -22,7 +17,6 @@ import java.util.List;
 public class CouponController {
 
     private final ICouponService iCouponService;
-    private final ICouponListService iCouponListService;
 
     @PostMapping("/add")    // DB에 쿠폰 추가
     @Operation(summary = "쿠폰 등록", description = "어드민 권한 - 삭제 예정?")

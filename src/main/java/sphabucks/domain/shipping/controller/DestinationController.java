@@ -6,12 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.shipping.vo.ResponseDestinationSummary;
-import sphabucks.domain.shipping.model.Destination;
 import sphabucks.domain.shipping.service.IDestinationService;
 import sphabucks.domain.shipping.vo.RequestDestination;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/shipping")

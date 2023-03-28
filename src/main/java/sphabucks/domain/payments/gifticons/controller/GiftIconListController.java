@@ -6,11 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.payments.gifticons.model.GiftIconList;
 import sphabucks.domain.payments.gifticons.service.IGiftIconListService;
 import sphabucks.domain.payments.gifticons.vo.RequestGiftIconList;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/gifticon-list")

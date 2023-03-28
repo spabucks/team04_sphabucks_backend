@@ -6,12 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.productimage.model.ProductImage;
 import sphabucks.domain.productimage.service.IProductImageService;
 import sphabucks.domain.productimage.vo.RequestProductImage;
-
-import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/productImage")
