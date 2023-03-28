@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import sphabucks.global.auth.service.AuthenticationService;
 import sphabucks.global.email.vo.RequestEmail;
 import sphabucks.global.auth.vo.*;
+import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -43,40 +44,41 @@ public class AuthenticationController {
 
     @PostMapping("/findPassword")
     @Operation(summary = "비밀번호 찾기", description = "이름, loginId, email이 일치하는 회원이 있으면 메일 전송")
-    public String findPassword(@RequestBody RequestFindPassword requestFindPassword) {
-        return authenticationService.findPassword(requestFindPassword);
+    public ResponseEntity<Object> findPassword(@RequestBody RequestFindPassword requestFindPassword) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, authenticationService.findPassword(requestFindPassword)));
     }
 
     @PutMapping("/resetPassword")
     @Operation(summary = "비밀번호 재설정", description = "비밀번호 재설정, 비밀번호 변경할 유저 loginId도 함께 줘야 함")
-    public void resetPassword(@RequestBody RequestResetPassword requestResetPassword) {
-
+    public ResponseEntity resetPassword(@RequestBody RequestResetPassword requestResetPassword) {
 
         authenticationService.resetPassword(requestResetPassword);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/logout")
-    public void logout(@RequestBody RequestToken requestToken){
+    public ResponseEntity logout(@RequestBody RequestToken requestToken){
         authenticationService.Logout(requestToken);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/signup/chkemail")
     @Operation(summary = "회원가입 시 이메일 중복 체크(유무 체크)", description = "회원가입 시 중복일 경우 진행 X")
-    public Boolean chkEmailWhenSignUp(@RequestBody RequestEmail requestEmail) throws Exception {
-        return authenticationService.chkEmailWhenSignUp(requestEmail);
+    public ResponseEntity<Object> chkEmailWhenSignUp(@RequestBody RequestEmail requestEmail) throws Exception {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, authenticationService.chkEmailWhenSignUp(requestEmail)));
     }
 
     @PostMapping("/findid/chkemail")
     @Operation(summary = "아이디 찾기 시 이메일 중복 체크(유무 체크)", description = "중복이 아닐 경우 진행 X(이메일이 DB에 있어야함)")
-    public Boolean chkEmailWhenFindId(@RequestBody RequestFindId requestFindId) throws Exception {
-        return authenticationService.chkEmailWhenFindId(requestFindId);
+    public ResponseEntity<Object> chkEmailWhenFindId(@RequestBody RequestFindId requestFindId) throws Exception {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, authenticationService.chkEmailWhenFindId(requestFindId)));
     }
 
 
     @PostMapping("/findid")
     @Operation(summary = "아이디 찾기", description = "이메일 인증 후 해당 이메일과 실명으로 아이디를 찾아서 반환")
-    public String findId(@RequestBody RequestFindId requestFindId) {
+    public ResponseEntity<Object> findId(@RequestBody RequestFindId requestFindId) {
 
-        return authenticationService.findId(requestFindId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, authenticationService.findId(requestFindId)));
     }
 }
