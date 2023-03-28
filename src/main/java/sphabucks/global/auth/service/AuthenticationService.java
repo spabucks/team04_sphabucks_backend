@@ -56,7 +56,7 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        return HttpStatus.OK;
+        return HttpStatus.CREATED;
     }
     
     public AuthenticationResponse Login(AuthenticationRequest authenticationRequest) {
