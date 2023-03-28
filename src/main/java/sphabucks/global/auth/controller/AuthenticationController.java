@@ -32,15 +32,21 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인 시 access 토큰, uuid, userid(추가예정) 반환")
-    public ResponseEntity<AuthenticationResponse> login(
+    public ResponseEntity<Object> login(
             @RequestBody AuthenticationRequest authenticationRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(authenticationService.Login(authenticationRequest));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
+                HttpStatus.OK,
+                authenticationService.Login(authenticationRequest)
+        ));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthenticationResponse> refresh(
+    public ResponseEntity<Object> refresh(
             @RequestBody RefreshRequest refreshRequest){
-        return ResponseEntity.status(HttpStatus.OK).body(authenticationService.refresh(refreshRequest));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
+                HttpStatus.OK,
+                authenticationService.refresh(refreshRequest)
+        ));
     }
 
     @PostMapping("/findPassword")
