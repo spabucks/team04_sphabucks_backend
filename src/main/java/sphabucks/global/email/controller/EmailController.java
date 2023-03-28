@@ -3,10 +3,13 @@ package sphabucks.global.email.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.global.email.service.EmailService;
 import sphabucks.global.email.vo.RequestEmail;
 import sphabucks.global.email.vo.RequestEmailCheck;
+import sphabucks.global.responseEntity.ResponseDTO;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,16 +22,21 @@ public class EmailController {
 
     @PostMapping("/send")
     @Operation(summary = "인증 메일 전송")
-    public String sendEmail(@RequestBody RequestEmail requestEmail) throws Exception{
+    public ResponseEntity<Object> sendEmail(@RequestBody RequestEmail requestEmail) throws Exception{
 
-        return emailService.sendSimpleMessage(requestEmail.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
+                HttpStatus.OK,
+                emailService.sendSimpleMessage(requestEmail.getEmail())
+        ));
     }
 
     @PostMapping("/check")
     @Operation(summary = "인증 번호 확인")
-    public Boolean checkEmailCode(@RequestBody RequestEmailCheck requestEmailCheck) throws Exception{
-
-        return emailService.checkEmailCode(requestEmailCheck);
+    public ResponseEntity<Object> checkEmailCode(@RequestBody RequestEmailCheck requestEmailCheck) throws Exception{
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
+                HttpStatus.OK,
+                emailService.checkEmailCode(requestEmailCheck)
+        ));
     }
 
 
