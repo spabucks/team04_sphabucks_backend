@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.purchaseHistory.service.IPurchaseHistoryService;
+import sphabucks.global.responseEntity.ResponseDTO;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class PurchaseHistoryController {
     @Operation(summary = "구매 내역 조회", description = "프론트와 테스트 후 수정 필요")
     public ResponseEntity<Object> getPurchaseHistory(@RequestHeader String userId) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(iPurchaseHistoryService.getPurchaseHistoryList(userId));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iPurchaseHistoryService.getPurchaseHistoryList(userId)));
     }
 
 

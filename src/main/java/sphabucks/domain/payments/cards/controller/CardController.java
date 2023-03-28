@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.payments.cards.service.ICardService;
 import sphabucks.domain.payments.cards.vo.RequestCard;
+import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
 @RequestMapping("/api/v1/card")
@@ -27,6 +28,6 @@ public class CardController {
     @GetMapping("/get/{id}")
     @Operation(summary = "스타벅스 카드 조회", description = "사용자가 등록한 카드 정보 조회?")
     public ResponseEntity<Object> getCard(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(iCardService.getCard(id));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iCardService.getCard(id)));
     }
 }

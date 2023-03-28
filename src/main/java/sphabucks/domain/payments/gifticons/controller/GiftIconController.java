@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.payments.gifticons.vo.RequestGiftIcon;
 import sphabucks.domain.payments.gifticons.service.IGiftIconService;
+import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
 @RequestMapping("/api/v1/gift-icon")
@@ -27,6 +28,6 @@ public class GiftIconController {
     @GetMapping("/get/{id}")
     @Operation(summary = "기프티콘 정보 조회", description = "어드민 권한인데 고객이 사용할 가능성도 있음")
     public ResponseEntity<Object> getGiftIcon(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(iGiftIconService.getGiftIcon(id));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iGiftIconService.getGiftIcon(id)));
     }
 }

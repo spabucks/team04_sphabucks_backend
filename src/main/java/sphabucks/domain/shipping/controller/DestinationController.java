@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.shipping.service.IDestinationService;
 import sphabucks.domain.shipping.vo.RequestDestination;
+import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
 @RequestMapping("/api/v1/shipping")
@@ -31,13 +32,13 @@ public class DestinationController {
     @GetMapping("/get/{id}")
     @Operation(summary = "배송지 수정 클릭 했을 때 뜨는 정보들")
     public ResponseEntity<Object> getDestination(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(iDestinationService.getDestination(id));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iDestinationService.getDestination(id)));
     }
 
     @GetMapping("/get")
     @Operation(summary = "배송지 관리 클릭했을 때 뜨는 배송지 리스트", description = "기본 배송지가 최상단, 그 이후로는 최근에 수정한 순으로 정렬되서 반환됨")
     public ResponseEntity<Object> getDestinationsByUUID(@RequestHeader String uuid) {
-        return ResponseEntity.status(HttpStatus.OK).body(iDestinationService.getDestinationsByUUID(uuid));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iDestinationService.getDestinationsByUUID(uuid)));
     }
 
     @PostMapping("/update/{id}")
