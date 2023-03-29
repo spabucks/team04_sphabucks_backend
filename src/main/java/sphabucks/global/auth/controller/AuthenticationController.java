@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sphabucks.domain.users.service.IUserService;
+import sphabucks.domain.users.vo.RequestLoginIdCheck;
 import sphabucks.global.auth.service.AuthenticationService;
 import sphabucks.global.email.vo.RequestEmail;
 import sphabucks.global.auth.vo.*;
@@ -21,6 +23,7 @@ import sphabucks.global.responseEntity.ResponseDTO;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final IUserService iUserService;
 
     @PostMapping("/signup")
     @Operation(summary = "회원 가입", description = "이메일 인증 후 진행되는 api")
@@ -88,4 +91,12 @@ public class AuthenticationController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, authenticationService.findId(requestFindId)));
     }
+
+    @PostMapping("/check/loginId")
+    @Operation(summary = "아이디 중복 체크", description = "회원가입시 아이디 중복체크")
+    public ResponseEntity<Object> checkLoginId(@RequestBody RequestLoginIdCheck requestLoginIdCheck) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserService.existByLoginId(requestLoginIdCheck)));
+    }
+
+
 }

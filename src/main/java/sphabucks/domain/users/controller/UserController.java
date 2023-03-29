@@ -51,10 +51,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserService.getAll()));
     }
 
-    @PostMapping("/check/loginId")
-    @Operation(summary = "아이디 중복 체크", description = "회원가입시 아이디 중복체크")
-    public ResponseEntity<Object> checkLoginId(@RequestBody RequestLoginIdCheck requestLoginIdCheck) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserService.existByLoginId(requestLoginIdCheck)));
-    }
+
 
 }
