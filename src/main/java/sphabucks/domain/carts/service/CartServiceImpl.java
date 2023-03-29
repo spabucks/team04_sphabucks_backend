@@ -32,12 +32,12 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public ResponseEntity<Object> addCart(RequestCart requestCart) {
+    public ResponseEntity<Object> addCart(String userId, RequestCart requestCart) {
 
         // 해당 상품이 고객의 장바구니에 담겼던 이력이 있는지 없는지
-        if (iCartRepo.existsByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId())) {    // 장바구니에 저장되었던 이력이 있다면
+        if (iCartRepo.existsByUserUserIdAndProductId(userId, requestCart.getProductId())) {    // 장바구니에 저장되었던 이력이 있다면
             // 해당하는 이력을 조회
-            Cart cart = iCartRepo.findByUserUserIdAndProductId(requestCart.getUserId(), requestCart.getProductId())
+            Cart cart = iCartRepo.findByUserUserIdAndProductId(userId, requestCart.getProductId())
                     .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
 
             if (cart.getAmount() + requestCart.getAmount() <= 5) {  // 한 상품을 최대 5개 까지 담을 수 있음
@@ -54,7 +54,7 @@ public class CartServiceImpl implements ICartService{
                     .orElseThrow(()->new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
             iCartRepo.save(Cart.builder()
                     .product(product)
-                    .user(iUserRepository.findByUserId(requestCart.getUserId())
+                    .user(iUserRepository.findByUserId(userId)
                             .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                     .categoryId(iProductCategoryListRepository.findByProductId(requestCart.getProductId()).getBigCategory().getId())
                     .amount(requestCart.getAmount())
@@ -160,11 +160,10 @@ public class CartServiceImpl implements ICartService{
     @Override
     @Transactional
     public void deleteAll(String userId) {
-        // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
 
-        List<Cart> cartList = iCartRepo.findAllByUserId(iUserRepository.findByUserId(userId)
-                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
-                .getId());
+        // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
+        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
+
         if(cartList.isEmpty()){
             throw new BusinessException(ErrorCode.CARTS_NOT_EXISTS, ErrorCode.CARTS_NOT_EXISTS.getCode());
         }
