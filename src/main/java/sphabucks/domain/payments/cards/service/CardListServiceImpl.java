@@ -6,6 +6,7 @@ import sphabucks.domain.payments.cards.model.CardList;
 import sphabucks.domain.payments.cards.repository.ICardRepo;
 import sphabucks.domain.users.model.User;
 import sphabucks.domain.users.repository.IUserRepository;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 import sphabucks.domain.payments.cards.repository.ICardListRepo;
@@ -21,12 +22,12 @@ public class CardListServiceImpl implements ICardListService{
     private final ICardListRepo iCardListRepo;
 
     @Override
-    public void addCardList(RequestCardList requestCardList) {
+    public void addCardList(RequestHead requestHead, RequestCardList requestCardList) {
 
         CardList cardList = CardList.builder()
                 .card(iCardRepo.findById(requestCardList.getCardId())
                         .orElseThrow(()->new BusinessException(ErrorCode.CARD_NOT_EXISTS, ErrorCode.CARD_NOT_EXISTS.getCode())))
-                .user(iUserRepository.findById(requestCardList.getUserId())
+                .user(iUserRepository.findByUserId(requestHead.getUserId())
                         .orElseThrow(()->new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                 .build();
 

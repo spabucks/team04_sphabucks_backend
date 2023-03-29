@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.payments.cards.service.ICardListService;
 import sphabucks.domain.payments.cards.vo.RequestCardList;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
@@ -21,8 +22,8 @@ public class CardListController {
 
     @PostMapping("/add")
     @Operation(summary = "고객이 카드를 등록", description = "구현 X")
-    public ResponseEntity<Object> addCardList(@RequestBody RequestCardList requestCardList) {
-        iCardListService.addCardList(requestCardList);
+    public ResponseEntity<Object> addCardList(@RequestHeader RequestHead requestHead, @RequestBody RequestCardList requestCardList) {
+        iCardListService.addCardList(requestHead, requestCardList);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
