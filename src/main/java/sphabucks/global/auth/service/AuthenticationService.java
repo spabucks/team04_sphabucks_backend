@@ -101,22 +101,12 @@ public class AuthenticationService {
                 .build();
     }
 
-    public boolean chkEmailWhenSignUp(RequestEmail requestEmail) throws Exception {
-        if (userRepository.existsByEmail(requestEmail.getEmail())) {
-            return false;
-        } else {
-//            emailService.sendSimpleMessage(requestEmail.getEmail());
-            return true;
-        }
+    public boolean chkEmailWhenSignUp(RequestEmail requestEmail) {
+        return !userRepository.existsByEmail(requestEmail.getEmail());
     }
 
-    public boolean chkEmailWhenFindId(RequestFindId requestFindId) throws Exception {
-        if (!userRepository.existsByEmailAndName(requestFindId.getEmail(), requestFindId.getUserName())) {
-            return false;
-        } else {
-//            emailService.sendSimpleMessage(requestFindId.getEmail());
-            return true;
-        }
+    public boolean chkEmailWhenFindId(RequestFindId requestFindId) {
+        return userRepository.existsByEmailAndName(requestFindId.getEmail(), requestFindId.getUserName());
     }
 
     public String findId(RequestFindId requestFindId) {
