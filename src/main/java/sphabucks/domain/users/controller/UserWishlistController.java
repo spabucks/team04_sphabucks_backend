@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.users.service.IUserWishlistService;
 import sphabucks.domain.users.vo.RequestUserWishlist;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
@@ -23,16 +24,21 @@ public class UserWishlistController {
 
     @PostMapping()
     @Operation(summary = "위시리스트에 상품 담기", description = "구현 완료")
-    ResponseEntity<Object> clickUserWishlist(@RequestBody RequestUserWishlist requestUserWishlist){
-        iUserWishlistService.clickWishList(requestUserWishlist);
+    ResponseEntity<Object> clickUserWishlist(
+            @RequestHeader RequestHead requestHead,
+            @RequestBody RequestUserWishlist requestUserWishlist) {
+
+        iUserWishlistService.clickWishList(requestHead, requestUserWishlist);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/get/{userId}")
+    @GetMapping("/get")
     @Operation(summary = "위시리스트에 담은 상품 확인", description = "구현 중")
-    ResponseEntity<Object> getUserWishlist(@PathVariable String userId){
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserWishlistService.getByUserWishlist(userId)));
+    ResponseEntity<Object> getUserWishlist(@RequestHeader RequestHead requestHead){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK, iUserWishlistService.getByUserWishlist(requestHead)));
     }
 
     @GetMapping("/get/product/{id}")

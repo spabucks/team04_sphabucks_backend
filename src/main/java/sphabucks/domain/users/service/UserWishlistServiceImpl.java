@@ -12,6 +12,7 @@ import sphabucks.domain.users.repository.IUserWishlistRepo;
 import sphabucks.domain.users.vo.RequestUserWishlist;
 import sphabucks.domain.users.vo.ResponseWishList;
 import sphabucks.domain.users.vo.ResponseWishListProduct;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 import sphabucks.domain.productimage.repository.IProductImageRepo;
@@ -32,14 +33,14 @@ public class UserWishlistServiceImpl implements IUserWishlistService {
 
     @Override
     @Transactional
-    public void clickWishList(RequestUserWishlist request) {
+    public void clickWishList(RequestHead requestHead, RequestUserWishlist request) {
 
         // uuid 를 이용하여 조회한 user
-        User user = iUserRepository.findByUserId(request.getUserId())
+        User user = iUserRepository.findByUserId(requestHead.getUserId())
                 .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
         // 해당 유저가 상품을 위시리스트에 추가했던 내역이 있었다면
-        if (iUserWishlistRepo.existsByUserUserIdAndProductId(request.getUserId(), request.getProductId())) {
+        if (iUserWishlistRepo.existsByUserUserIdAndProductId(requestHead.getUserId(), request.getProductId())) {
             log.info("db update");
             UserWishlist wishlist = iUserWishlistRepo.findByUserIdAndProductId(user.getId(), request.getProductId());
             wishlist.setIsDeleted(!wishlist.getIsDeleted());    // 기존의 정보와 반대로 저장
@@ -55,19 +56,19 @@ public class UserWishlistServiceImpl implements IUserWishlistService {
     }
 
     @Override
-    public List<ResponseWishList> getByUserWishlist(String userId) {
+    public List<ResponseWishList> getByUserWishlist(RequestHead requestHead) {
         List<ResponseWishList> responseWishLists = new ArrayList<>();
 
-        if(iUserWishlistRepo.findAllByUserUserIdAndIsDeletedIsFalse(userId).isEmpty()){
+        if(iUserWishlistRepo.findAllByUserUserIdAndIsDeletedIsFalse(requestHead.getUserId()).isEmpty()){
             throw new BusinessException(ErrorCode.WISHLIST_NOT_EXISTS, ErrorCode.WISHLIST_NOT_EXISTS.getCode());
         }
 
-        iUserWishlistRepo.findAllByUserUserIdAndIsDeletedIsFalse(userId).forEach(userWishlist -> {
+        iUserWishlistRepo.findAllByUserUserIdAndIsDeletedIsFalse(requestHead.getUserId()).forEach(userWishlist ->
             responseWishLists.add(ResponseWishList.builder()
                     .id(userWishlist.getId())
                     .productId(userWishlist.getProduct().getId())
-                    .build());
-        });
+                    .build()));
+
         return responseWishLists;
     }
 
