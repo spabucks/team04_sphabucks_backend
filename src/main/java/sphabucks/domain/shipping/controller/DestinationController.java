@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.shipping.service.IDestinationService;
 import sphabucks.domain.shipping.vo.RequestDestination;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
@@ -21,10 +22,10 @@ public class DestinationController {
     @PostMapping("/add")
     @Operation(summary = "배송지 추가")
     public ResponseEntity<Object> addDestination(
-            @RequestHeader String uuid,
+            @RequestHeader RequestHead requestHead,
             @RequestBody RequestDestination requestDestination) {
 
-        iDestinationService.addDestination(uuid, requestDestination);
+        iDestinationService.addDestination(requestHead, requestDestination);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -37,8 +38,10 @@ public class DestinationController {
 
     @GetMapping("/get")
     @Operation(summary = "배송지 관리 클릭했을 때 뜨는 배송지 리스트", description = "기본 배송지가 최상단, 그 이후로는 최근에 수정한 순으로 정렬되서 반환됨")
-    public ResponseEntity<Object> getDestinationsByUUID(@RequestHeader String uuid) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iDestinationService.getDestinationsByUUID(uuid)));
+    public ResponseEntity<Object> getDestinationsByUUID(@RequestHeader RequestHead requestHead) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK,iDestinationService.getDestinationsByUUID(requestHead)));
     }
 
     @PostMapping("/update/{id}")

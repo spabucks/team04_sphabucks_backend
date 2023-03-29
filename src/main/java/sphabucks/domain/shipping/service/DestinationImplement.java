@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sphabucks.domain.shipping.repository.IDestinationRepo;
 import sphabucks.domain.shipping.vo.ResponseDestinationSummary;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 import sphabucks.domain.shipping.model.Destination;
@@ -23,9 +24,9 @@ public class DestinationImplement implements IDestinationService {
     private final IUserRepository iUserRepository;
 
     @Override
-    public void addDestination(String uuid, RequestDestination requestDestination) {
+    public void addDestination(RequestHead requestHead, RequestDestination requestDestination) {
 
-        User user = iUserRepository.findByUserId(uuid)  // 유저의 정보
+        User user = iUserRepository.findByUserId(requestHead.getUserId())  // 유저의 정보
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
         // 기본 배송지로 저장을 선택했거나 기존에 등록된 배송지가 없을 경우 기본 배송지 설정은 true 그 외에는 false
@@ -56,9 +57,8 @@ public class DestinationImplement implements IDestinationService {
 
     @Override
     public Destination getDestination(Long id) {
-        Destination destination = iDestinationRepo.findById(id)
+        return iDestinationRepo.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.DESTINATION_NOT_EXISTS, ErrorCode.DESTINATION_NOT_EXISTS.getCode()));
-        return destination;
     }
 
     @Override
@@ -96,9 +96,9 @@ public class DestinationImplement implements IDestinationService {
     }
 
     @Override
-    public List<ResponseDestinationSummary> getDestinationsByUUID(String uuid) {
+    public List<ResponseDestinationSummary> getDestinationsByUUID(RequestHead requestHead) {
         List<ResponseDestinationSummary> return_value = new ArrayList<>();  // 최종 반환될 리스트
-        User user = iUserRepository.findByUserId(uuid)  // 조회할 유저
+        User user = iUserRepository.findByUserId(requestHead.getUserId())  // 조회할 유저
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
         if (iDestinationRepo.findAllByUserIdOrderByDefaultDestinationDescUpdateDateDesc(user.getId()).isEmpty()) {
