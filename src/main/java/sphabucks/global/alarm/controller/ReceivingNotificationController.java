@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.global.alarm.service.IReceivingNotificationService;
-import sphabucks.global.alarm.vo.RequestGetNotification;
 import sphabucks.global.alarm.vo.RequestReceivingNotification;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
@@ -25,18 +25,19 @@ public class ReceivingNotificationController {
     @PostMapping("/add")
     @Operation(summary = "입고 알림 추가", description = "구현 완료")
     public ResponseEntity<Object> addReceivingNotification(
+            @RequestHeader RequestHead requestHead,
             @RequestBody RequestReceivingNotification requestReceivingNotification){
-        iReceivingNotificationService.addReceivingNotification(requestReceivingNotification);
+        iReceivingNotificationService.addReceivingNotification(requestHead, requestReceivingNotification);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/get")
+    @GetMapping("/get")
     @Operation(summary = "입고 알림 리스트 ", description = "구현 완료")
     public ResponseEntity<Object> getReceivingNotification(
-            @RequestBody RequestGetNotification requestGetNotification){
+            @RequestHeader RequestHead requestHead){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
                 HttpStatus.OK,
-                iReceivingNotificationService.getReceivingNotification(requestGetNotification)
+                iReceivingNotificationService.getReceivingNotification(requestHead)
         ));
     }
 
