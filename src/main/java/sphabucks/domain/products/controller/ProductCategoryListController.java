@@ -13,17 +13,10 @@ import sphabucks.global.responseEntity.ResponseDTO;
 @RestController
 @RequestMapping("/api/v1/product-category")
 @RequiredArgsConstructor
-@Tag(name = "상품")
+@Tag(name = "상품 분류 중간 테이블")
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class ProductCategoryListController {
     private final IProductCategoryListService iProductCategoryListService;
-
-    @PostMapping("/add")
-    @Operation(summary = "상품에 대-소분류 물리기", description = "어드민 권한 - 삭제 예정?")
-    public ResponseEntity<Object> addProductCategoryList(@RequestBody RequestProductCategoryList requestProductCategoryList){
-        iProductCategoryListService.addProductCategoryList(requestProductCategoryList);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
 
     @GetMapping("/get/{productId}")
     @Operation(summary = "상품의 대-소분류 조회")

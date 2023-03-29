@@ -26,13 +26,6 @@ import java.util.List;
 public class ProductController {
     private final IProductService iProductService;
 
-    @PostMapping("/add")
-    @Operation(summary = "상품 추가", description = "어드민 권한 - 삭제 예정?")
-    public ResponseEntity<Object> addProduct(@RequestBody RequestProduct requestProduct) {
-        iProductService.addProduct(requestProduct);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     @GetMapping("/get/{productId}")
     @Operation(summary = "상품 조회", description = "상품을 클릭했을 때 뜨는 상세정보")
     public ResponseEntity<Object> getProduct(@PathVariable Long productId) {

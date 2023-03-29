@@ -14,18 +14,12 @@ import sphabucks.global.responseEntity.ResponseDTO;
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
 @RequestMapping("/api/v1/bigCategory")
 @RequiredArgsConstructor
-@Tag(name = "상품")
+@Tag(name = "상품 대분류")
 public class BigCategoryController {
 
     private final IBigCategoryService iBigCategoryService;
 
-    @PostMapping("/add")
-    @Operation(summary = "상품에 대분류 물리기", description = "어드민 권한 - 삭제 예정?")
-    public ResponseEntity<Object> addBigCategory(@RequestBody RequestBigCategory requestBigCategory){
-        iBigCategoryService.addBigCategory(requestBigCategory);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
 
     @GetMapping("/get/{bigCategoryId}")
     @Operation(summary = "대분류 조회", description = "상품 조회도 아닌 단순한 대분류 정보 조회 - 삭제 예정?")

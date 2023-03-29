@@ -22,14 +22,6 @@ public class EventController {
 
     private final IEventService iEventService;
 
-    @PostMapping("/add")
-    @Operation(summary = "이벤트 추가", description = "어드민 권한 - 아마 삭제될 수도?")
-    public ResponseEntity<Object> addEvent(@RequestBody RequestEvent requestEvent){
-        iEventService.addEvent(requestEvent);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     @GetMapping("/get/{id}")
     @Operation(summary = "이벤트 정보 조회", description = "이벤트 상품 조회가 아닌 이벤트 자체의 정보를 조회 - 아마 삭제될 수도?")
     public ResponseEntity<Object> getEvent(@PathVariable Long id){
@@ -40,13 +32,6 @@ public class EventController {
     @Operation(summary = "전체 이벤트 정보 조회", description = "이벤트 상품 조회가 아닌 이벤트 자체의 정보를 조회 - 아마 삭제될 수도?")
     public ResponseEntity<Object> getEventAll(){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iEventService.getEventAll()));
-    }
-
-    @PostMapping("/addImage")
-    @Operation(summary = "이벤트 이미지 추가", description = "어드민 권한 - 아마 삭제될 수도?")
-    public ResponseEntity<Object> addEventImage(@RequestBody RequestEventImage requestEventImage) {
-
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iEventService.addEventImage(requestEventImage)));
     }
 
     @GetMapping("/getImage/{id}")

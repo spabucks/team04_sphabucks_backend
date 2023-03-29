@@ -11,23 +11,18 @@ import sphabucks.domain.event.vo.RequestEventProductList;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
-@RequestMapping("/api/v1/event-products")
+@RequestMapping("/admin/api/v1/event-products")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
-@Tag(name = "이벤트")
-public class EventProductController {
+@Tag(name = "이벤트 상품 어드민")
+public class AEventProductController {
+
     private final IEventProductService iEventProductService;
 
-    @GetMapping("/get/recommendMD")
-    @Operation(summary = "메인페이지 추천 MD")
-    public ResponseEntity<Object> getRecommendMD() {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iEventProductService.recommendMD()));
-    }
-
-    @GetMapping("/getProductList/{id}")
-    @Operation(summary = "이벤트 상품 조회")
-    public ResponseEntity<Object> getEventProductList(@PathVariable Long id) {
+    @PostMapping("/addProductList")
+    @Operation(summary = "이벤트 상품 추가", description = "어드민 권한 - 아마 삭제될 수도?")
+    public ResponseEntity<Object> addEventProductList(@RequestBody RequestEventProductList requestEventProductList) {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,
-                iEventProductService.getEventProductList(id)));
+                iEventProductService.addEventProductList(requestEventProductList)));
     }
 }

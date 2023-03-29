@@ -34,9 +34,5 @@ public class UserLikesController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserLikesService.getUserLikes(userId)));
     }
 
-    @GetMapping("/get/all")
-    @Operation(summary = "고객이 좋아요를 누른 모든 상품 조회", description = "어드민 권한 - 삭제 예정?")
-    ResponseEntity<Object> getAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserLikesService.getAll()));
-    }
+
 }

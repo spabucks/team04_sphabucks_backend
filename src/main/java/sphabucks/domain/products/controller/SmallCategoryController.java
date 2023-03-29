@@ -15,17 +15,10 @@ import sphabucks.global.responseEntity.ResponseDTO;
 @RequestMapping("/api/v1/smallCategory")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*" , allowedHeaders = "*")
-@Tag(name = "상품")
+@Tag(name = "소분류")
 public class SmallCategoryController {
 
     private final ISmallCategoryService iSmallCategoryService;
-
-    @PostMapping("/add")
-    @Operation(summary = "상품에 소분류 물리기", description = "어드민 권한 - 삭제 예정?")
-    public ResponseEntity<Object> addSmallCategory(@RequestBody RequestSmallCategory requestSmallCategory){
-        iSmallCategoryService.addSmallCategory(requestSmallCategory);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
 
     @GetMapping("/get/{smallCategoryId}")
     @Operation(summary = "소분류 조회", description = "상품 조회도 아닌 단순한 소분류 정보 조회 - 삭제 예정?")

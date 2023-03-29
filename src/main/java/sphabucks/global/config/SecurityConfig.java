@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import sphabucks.domain.users.model.Role;
 
 @Configuration
 @EnableWebSecurity
@@ -25,10 +26,9 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
+                .requestMatchers("/**").permitAll()                     // 설정한 리소스의 접근을 인증절차 없이 접근 가능
+                .requestMatchers("/admin/**","/api/v1/user","/api/v1/card","/api/v1/coupon","/api/v1/gift-icon").hasRole(Role.ADMIN.toString())  // ADMIN 권한을 가지고 있어야 접근 가능
+                .anyRequest().authenticated()                                     // 그 외 모든 리소스를 의미하며 인증 필요
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
