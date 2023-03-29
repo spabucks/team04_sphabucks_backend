@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.purchaseHistory.service.IPurchaseHistoryService;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 import java.util.List;
@@ -24,17 +25,19 @@ public class PurchaseHistoryController {
 
     @PostMapping("/add")
     @Operation(summary = "구매 내역 추가", description = "폼태그로 데이터 어떻게 넘어오는지 확인 후 수정 필요할 듯")
-    public ResponseEntity<Object> addPurchaseHistory(@RequestBody List<Long> selected, @RequestHeader String userId){
+    public ResponseEntity<Object> addPurchaseHistory(@RequestHeader RequestHead requestHead, @RequestBody List<Long> selected){
 
-        iPurchaseHistoryService.addPurchaseHistory(selected, userId);
+        iPurchaseHistoryService.addPurchaseHistory(selected, requestHead);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get")
     @Operation(summary = "구매 내역 조회", description = "프론트와 테스트 후 수정 필요")
-    public ResponseEntity<Object> getPurchaseHistory(@RequestHeader String userId) {
+    public ResponseEntity<Object> getPurchaseHistory(@RequestHeader RequestHead requestHead) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iPurchaseHistoryService.getPurchaseHistoryList(userId)));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK, iPurchaseHistoryService.getPurchaseHistoryList(requestHead)));
     }
 
 

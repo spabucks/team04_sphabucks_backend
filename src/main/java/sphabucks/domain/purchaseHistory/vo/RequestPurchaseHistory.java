@@ -10,7 +10,6 @@ public class RequestPurchaseHistory {
     private Long amount;
     private Long sum;
     private String paymentNum;
-    private Long userId;
     private Boolean type;
     private String sp_status;
     private String or_status;
