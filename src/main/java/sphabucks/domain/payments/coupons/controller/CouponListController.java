@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.payments.coupons.service.ICouponListService;
 import sphabucks.domain.payments.coupons.vo.RequestCouponList;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController
@@ -20,14 +21,18 @@ public class CouponListController {
 
     @PostMapping("/add/user")    // 사용자 id와 쿠폰 id를 이용하여 쿠폰 리스트에 정보 추가
     @Operation(summary = "고객이 자신의 계정이 쿠폰 등록", description = "구현 X")
-    public ResponseEntity<Object> addCoupon2User(@RequestBody RequestCouponList requestCouponList) {
-        iCouponListService.addCoupon2User(requestCouponList);
+    public ResponseEntity<Object> addCoupon2User(
+            @RequestHeader RequestHead requestHead,
+            @RequestBody RequestCouponList requestCouponList) {
+        iCouponListService.addCoupon2User(requestHead, requestCouponList);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/get/user/{id}")   // 사용자별 가지고 있는 모든 쿠폰조회
+    @GetMapping("/get/user")   // 사용자별 가지고 있는 모든 쿠폰조회
     @Operation(summary = "고객이 자신이 가지고 있는 모든 쿠폰 확인", description = "구현 X")
-    public ResponseEntity<Object> getCoupon2User(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iCouponListService.getCoupon2User(id)));
+    public ResponseEntity<Object> getCoupon2User(@RequestHeader RequestHead requestHead) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK, iCouponListService.getCoupon2User(requestHead)));
     }
 }
