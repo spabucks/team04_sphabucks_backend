@@ -9,6 +9,7 @@ import sphabucks.domain.users.model.UserLikes;
 import sphabucks.domain.users.repository.IUserLikesRepo;
 import sphabucks.domain.users.repository.IUserRepository;
 import sphabucks.domain.users.vo.RequestUserLikes;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 
@@ -24,13 +25,13 @@ public class UserLikesServiceImpl implements IUserLikesService{
     private final IUserRepository iUserRepository;
     @Override
     @Transactional
-    public void pushUserLikes(RequestUserLikes requestUserLikes) {
+    public void pushUserLikes(RequestHead requestHead, RequestUserLikes requestUserLikes) {
         // User가 like를 했을 때
-        if(!iUserLikesRepo.existsAllByProductIdAndUserUserId(requestUserLikes.getProductId(), requestUserLikes.getUserId())) {
+        if(!iUserLikesRepo.existsAllByProductIdAndUserUserId(requestUserLikes.getProductId(), requestHead.getUserId())) {
             iUserLikesRepo.save(UserLikes.builder()
                     .product(iProductRepository.findById(requestUserLikes.getProductId())
                             .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode())))
-                    .user(iUserRepository.findByUserId(requestUserLikes.getUserId())
+                    .user(iUserRepository.findByUserId(requestHead.getUserId())
                             .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                     .build());
             Long count = iProductRepository.findById(requestUserLikes.getProductId())
@@ -43,18 +44,18 @@ public class UserLikesServiceImpl implements IUserLikesService{
                     .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()))
                     .getLikeCount();
             iProductRepository.updateLikeCount(count-1, requestUserLikes.getProductId());
-            iUserLikesRepo.deleteByUserUserId(requestUserLikes.getUserId());
+            iUserLikesRepo.deleteByUserUserId(requestHead.getUserId());
         }
     }
 
     @Override
-    public List<UserLikes> getUserLikes(String userId) {
+    public List<UserLikes> getUserLikes(RequestHead requestHead) {
 
-        if(iUserLikesRepo.findUserLikesByUserUserId(userId).isEmpty()){
+        if(iUserLikesRepo.findUserLikesByUserUserId(requestHead.getUserId()).isEmpty()){
             throw new BusinessException(ErrorCode.LIKE_NOT_EXISTS, ErrorCode.LIKE_NOT_EXISTS.getCode());
         }
 
-        return iUserLikesRepo.findUserLikesByUserUserId(userId);
+        return iUserLikesRepo.findUserLikesByUserUserId(requestHead.getUserId());
     }
 
     @Override
