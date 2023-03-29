@@ -6,6 +6,7 @@ import sphabucks.domain.payments.gifticons.model.GiftIconList;
 import sphabucks.domain.payments.gifticons.repository.IGiftIconListRepo;
 import sphabucks.domain.users.model.User;
 import sphabucks.domain.users.repository.IUserRepository;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 import sphabucks.domain.payments.gifticons.repository.IGiftIconRepository;
@@ -21,12 +22,12 @@ public class GiftIconListServiceImpl implements IGiftIconListService{
     private final IGiftIconRepository iGiftIconRepository;
     private final IUserRepository iUserRepository;
     @Override
-    public void addGiftIconList(RequestGiftIconList requestGiftIconList) {
+    public void addGiftIconList(RequestHead requestHead, RequestGiftIconList requestGiftIconList) {
 
         GiftIconList giftIconList = GiftIconList.builder()
                 .giftIcon(iGiftIconRepository.findById(requestGiftIconList.getGiftIconId())
                         .orElseThrow(()-> new BusinessException(ErrorCode.GIFTICON_NOT_EXISTS,ErrorCode.GIFTICON_NOT_EXISTS.getCode())))
-                .user(iUserRepository.findById(requestGiftIconList.getUserId())
+                .user(iUserRepository.findByUserId(requestHead.getUserId())
                         .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                 .build();
 
@@ -34,12 +35,12 @@ public class GiftIconListServiceImpl implements IGiftIconListService{
     }
 
     @Override
-    public List<GiftIconList> getGiftIconList(Long id) {
+    public List<GiftIconList> getGiftIconList(RequestHead requestHead) {
 
-        User user = iUserRepository.findById(id)
+        User user = iUserRepository.findByUserId(requestHead.getUserId())
                 .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
-        if(iGiftIconListRepo.findAllByUserUserId(user.getUserId()).isEmpty()){
+        if (iGiftIconListRepo.findAllByUserUserId(user.getUserId()).isEmpty()){
             throw new BusinessException(ErrorCode.GIFTICONS_NOT_EXISTS, ErrorCode.GIFTICONS_NOT_EXISTS.getCode());
         }
 
