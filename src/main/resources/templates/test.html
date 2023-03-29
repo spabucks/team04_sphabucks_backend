@@ -22,7 +22,7 @@
             IMP.request_pay({
                 pg : 'kcp.{상점ID}',
                 pay_method : 'card',
-                merchant_uid: "57008833-330018",
+                merchant_uid: "57008833-330021",
                 name : [[${name}]],
                 amount : 100,
                 buyer_email : 'Iamport@chai.finance',
@@ -30,7 +30,7 @@
                 buyer_tel : '010-1234-5678',
                 buyer_addr : '서울특별시 강남구 삼성동',
                 buyer_postcode : '123-456',
-                m_redirect_url : 'http://localhost:3000?name=[[${name}]]'
+                m_redirect_url : 'http://localhost:8080/api/v1/portone/re/?name=[[${name}]]'
             }, function (rsp) { //
                 if (rsp.success) {
                 } else {
