@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
+                .requestMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/api/v1/tag/**","/api/v1/tag/**","/api/v1/bigCategory/**","/api/v1/product-category/**",
                         "/api/v1/product/**","/api/v1/smallCategory/**","/api/v1/event/**","/api/v1/event-products/**","/api/v1/auth/**").permitAll()                     // 설정한 리소스의 접근을 인증절차 없이 접근 가능
                 .requestMatchers("/admin/**","/api/v1/user/**","/api/v1/card/**","/api/v1/coupon/**","/api/v1/gift-icon/**").hasRole(Role.ADMIN.toString())  // ADMIN 권한을 가지고 있어야 접근 가능
