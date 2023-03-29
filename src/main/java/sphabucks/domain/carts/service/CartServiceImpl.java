@@ -14,6 +14,7 @@ import sphabucks.domain.products.model.Product;
 import sphabucks.domain.products.repository.IProductCategoryListRepository;
 import sphabucks.domain.products.repository.IProductRepository;
 import sphabucks.domain.users.repository.IUserRepository;
+import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 
@@ -32,12 +33,12 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public ResponseEntity<Object> addCart(String userId, RequestCart requestCart) {
+    public ResponseEntity<Object> addCart(RequestHead requestHead, RequestCart requestCart) {
 
         // 해당 상품이 고객의 장바구니에 담겼던 이력이 있는지 없는지
-        if (iCartRepo.existsByUserUserIdAndProductId(userId, requestCart.getProductId())) {    // 장바구니에 저장되었던 이력이 있다면
+        if (iCartRepo.existsByUserUserIdAndProductId(requestHead.getUserId(), requestCart.getProductId())) {    // 장바구니에 저장되었던 이력이 있다면
             // 해당하는 이력을 조회
-            Cart cart = iCartRepo.findByUserUserIdAndProductId(userId, requestCart.getProductId())
+            Cart cart = iCartRepo.findByUserUserIdAndProductId(requestHead.getUserId(), requestCart.getProductId())
                     .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
 
             if (cart.getAmount() + requestCart.getAmount() <= 5) {  // 한 상품을 최대 5개 까지 담을 수 있음
@@ -54,7 +55,7 @@ public class CartServiceImpl implements ICartService{
                     .orElseThrow(()->new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
             iCartRepo.save(Cart.builder()
                     .product(product)
-                    .user(iUserRepository.findByUserId(userId)
+                    .user(iUserRepository.findByUserId(requestHead.getUserId())
                             .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                     .categoryId(iProductCategoryListRepository.findByProductId(requestCart.getProductId()).getBigCategory().getId())
                     .amount(requestCart.getAmount())
@@ -67,16 +68,16 @@ public class CartServiceImpl implements ICartService{
     }
 
     @Override
-    public List<ResponseGetCart> getCart(String userId) {  // userId : user.uuid
+    public List<ResponseGetCart> getCart(RequestHead requestHead) {  // userId : user.uuid
 
         List<ResponseGetCart> responseGetCartList = new ArrayList<>();
 
-        if(iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId).isEmpty()){
+        if(iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(requestHead.getUserId()).isEmpty()){
             throw new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode());
         }
 
         // 고객의 장바구니 속 isDelete = false 인 제품들만 가져옴
-        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
+        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(requestHead.getUserId());
 
         cartList.forEach(cart -> responseGetCartList.add(ResponseGetCart.builder()
                 .cartId(cart.getId())
@@ -99,9 +100,9 @@ public class CartServiceImpl implements ICartService{
     }
 
     @Override
-    public List<ResponseCartV2> getCartV2(String userId) {
+    public List<ResponseCartV2> getCartV2(RequestHead requestHead) {
         // 유저의 모든 카트를 불러옴(삭제된 상품 카트는 불러오지 않음)
-        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
+        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(requestHead.getUserId());
         if (cartList.isEmpty()) {
             throw new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode());
         }
@@ -159,10 +160,10 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public void deleteAll(String userId) {
+    public void deleteAll(RequestHead requestHead) {
 
         // userId(uuid) 에 연결된 장바구니 속 모든 정보 조회
-        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(userId);
+        List<Cart> cartList = iCartRepo.findAllByUserUserIdAndIsDeleteIsFalse(requestHead.getUserId());
 
         if(cartList.isEmpty()){
             throw new BusinessException(ErrorCode.CARTS_NOT_EXISTS, ErrorCode.CARTS_NOT_EXISTS.getCode());
