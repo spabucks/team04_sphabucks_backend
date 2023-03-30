@@ -7,6 +7,6 @@ import sphabucks.global.auth.vo.RequestHead;
 import java.util.List;
 
 public interface ICardListService {
-    void addCardList(RequestHead requestHead, RequestCardList requestCardList);
+    void addCardList(String userId, RequestCardList requestCardList);
     List<CardList> getCardList(Long userId);
 }
