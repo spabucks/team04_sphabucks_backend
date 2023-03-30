@@ -56,7 +56,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return loginId;
+        return userId;
     }
 
     @Override
