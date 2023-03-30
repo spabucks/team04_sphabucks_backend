@@ -33,14 +33,14 @@ public class UserWishlistServiceImpl implements IUserWishlistService {
 
     @Override
     @Transactional
-    public void clickWishList(RequestHead requestHead, RequestUserWishlist request) {
+    public void clickWishList(String userId, RequestUserWishlist request) {
 
         // uuid 를 이용하여 조회한 user
-        User user = iUserRepository.findByUserId(requestHead.getUserId())
+        User user = iUserRepository.findByUserId(userId)
                 .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
         // 해당 유저가 상품을 위시리스트에 추가했던 내역이 있었다면
-        if (iUserWishlistRepo.existsByUserUserIdAndProductId(requestHead.getUserId(), request.getProductId())) {
+        if (iUserWishlistRepo.existsByUserUserIdAndProductId(userId, request.getProductId())) {
             log.info("db update");
             UserWishlist wishlist = iUserWishlistRepo.findByUserIdAndProductId(user.getId(), request.getProductId());
             wishlist.setIsDeleted(!wishlist.getIsDeleted());    // 기존의 정보와 반대로 저장
@@ -56,14 +56,14 @@ public class UserWishlistServiceImpl implements IUserWishlistService {
     }
 
     @Override
-    public List<ResponseWishList> getByUserWishlist(RequestHead requestHead) {
+    public List<ResponseWishList> getByUserWishlist(String userId) {
         List<ResponseWishList> responseWishLists = new ArrayList<>();
 
-        if(iUserWishlistRepo.findAllByUserUserIdAndIsDeletedIsFalse(requestHead.getUserId()).isEmpty()){
+        if(iUserWishlistRepo.findAllByUserUserIdAndIsDeletedIsFalse(userId).isEmpty()){
             throw new BusinessException(ErrorCode.WISHLIST_NOT_EXISTS, ErrorCode.WISHLIST_NOT_EXISTS.getCode());
         }
 
-        iUserWishlistRepo.findAllByUserUserIdAndIsDeletedIsFalse(requestHead.getUserId()).forEach(userWishlist ->
+        iUserWishlistRepo.findAllByUserUserIdAndIsDeletedIsFalse(userId).forEach(userWishlist ->
             responseWishLists.add(ResponseWishList.builder()
                     .id(userWishlist.getId())
                     .productId(userWishlist.getProduct().getId())
