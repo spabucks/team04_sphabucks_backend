@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.shipping.service.IDestinationService;
 import sphabucks.domain.shipping.vo.RequestDestination;
@@ -22,10 +24,12 @@ public class DestinationController {
     @PostMapping("/add")
     @Operation(summary = "배송지 추가")
     public ResponseEntity<Object> addDestination(
-            @RequestHeader RequestHead requestHead,
+            Authentication authentication,
             @RequestBody RequestDestination requestDestination) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
 
-        iDestinationService.addDestination(requestHead, requestDestination);
+        iDestinationService.addDestination(userId, requestDestination);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -38,10 +42,14 @@ public class DestinationController {
 
     @GetMapping("/get")
     @Operation(summary = "배송지 관리 클릭했을 때 뜨는 배송지 리스트", description = "기본 배송지가 최상단, 그 이후로는 최근에 수정한 순으로 정렬되서 반환됨")
-    public ResponseEntity<Object> getDestinationsByUUID(@RequestHeader RequestHead requestHead) {
+    public ResponseEntity<Object> getDestinationsByUUID(Authentication authentication) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(HttpStatus.OK,iDestinationService.getDestinationsByUUID(requestHead)));
+                .body(new ResponseDTO(HttpStatus.OK,iDestinationService.getDestinationsByUUID(userId)));
     }
 
     @PostMapping("/update/{id}")

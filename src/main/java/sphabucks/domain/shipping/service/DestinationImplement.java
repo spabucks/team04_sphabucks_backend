@@ -24,9 +24,9 @@ public class DestinationImplement implements IDestinationService {
     private final IUserRepository iUserRepository;
 
     @Override
-    public void addDestination(RequestHead requestHead, RequestDestination requestDestination) {
+    public void addDestination(String userId, RequestDestination requestDestination) {
 
-        User user = iUserRepository.findByUserId(requestHead.getUserId())  // 유저의 정보
+        User user = iUserRepository.findByUserId(userId)  // 유저의 정보
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
         // 기본 배송지로 저장을 선택했거나 기존에 등록된 배송지가 없을 경우 기본 배송지 설정은 true 그 외에는 false
@@ -96,9 +96,9 @@ public class DestinationImplement implements IDestinationService {
     }
 
     @Override
-    public List<ResponseDestinationSummary> getDestinationsByUUID(RequestHead requestHead) {
+    public List<ResponseDestinationSummary> getDestinationsByUUID(String userId) {
         List<ResponseDestinationSummary> return_value = new ArrayList<>();  // 최종 반환될 리스트
-        User user = iUserRepository.findByUserId(requestHead.getUserId())  // 조회할 유저
+        User user = iUserRepository.findByUserId(userId)  // 조회할 유저
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
         if (iDestinationRepo.findAllByUserIdOrderByDefaultDestinationDescUpdateDateDesc(user.getId()).isEmpty()) {
