@@ -25,13 +25,13 @@ public class UserLikesServiceImpl implements IUserLikesService{
     private final IUserRepository iUserRepository;
     @Override
     @Transactional
-    public void pushUserLikes(RequestHead requestHead, RequestUserLikes requestUserLikes) {
+    public void pushUserLikes(String userId, RequestUserLikes requestUserLikes) {
         // User가 like를 했을 때
-        if(!iUserLikesRepo.existsAllByProductIdAndUserUserId(requestUserLikes.getProductId(), requestHead.getUserId())) {
+        if(!iUserLikesRepo.existsAllByProductIdAndUserUserId(requestUserLikes.getProductId(), userId)) {
             iUserLikesRepo.save(UserLikes.builder()
                     .product(iProductRepository.findById(requestUserLikes.getProductId())
                             .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode())))
-                    .user(iUserRepository.findByUserId(requestHead.getUserId())
+                    .user(iUserRepository.findByUserId(userId)
                             .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                     .build());
             Long count = iProductRepository.findById(requestUserLikes.getProductId())
@@ -44,18 +44,18 @@ public class UserLikesServiceImpl implements IUserLikesService{
                     .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()))
                     .getLikeCount();
             iProductRepository.updateLikeCount(count-1, requestUserLikes.getProductId());
-            iUserLikesRepo.deleteByUserUserId(requestHead.getUserId());
+            iUserLikesRepo.deleteByUserUserId(userId);
         }
     }
 
     @Override
-    public List<UserLikes> getUserLikes(RequestHead requestHead) {
+    public List<UserLikes> getUserLikes(String userId) {
 
-        if(iUserLikesRepo.findUserLikesByUserUserId(requestHead.getUserId()).isEmpty()){
+        if(iUserLikesRepo.findUserLikesByUserUserId(userId).isEmpty()){
             throw new BusinessException(ErrorCode.LIKE_NOT_EXISTS, ErrorCode.LIKE_NOT_EXISTS.getCode());
         }
 
-        return iUserLikesRepo.findUserLikesByUserUserId(requestHead.getUserId());
+        return iUserLikesRepo.findUserLikesByUserUserId(userId);
     }
 
     @Override

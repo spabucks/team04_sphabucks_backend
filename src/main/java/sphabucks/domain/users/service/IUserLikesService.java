@@ -7,7 +7,7 @@ import sphabucks.global.auth.vo.RequestHead;
 import java.util.List;
 
 public interface IUserLikesService {
-    void pushUserLikes(RequestHead requestHead, RequestUserLikes requestUserLikes);
-    List<UserLikes> getUserLikes(RequestHead requestHead);
+    void pushUserLikes(String userId, RequestUserLikes requestUserLikes);
+    List<UserLikes> getUserLikes(String userId);
     List<UserLikes> getAll();
 }

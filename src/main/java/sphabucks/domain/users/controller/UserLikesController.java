@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.users.vo.RequestUserLikes;
 import sphabucks.domain.users.service.IUserLikesService;
@@ -23,19 +25,25 @@ public class UserLikesController {
     @PutMapping("/push")
     @Operation(summary = "좋아요 클릭", description = "다시 한번 눌리면 좋아요 취소")
     ResponseEntity<Object> pushUserLikes(
-            @RequestHeader RequestHead requestHead,
+            Authentication authentication,
             @RequestBody RequestUserLikes requestUserLikes){
-        iUserLikesService.pushUserLikes(requestHead, requestUserLikes);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        iUserLikesService.pushUserLikes(userId, requestUserLikes);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get")
     @Operation(summary = "좋아요 클릭한 상품 조회")
-    ResponseEntity<Object> getUserLikes(@RequestHeader RequestHead requestHead){
+    ResponseEntity<Object> getUserLikes(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(HttpStatus.OK, iUserLikesService.getUserLikes(requestHead)));
+                .body(new ResponseDTO(HttpStatus.OK, iUserLikesService.getUserLikes(userId)));
     }
 
 
