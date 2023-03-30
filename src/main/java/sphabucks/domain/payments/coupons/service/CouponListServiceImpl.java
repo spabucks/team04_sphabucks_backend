@@ -22,12 +22,12 @@ public class CouponListServiceImpl implements ICouponListService{
     private final IUserRepository iUserRepository;
 
     @Override
-    public void addCoupon2User(RequestHead requestHead, RequestCouponList requestCouponList) {
+    public void addCoupon2User(String userId, RequestCouponList requestCouponList) {
 
         CouponList couponList = CouponList.builder()
                 .coupon(iCouponRepo.findById(requestCouponList.getCouponId())
                         .orElseThrow(()-> new BusinessException(ErrorCode.COUPON_NOT_EXISTS,ErrorCode.COUPON_NOT_EXISTS.getCode())))
-                .user(iUserRepository.findByUserId(requestHead.getUserId())
+                .user(iUserRepository.findByUserId(userId)
                         .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                 .build();
 
@@ -35,15 +35,12 @@ public class CouponListServiceImpl implements ICouponListService{
     }
 
     @Override
-    public List<CouponList> getCoupon2User(RequestHead requestHead) {
+    public List<CouponList> getCoupon2User(String userId) {
 
-        User user = iUserRepository.findByUserId(requestHead.getUserId())
-                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
-
-        if(iCouponListRepo.findAllByUserUserId(user.getUserId()).isEmpty()){
+        if(iCouponListRepo.findAllByUserUserId(userId).isEmpty()){
             throw new BusinessException(ErrorCode.COUPONS_NOT_EXISTS, ErrorCode.COUPONS_NOT_EXISTS.getCode());
         }
 
-        return iCouponListRepo.findAllByUserUserId(user.getUserId());
+        return iCouponListRepo.findAllByUserUserId(userId);
     }
 }

@@ -7,6 +7,6 @@ import sphabucks.global.auth.vo.RequestHead;
 import java.util.List;
 
 public interface ICouponListService {
-    void addCoupon2User(RequestHead requestHead, RequestCouponList requestCouponList);
-    List<CouponList> getCoupon2User(RequestHead requestHead);
+    void addCoupon2User(String userId, RequestCouponList requestCouponList);
+    List<CouponList> getCoupon2User(String userId);
 }
