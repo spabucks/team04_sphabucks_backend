@@ -37,6 +37,7 @@ public class AuthenticationController {
     @Operation(summary = "로그인", description = "로그인 시 access 토큰, uuid, userid(추가예정) 반환")
     public ResponseEntity<Object> login(
             @RequestBody AuthenticationRequest authenticationRequest) {
+
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
                 HttpStatus.OK,
                 authenticationService.Login(authenticationRequest)

@@ -63,10 +63,13 @@ public class AuthenticationService {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getLoginId(),
+                        userRepository.findByLoginId(authenticationRequest.getLoginId())
+                                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                                .getUserId(),
                         authenticationRequest.getPwd()
                 )
         );
+
         var user = userRepository.findByLoginId(authenticationRequest.getLoginId())
                 .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
         var jwtToken = jwtService.generateToken(user);
