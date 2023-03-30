@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import sphabucks.global.alarm.Repository.IReceivingNotificationRepo;
 import sphabucks.global.alarm.model.ReceivingNotification;
 import sphabucks.global.alarm.vo.RequestReceivingNotification;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 import sphabucks.domain.products.repository.IProductRepository;

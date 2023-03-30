@@ -10,7 +10,6 @@ import sphabucks.domain.purchaseHistory.vo.IResponsePaymentNum;
 import sphabucks.domain.purchaseHistory.vo.ResponsePurchaseHistory;
 import sphabucks.domain.purchaseHistory.vo.ResponsePurchaseHistoryList;
 import sphabucks.domain.users.repository.IUserRepository;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 

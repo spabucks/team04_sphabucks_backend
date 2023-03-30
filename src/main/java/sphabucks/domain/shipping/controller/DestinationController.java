@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.shipping.service.IDestinationService;
 import sphabucks.domain.shipping.vo.RequestDestination;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController

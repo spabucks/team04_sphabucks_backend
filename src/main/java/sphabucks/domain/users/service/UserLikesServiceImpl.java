@@ -9,7 +9,6 @@ import sphabucks.domain.users.model.UserLikes;
 import sphabucks.domain.users.repository.IUserLikesRepo;
 import sphabucks.domain.users.repository.IUserRepository;
 import sphabucks.domain.users.vo.RequestUserLikes;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 

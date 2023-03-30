@@ -12,7 +12,6 @@ import sphabucks.domain.users.repository.IUserWishlistRepo;
 import sphabucks.domain.users.vo.RequestUserWishlist;
 import sphabucks.domain.users.vo.ResponseWishList;
 import sphabucks.domain.users.vo.ResponseWishListProduct;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 import sphabucks.domain.productimage.repository.IProductImageRepo;

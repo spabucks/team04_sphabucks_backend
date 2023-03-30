@@ -1,9 +1,7 @@
 package sphabucks.domain.carts.service;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import sphabucks.domain.carts.vo.*;
-import sphabucks.global.auth.vo.RequestHead;
 
 import java.util.List;
 

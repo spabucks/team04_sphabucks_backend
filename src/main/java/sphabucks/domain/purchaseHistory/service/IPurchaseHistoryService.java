@@ -1,7 +1,6 @@
 package sphabucks.domain.purchaseHistory.service;
 
 import sphabucks.domain.purchaseHistory.vo.ResponsePurchaseHistoryList;
-import sphabucks.global.auth.vo.RequestHead;
 
 import java.util.List;
 

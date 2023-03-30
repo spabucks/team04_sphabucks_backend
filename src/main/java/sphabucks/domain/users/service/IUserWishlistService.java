@@ -3,7 +3,6 @@ package sphabucks.domain.users.service;
 import sphabucks.domain.users.vo.RequestUserWishlist;
 import sphabucks.domain.users.vo.ResponseWishList;
 import sphabucks.domain.users.vo.ResponseWishListProduct;
-import sphabucks.global.auth.vo.RequestHead;
 
 import java.util.List;
 
