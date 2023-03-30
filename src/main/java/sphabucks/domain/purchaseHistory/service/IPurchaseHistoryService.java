@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface IPurchaseHistoryService {
 
-    void addPurchaseHistory(List<Long> selected, RequestHead requestHead);
+    void addPurchaseHistory(List<Long> selected, String userId);
 
-    List<ResponsePurchaseHistoryList> getPurchaseHistoryList(RequestHead requestHead);
+    List<ResponsePurchaseHistoryList> getPurchaseHistoryList(String userId);
 
 
     //List<ResponsePurchaseHistoryList> getPurchaseHistory(String userId);

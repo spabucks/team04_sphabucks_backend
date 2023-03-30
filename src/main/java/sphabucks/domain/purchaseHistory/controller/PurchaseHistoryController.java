@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.purchaseHistory.service.IPurchaseHistoryService;
 import sphabucks.global.auth.vo.RequestHead;
@@ -25,19 +27,25 @@ public class PurchaseHistoryController {
 
     @PostMapping("/add")
     @Operation(summary = "구매 내역 추가", description = "폼태그로 데이터 어떻게 넘어오는지 확인 후 수정 필요할 듯")
-    public ResponseEntity<Object> addPurchaseHistory(@RequestHeader RequestHead requestHead, @RequestBody List<Long> selected){
+    public ResponseEntity<Object> addPurchaseHistory(Authentication authentication, @RequestBody List<Long> selected){
 
-        iPurchaseHistoryService.addPurchaseHistory(selected, requestHead);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        iPurchaseHistoryService.addPurchaseHistory(selected, userId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get")
     @Operation(summary = "구매 내역 조회", description = "프론트와 테스트 후 수정 필요")
-    public ResponseEntity<Object> getPurchaseHistory(@RequestHeader RequestHead requestHead) {
+    public ResponseEntity<Object> getPurchaseHistory(Authentication authentication) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(HttpStatus.OK, iPurchaseHistoryService.getPurchaseHistoryList(requestHead)));
+                .body(new ResponseDTO(HttpStatus.OK, iPurchaseHistoryService.getPurchaseHistoryList(userId)));
     }
 
 

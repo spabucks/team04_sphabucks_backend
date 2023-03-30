@@ -36,7 +36,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
     private final ICartRepo iCartRepo;
 
     @Override
-    public void addPurchaseHistory(List<Long> selected, RequestHead requestHead) {
+    public void addPurchaseHistory(List<Long> selected, String userId) {
         // 현재
         // selected : 구매내역 (구매할 상품 cart id) 체크리스트 배열로 받는다고 생각하고 구현.
         // 전체 배열 돌면서 값 저장하도록 되어있음.
@@ -53,7 +53,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                     .orElseThrow(() -> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
 
             PurchaseHistory purchaseHistory = PurchaseHistory.builder()
-                    .user(iUserRepository.findByUserId(requestHead.getUserId())
+                    .user(iUserRepository.findByUserId(userId)
                             .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                     .image(iProductImageRepo.findAllByProductId(
                             cart.getProduct().getId()
@@ -74,13 +74,13 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
     }
 
     @Override
-    public List<ResponsePurchaseHistoryList> getPurchaseHistoryList(RequestHead requestHead) {
+    public List<ResponsePurchaseHistoryList> getPurchaseHistoryList(String userId) {
 
         log.info("@@@@@@@@@@@@@@@@@@@@@@@1");
 
         // userId에 해당하는 paymentNum 모두 조회
         List<IResponsePaymentNum> paymentNumList = iPurchaseHistoryRepository.findAllPaymentNum(
-                iUserRepository.findByUserId(requestHead.getUserId())
+                iUserRepository.findByUserId(userId)
                         .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
                         .getId()
         );
@@ -96,7 +96,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
         // 조회한 paymentNum로 조회하면서 list에 결과 저장
         paymentNumList.forEach(paymentNum -> {
             List<PurchaseHistory> purchaseHistoryList = iPurchaseHistoryRepository.findAllByPaymentNum(
-                    iUserRepository.findByUserId(requestHead.getUserId())
+                    iUserRepository.findByUserId(userId)
                             .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
                             .getId(), paymentNum.getPaymentNum()
             );
