@@ -29,7 +29,7 @@ public class payingController {
 
         log.info("@@@@@@@@@@@@@@@ {}", map);
 
-        return "redirect:http://localhost:3000";
+        return "goFront.html";
     }
 
 
