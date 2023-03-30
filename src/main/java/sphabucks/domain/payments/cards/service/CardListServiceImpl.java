@@ -6,7 +6,6 @@ import sphabucks.domain.payments.cards.model.CardList;
 import sphabucks.domain.payments.cards.repository.ICardRepo;
 import sphabucks.domain.users.model.User;
 import sphabucks.domain.users.repository.IUserRepository;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 import sphabucks.domain.payments.cards.repository.ICardListRepo;

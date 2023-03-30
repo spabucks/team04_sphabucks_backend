@@ -14,7 +14,6 @@ import sphabucks.domain.products.model.Product;
 import sphabucks.domain.products.repository.IProductCategoryListRepository;
 import sphabucks.domain.products.repository.IProductRepository;
 import sphabucks.domain.users.repository.IUserRepository;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 

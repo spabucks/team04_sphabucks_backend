@@ -2,7 +2,6 @@ package sphabucks.domain.payments.coupons.service;
 
 import sphabucks.domain.payments.coupons.model.CouponList;
 import sphabucks.domain.payments.coupons.vo.RequestCouponList;
-import sphabucks.global.auth.vo.RequestHead;
 
 import java.util.List;
 

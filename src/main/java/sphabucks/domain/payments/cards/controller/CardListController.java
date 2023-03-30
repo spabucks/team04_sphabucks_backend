@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.payments.cards.service.ICardListService;
 import sphabucks.domain.payments.cards.vo.RequestCardList;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController

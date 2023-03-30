@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.users.vo.RequestUserLikes;
 import sphabucks.domain.users.service.IUserLikesService;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController

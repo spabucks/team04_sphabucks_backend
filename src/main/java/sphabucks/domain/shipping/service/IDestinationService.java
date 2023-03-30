@@ -3,7 +3,6 @@ package sphabucks.domain.shipping.service;
 import sphabucks.domain.shipping.vo.ResponseDestinationSummary;
 import sphabucks.domain.shipping.model.Destination;
 import sphabucks.domain.shipping.vo.RequestDestination;
-import sphabucks.global.auth.vo.RequestHead;
 
 import java.util.List;
 

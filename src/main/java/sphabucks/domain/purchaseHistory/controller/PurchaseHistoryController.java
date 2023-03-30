@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.purchaseHistory.service.IPurchaseHistoryService;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 import java.util.List;

@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.global.alarm.service.IReceivingNotificationService;
 import sphabucks.global.alarm.vo.RequestReceivingNotification;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.responseEntity.ResponseDTO;
 
 @RestController

@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.carts.service.ICartService;
 import sphabucks.domain.carts.vo.*;
-import sphabucks.global.auth.vo.RequestHead;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class CartController {
     @Operation(summary = "장바구니 담기")
     public ResponseEntity<Object> addCart(
             Authentication authentication, @RequestBody RequestCart requestCart){
-//
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userId = userDetails.getUsername();
         log.info(userId);

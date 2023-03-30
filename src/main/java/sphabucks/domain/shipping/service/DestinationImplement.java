@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sphabucks.domain.shipping.repository.IDestinationRepo;
 import sphabucks.domain.shipping.vo.ResponseDestinationSummary;
-import sphabucks.global.auth.vo.RequestHead;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
 import sphabucks.domain.shipping.model.Destination;
