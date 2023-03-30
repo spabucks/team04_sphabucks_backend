@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.global.alarm.service.IReceivingNotificationService;
 import sphabucks.global.alarm.vo.RequestReceivingNotification;
@@ -25,19 +27,27 @@ public class ReceivingNotificationController {
     @PostMapping("/add")
     @Operation(summary = "입고 알림 추가", description = "구현 완료")
     public ResponseEntity<Object> addReceivingNotification(
-            @RequestHeader RequestHead requestHead,
+            Authentication authentication,
             @RequestBody RequestReceivingNotification requestReceivingNotification){
-        iReceivingNotificationService.addReceivingNotification(requestHead, requestReceivingNotification);
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        iReceivingNotificationService.addReceivingNotification(userId, requestReceivingNotification);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get")
     @Operation(summary = "입고 알림 리스트 ", description = "구현 완료")
     public ResponseEntity<Object> getReceivingNotification(
-            @RequestHeader RequestHead requestHead){
+            Authentication authentication){
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
                 HttpStatus.OK,
-                iReceivingNotificationService.getReceivingNotification(requestHead)
+                iReceivingNotificationService.getReceivingNotification(userId)
         ));
     }
 

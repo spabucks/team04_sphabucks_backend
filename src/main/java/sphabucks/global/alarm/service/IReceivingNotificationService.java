@@ -7,8 +7,8 @@ import sphabucks.global.auth.vo.RequestHead;
 import java.util.List;
 
 public interface IReceivingNotificationService {
-    void addReceivingNotification(RequestHead requestHead, RequestReceivingNotification requestReceivingNotification);
-    List<ReceivingNotification> getReceivingNotification(RequestHead requestHead);
+    void addReceivingNotification(String userId, RequestReceivingNotification requestReceivingNotification);
+    List<ReceivingNotification> getReceivingNotification(String userId);
 
 
 
