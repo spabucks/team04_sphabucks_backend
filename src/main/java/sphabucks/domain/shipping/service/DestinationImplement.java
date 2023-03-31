@@ -100,14 +100,11 @@ public class DestinationImplement implements IDestinationService {
         User user = iUserRepository.findByUserId(userId)  // 조회할 유저
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
-        if (iDestinationRepo.findAllByUserIdOrderByDefaultDestinationDescUpdateDateDesc(user.getId()).isEmpty()) {
-            throw new BusinessException(ErrorCode.DESTINATION_NOT_EXISTS, ErrorCode.DESTINATION_NOT_EXISTS.getCode());
-        }
         List<Destination> destinationList = // 유저의 정보에 저장된 모든 배송지
                 iDestinationRepo.findAllByUserIdOrderByDefaultDestinationDescUpdateDateDesc(user.getId());
 
-        for (Destination destination : destinationList)
-            return_value.add(ResponseDestinationSummary.builder()
+        destinationList.forEach(destination ->
+                return_value.add(ResponseDestinationSummary.builder()
                     .name(destination.getName())
                     .recipient(destination.getRecipient())
                     .zipCode(destination.getZipCode())
@@ -116,7 +113,7 @@ public class DestinationImplement implements IDestinationService {
                     .phoneNum(destination.getPhoneNum())
                     .phoneNum2(destination.getPhoneNum2())
                     .content(destination.getContent())
-                    .build());
+                    .build()));
 
         return return_value;
     }
