@@ -105,27 +105,25 @@ public class CartServiceImpl implements ICartService{
 
         List<ResponseCartV2> responseCartV2List = new ArrayList<>();
 
-        if (!cartList.isEmpty()) {
-            cartList.forEach(cart -> {
-                // 해당 상품 카트의 상품정보를 불러옴
-                Product product = iProductRepository.findById(cart.getProduct().getId()).orElseThrow(() ->
-                        new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
+        // cartList가 비었을 경우 빈 리스트 반환
+        cartList.forEach(cart -> {
+            // 해당 상품 카트의 상품정보를 불러옴
+            Product product = iProductRepository.findById(cart.getProduct().getId()).orElseThrow(() ->
+                    new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
 
-                // 해당 상품의 이미지 정보(썸네일)를 불러옴
-                String imgUrl = iProductImageRepo.findAllByProductIdAndChk(product.getId(), 1).get(0).getImage();
-                responseCartV2List.add(ResponseCartV2.builder()
-                        .cartId(cart.getId())
-                        .productId(product.getId())
-                        .bigCategoryId(cart.getCategoryId())
-                        .count(cart.getAmount())
-                        .productName(product.getName())
-                        .imgUrl(imgUrl)
-                        .price(product.getPrice())
-                        .check(false)
-                        .build());
-            });
-        }
-
+            // 해당 상품의 이미지 정보(썸네일)를 불러옴
+            String imgUrl = iProductImageRepo.findAllByProductIdAndChk(product.getId(), 1).get(0).getImage();
+            responseCartV2List.add(ResponseCartV2.builder()
+                    .cartId(cart.getId())
+                    .productId(product.getId())
+                    .bigCategoryId(cart.getCategoryId())
+                    .count(cart.getAmount())
+                    .productName(product.getName())
+                    .imgUrl(imgUrl)
+                    .price(product.getPrice())
+                    .check(false)
+                    .build());
+        });
 
         return responseCartV2List;
     }
