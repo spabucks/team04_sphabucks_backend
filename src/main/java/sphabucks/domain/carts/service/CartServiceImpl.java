@@ -171,9 +171,10 @@ public class CartServiceImpl implements ICartService{
         if(cartList.isEmpty()){
             throw new BusinessException(ErrorCode.CARTS_NOT_EXISTS, ErrorCode.CARTS_NOT_EXISTS.getCode());
         }
-        for(Cart cart:cartList){
-            cart.setAmount(0L);
+
+        cartList.forEach(cart -> {
             cart.setIsDelete(true);
-        }
+            cart.setAmount(0L);
+        });
     }
 }
