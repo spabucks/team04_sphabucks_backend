@@ -34,7 +34,7 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers(
                         "/api/v1/tag/**"
-                        , "/api/v1/tag/**"
+                        , "/api/v1/product-tag/**"
                         , "/api/v1/bigCategory/**"
                         , "/api/v1/product-category/**"
                         , "/api/v1/product/**"
