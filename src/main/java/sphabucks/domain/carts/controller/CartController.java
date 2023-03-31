@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.carts.service.ICartService;
 import sphabucks.domain.carts.vo.*;
+import sphabucks.global.responseEntity.ResponseDTO;
 
 import java.util.List;
 
@@ -52,12 +53,12 @@ public class CartController {
     public ResponseEntity<Object> getCartV2(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userId = userDetails.getUsername();
-        return ResponseEntity.status(HttpStatus.OK).body(iCartService.getCartV2(userId));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iCartService.getCartV2(userId)));
     }
 
     @GetMapping("/get/product/{id}")
     public ResponseEntity<Object> getCartProduct(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(iCartService.getCartProduct(id));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iCartService.getCartProduct(id)));
     }
 
     @PatchMapping("/update")
