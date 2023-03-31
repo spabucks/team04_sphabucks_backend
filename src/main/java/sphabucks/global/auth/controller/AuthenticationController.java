@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.users.service.IUserService;
 import sphabucks.domain.users.vo.RequestLoginIdCheck;
@@ -37,6 +39,7 @@ public class AuthenticationController {
     @Operation(summary = "로그인", description = "로그인 시 access 토큰, uuid, userid(추가예정) 반환")
     public ResponseEntity<Object> login(
             @RequestBody AuthenticationRequest authenticationRequest) {
+
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
                 HttpStatus.OK,
                 authenticationService.Login(authenticationRequest)
@@ -67,8 +70,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<HttpStatus> logout(@RequestBody RequestToken requestToken){
-        authenticationService.Logout(requestToken);
+    public ResponseEntity<HttpStatus> logout(Authentication authentication ,@RequestHeader("Authorization") String access){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+        log.info(userId);
+        log.info(access);
+        authenticationService.Logout(userId, access);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

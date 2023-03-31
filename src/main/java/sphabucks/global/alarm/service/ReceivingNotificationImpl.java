@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import sphabucks.global.alarm.Repository.IReceivingNotificationRepo;
 import sphabucks.global.alarm.model.ReceivingNotification;
-import sphabucks.global.alarm.vo.RequestGetNotification;
 import sphabucks.global.alarm.vo.RequestReceivingNotification;
 import sphabucks.global.exception.BusinessException;
 import sphabucks.global.exception.ErrorCode;
@@ -26,19 +25,21 @@ public class ReceivingNotificationImpl implements IReceivingNotificationService 
 
 
     @Override
-    public void addReceivingNotification(RequestReceivingNotification requestReceivingNotification) {
+    public void addReceivingNotification(String userId, RequestReceivingNotification requestReceivingNotification) {
 
-        if(iReceivingNotificationRepo.findByUser_UserIdAndProductId(requestReceivingNotification.getUserId(),
-                requestReceivingNotification.getProductId()).get().getIsState() == 1){
-            throw new BusinessException(ErrorCode.DUPLICATE_NOTIFICATION, ErrorCode.DUPLICATE_NOTIFICATION.getCode());
+        log.info("if 전 실행 " + userId);
+        if(iReceivingNotificationRepo.findByUser_UserIdAndProductId(userId, requestReceivingNotification.getProductId()).isPresent()) {
+            if (iReceivingNotificationRepo.findByUser_UserIdAndProductId(userId, requestReceivingNotification.getProductId()).get().getIsState() == 1)
+                throw new BusinessException(ErrorCode.DUPLICATE_NOTIFICATION, ErrorCode.DUPLICATE_NOTIFICATION.getCode());
         }
+        log.info("if 후 실행 " + userId);
 
         StringBuilder sb = new StringBuilder();
         ReceivingNotification receivingNotification = ReceivingNotification.builder()
                 .expirationDate(new Date(System.currentTimeMillis() + (long) 1000 * 60 * 60 * 24 * 14))
                 .isState(1L)
                 .notificationDateMemo(String.valueOf(sb.append(new Date(System.currentTimeMillis())).append(" ").append(new Date(System.currentTimeMillis() + (long) 1000 * 60 * 60 * 24 * 14))))
-                .user(iUserRepository.findByUserId(requestReceivingNotification.getUserId())
+                .user(iUserRepository.findByUserId(userId)
                         .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                 .product(iProductRepository.findById(requestReceivingNotification.getProductId())
                         .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode())))
@@ -48,12 +49,12 @@ public class ReceivingNotificationImpl implements IReceivingNotificationService 
     }
 
     @Override
-    public List<ReceivingNotification> getReceivingNotification(RequestGetNotification requestGetNotification) {
+    public List<ReceivingNotification> getReceivingNotification(String userId) {
 
-        if(iReceivingNotificationRepo.findAllByUser_UserId(requestGetNotification.getUserId()).isEmpty()){
+        if(iReceivingNotificationRepo.findAllByUser_UserId(userId).isEmpty()){
             throw new BusinessException(ErrorCode.NOTIFICATION_NOT_EXISTS, ErrorCode.NOTIFICATION_NOT_EXISTS.getCode());
         }
-        List<ReceivingNotification> receivingNotificationList = iReceivingNotificationRepo.findAllByUser_UserId(requestGetNotification.getUserId());
+        List<ReceivingNotification> receivingNotificationList = iReceivingNotificationRepo.findAllByUser_UserId(userId);
         for (ReceivingNotification receivingNotification : receivingNotificationList) {
             if (new Date(System.currentTimeMillis()).after(receivingNotification.getExpirationDate())) {
                 // 현재시간이 알림 만료일 이후 일 때
@@ -63,6 +64,6 @@ public class ReceivingNotificationImpl implements IReceivingNotificationService 
             }
         }
 
-        return iReceivingNotificationRepo.findAllByUser_UserId(requestGetNotification.getUserId());
+        return iReceivingNotificationRepo.findAllByUser_UserId(userId);
     }
 }

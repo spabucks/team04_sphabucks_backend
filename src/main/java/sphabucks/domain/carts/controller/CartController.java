@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.carts.service.ICartService;
 import sphabucks.domain.carts.vo.*;
@@ -24,22 +26,32 @@ public class CartController {
 
     @PostMapping("/add")
     @Operation(summary = "장바구니 담기")
-    public ResponseEntity<Object> addCart(@RequestBody RequestCart requestCart){
+    public ResponseEntity<Object> addCart(
+            Authentication authentication, @RequestBody RequestCart requestCart){
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+        log.info(userId);
 
         // 성공: ResponseEntity.status(HttpStatus.OK).build();
         // 실패: return ResponseEntity.status(HttpStatus.BAD_REQUEST).body((5 - cart.getAmount()));
-        return iCartService.addCart(requestCart);
+        iCartService.addCart(userId, requestCart);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/get/{userId}")
+    @GetMapping("/get")
     @Operation(summary = "장바구니 조회", description = "uuid 사용")
-    public ResponseEntity<Object> getCart(@PathVariable String userId){
+    public ResponseEntity<Object> getCart(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
         return ResponseEntity.status(HttpStatus.OK).body(iCartService.getCart(userId));
     }
 
-    @GetMapping("/get/v2/{userId}")
+    @GetMapping("/get/v2")
     @Operation(summary = "장바구니 조회 v2", description = "유저의 카트 속 모든 정보를 한번에 반환해줌")
-    public ResponseEntity<Object> getCartV2(@PathVariable String userId) {
+    public ResponseEntity<Object> getCartV2(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
         return ResponseEntity.status(HttpStatus.OK).body(iCartService.getCartV2(userId));
     }
 
@@ -71,8 +83,11 @@ public class CartController {
 
     @PutMapping("/delete/all")
     @Operation(summary = "장바구니 전체 삭제")
-    public ResponseEntity<Object> deleteAll(@RequestBody RequestDeleteAll request){
-        iCartService.deleteAll(request.getUserId());
+    public ResponseEntity<Object> deleteAll(Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        iCartService.deleteAll(userId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

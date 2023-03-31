@@ -21,12 +21,12 @@ public class CardListServiceImpl implements ICardListService{
     private final ICardListRepo iCardListRepo;
 
     @Override
-    public void addCardList(RequestCardList requestCardList) {
+    public void addCardList(String userId, RequestCardList requestCardList) {
 
         CardList cardList = CardList.builder()
                 .card(iCardRepo.findById(requestCardList.getCardId())
                         .orElseThrow(()->new BusinessException(ErrorCode.CARD_NOT_EXISTS, ErrorCode.CARD_NOT_EXISTS.getCode())))
-                .user(iUserRepository.findById(requestCardList.getUserId())
+                .user(iUserRepository.findByUserId(userId)
                         .orElseThrow(()->new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                 .build();
 

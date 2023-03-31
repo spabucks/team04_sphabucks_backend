@@ -47,16 +47,16 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
             throw new BusinessException(ErrorCode.DUPLICATE_HISTORY, ErrorCode.DUPLICATE_HISTORY.getCode());
         }
 
-        for (int i = 0; i < selected.size(); i++) {
-            Cart cart = iCartRepo.findById(selected.get(i))
-                    .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
+        for (Long aLong : selected) {
+            Cart cart = iCartRepo.findById(aLong)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
 
             PurchaseHistory purchaseHistory = PurchaseHistory.builder()
                     .user(iUserRepository.findByUserId(userId)
-                            .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
+                            .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                     .image(iProductImageRepo.findAllByProductId(
                             cart.getProduct().getId()
-                            ).get(0).getImage())
+                    ).get(0).getImage())
                     .amount(cart.getAmount())
                     .sum(
                             cart.getPrice() * cart.getAmount()
@@ -124,12 +124,13 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
             });
             
             // ResponsePurchaseHistoryList 객체 생성 후 List<ResponsePurchaseHistoryList>에 저장
+            ResponsePurchaseHistoryList responsePurchaseHistoryList;
             if (purchaseHistoryList.size() > 1) {
-                ResponsePurchaseHistoryList responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
+                responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
                         .id(purchaseHistoryList.get(0).getId())
                         .orderName(
                                 purchaseHistoryList.get(0).getProductName() + " 외 "
-                                        + (purchaseHistoryList.size()-1) +" 상품")
+                                        + (purchaseHistoryList.size() - 1) + " 상품")
                         .amount(paymentNum.getAmount())
                         .sum(paymentNum.getSum())
                         .paymentNum(purchaseHistoryList.get(0).getPaymentNum())
@@ -140,9 +141,8 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                         .list(tmp2)
                         .build();
 
-                result.add(responsePurchaseHistoryList);
             } else {
-                ResponsePurchaseHistoryList responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
+                responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
                         .id(purchaseHistoryList.get(0).getId())
                         .orderName(
                                 purchaseHistoryList.get(0).getProductName())
@@ -156,8 +156,8 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                         .list(tmp2)
                         .build();
 
-                result.add(responsePurchaseHistoryList);
             }
+            result.add(responsePurchaseHistoryList);
 
         });
 
@@ -166,7 +166,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
 
     // 주문번호 생성 (ex) 230315(날짜)-xxxxxx(난수 6자리)
     private String createPaymentNum() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMMdd");
         sb.append(currentDate.format(dateTimeFormatter));

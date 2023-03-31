@@ -21,12 +21,12 @@ public class GiftIconListServiceImpl implements IGiftIconListService{
     private final IGiftIconRepository iGiftIconRepository;
     private final IUserRepository iUserRepository;
     @Override
-    public void addGiftIconList(RequestGiftIconList requestGiftIconList) {
+    public void addGiftIconList(String userId, RequestGiftIconList requestGiftIconList) {
 
         GiftIconList giftIconList = GiftIconList.builder()
                 .giftIcon(iGiftIconRepository.findById(requestGiftIconList.getGiftIconId())
                         .orElseThrow(()-> new BusinessException(ErrorCode.GIFTICON_NOT_EXISTS,ErrorCode.GIFTICON_NOT_EXISTS.getCode())))
-                .user(iUserRepository.findById(requestGiftIconList.getUserId())
+                .user(iUserRepository.findByUserId(userId)
                         .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                 .build();
 
@@ -34,12 +34,12 @@ public class GiftIconListServiceImpl implements IGiftIconListService{
     }
 
     @Override
-    public List<GiftIconList> getGiftIconList(Long id) {
+    public List<GiftIconList> getGiftIconList(String userId) {
 
-        User user = iUserRepository.findById(id)
+        User user = iUserRepository.findByUserId(userId)
                 .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
-        if(iGiftIconListRepo.findAllByUserUserId(user.getUserId()).isEmpty()){
+        if (iGiftIconListRepo.findAllByUserUserId(user.getUserId()).isEmpty()){
             throw new BusinessException(ErrorCode.GIFTICONS_NOT_EXISTS, ErrorCode.GIFTICONS_NOT_EXISTS.getCode());
         }
 

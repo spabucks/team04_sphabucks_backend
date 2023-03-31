@@ -6,6 +6,6 @@ import sphabucks.domain.payments.gifticons.vo.RequestGiftIconList;
 import java.util.List;
 
 public interface IGiftIconListService {
-    void addGiftIconList(RequestGiftIconList requestGiftIconList);
-    List<GiftIconList> getGiftIconList(Long id);
+    void addGiftIconList(String userId, RequestGiftIconList requestGiftIconList);
+    List<GiftIconList> getGiftIconList(String userId);
 }

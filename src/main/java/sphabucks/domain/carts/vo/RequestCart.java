@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestCart {
-    private String userId;  // UUID
+
     private Long productId;
     private Long amount;
 }

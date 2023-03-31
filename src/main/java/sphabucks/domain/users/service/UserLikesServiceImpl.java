@@ -24,13 +24,13 @@ public class UserLikesServiceImpl implements IUserLikesService{
     private final IUserRepository iUserRepository;
     @Override
     @Transactional
-    public void pushUserLikes(RequestUserLikes requestUserLikes) {
+    public void pushUserLikes(String userId, RequestUserLikes requestUserLikes) {
         // User가 like를 했을 때
-        if(!iUserLikesRepo.existsAllByProductIdAndUserUserId(requestUserLikes.getProductId(), requestUserLikes.getUserId())) {
+        if(!iUserLikesRepo.existsAllByProductIdAndUserUserId(requestUserLikes.getProductId(), userId)) {
             iUserLikesRepo.save(UserLikes.builder()
                     .product(iProductRepository.findById(requestUserLikes.getProductId())
                             .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode())))
-                    .user(iUserRepository.findByUserId(requestUserLikes.getUserId())
+                    .user(iUserRepository.findByUserId(userId)
                             .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
                     .build());
             Long count = iProductRepository.findById(requestUserLikes.getProductId())
@@ -43,7 +43,7 @@ public class UserLikesServiceImpl implements IUserLikesService{
                     .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()))
                     .getLikeCount();
             iProductRepository.updateLikeCount(count-1, requestUserLikes.getProductId());
-            iUserLikesRepo.deleteByUserUserId(requestUserLikes.getUserId());
+            iUserLikesRepo.deleteByUserUserId(userId);
         }
     }
 

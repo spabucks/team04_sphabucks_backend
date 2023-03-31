@@ -1,14 +1,14 @@
 package sphabucks.domain.event.vo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RequestEvent {
     private String season;  // 해당 이벤트 카테고리 이름(ex. 체리 블라썸, 발렌타인데이, ...)
     private String description; // 해당 이벤트 설명

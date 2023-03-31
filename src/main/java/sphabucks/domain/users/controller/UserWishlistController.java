@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.users.service.IUserWishlistService;
 import sphabucks.domain.users.vo.RequestUserWishlist;
@@ -23,16 +25,28 @@ public class UserWishlistController {
 
     @PostMapping()
     @Operation(summary = "위시리스트에 상품 담기", description = "구현 완료")
-    ResponseEntity<Object> clickUserWishlist(@RequestBody RequestUserWishlist requestUserWishlist){
-        iUserWishlistService.clickWishList(requestUserWishlist);
+    ResponseEntity<Object> clickUserWishlist(
+            Authentication authentication,
+            @RequestBody RequestUserWishlist requestUserWishlist) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        iUserWishlistService.clickWishList(userId, requestUserWishlist);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/get/{userId}")
+    @GetMapping("/get")
     @Operation(summary = "위시리스트에 담은 상품 확인", description = "구현 중")
-    ResponseEntity<Object> getUserWishlist(@PathVariable String userId){
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserWishlistService.getByUserWishlist(userId)));
+    ResponseEntity<Object> getUserWishlist(Authentication authentication){
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK, iUserWishlistService.getByUserWishlist(userId)));
     }
 
     @GetMapping("/get/product/{id}")

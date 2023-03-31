@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class RequestCouponList {
-    private Long userId;
     private Long couponId;
 }

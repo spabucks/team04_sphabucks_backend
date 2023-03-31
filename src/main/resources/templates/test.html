@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<!-- jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<!-- iamport.payment.js -->
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
+<script th:inline="javascript">
+        var IMP = window.IMP;
+        IMP.init("imp43027525");
+
+        $(document).ready(
+        function requestPay() {
+            IMP.request_pay({
+                pg : 'kcp.{상점ID}',
+                pay_method : 'card',
+                merchant_uid: "57008833-330024", // 주문번호
+                name : [[${name}]],
+                amount : 100,
+                buyer_email : 'Iamport@chai.finance',
+                buyer_name : '포트원 기술지원팀',
+                buyer_tel : '010-1234-5678',
+                buyer_addr : '서울특별시 강남구 삼성동',
+                buyer_postcode : '123-456',
+                m_redirect_url : 'http://localhost:8080/api/v1/portone/re/?name=[[${name}]]'
+            }, function (rsp) { //
+                if (rsp.success) {
+                } else {
+                    console.log(rsp);
+                }
+            });
+        }
+        );
+</script>
+
+</body>
+</html>

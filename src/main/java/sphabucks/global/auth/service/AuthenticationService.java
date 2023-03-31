@@ -63,10 +63,13 @@ public class AuthenticationService {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getLoginId(),
+                        userRepository.findByLoginId(authenticationRequest.getLoginId())
+                                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                                .getUserId(),
                         authenticationRequest.getPwd()
                 )
         );
+
         var user = userRepository.findByLoginId(authenticationRequest.getLoginId())
                 .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
         var jwtToken = jwtService.generateToken(user);
@@ -101,22 +104,12 @@ public class AuthenticationService {
                 .build();
     }
 
-    public boolean chkEmailWhenSignUp(RequestEmail requestEmail) throws Exception {
-        if (userRepository.existsByEmail(requestEmail.getEmail())) {
-            return false;
-        } else {
-//            emailService.sendSimpleMessage(requestEmail.getEmail());
-            return true;
-        }
+    public boolean chkEmailWhenSignUp(RequestEmail requestEmail) {
+        return !userRepository.existsByEmail(requestEmail.getEmail());
     }
 
-    public boolean chkEmailWhenFindId(RequestFindId requestFindId) throws Exception {
-        if (!userRepository.existsByEmailAndName(requestFindId.getEmail(), requestFindId.getUserName())) {
-            return false;
-        } else {
-//            emailService.sendSimpleMessage(requestFindId.getEmail());
-            return true;
-        }
+    public boolean chkEmailWhenFindId(RequestFindId requestFindId) {
+        return userRepository.existsByEmailAndName(requestFindId.getEmail(), requestFindId.getUserName());
     }
 
     public String findId(RequestFindId requestFindId) {
@@ -154,22 +147,21 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public void Logout(RequestToken requestToken){
-        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtService.extractUsername(requestToken.getAccessToken()));
-        if(!jwtService.isTokenValid(requestToken.getAccessToken(), userDetails)){
+    public void Logout(String userId, String access){
+
+        StringTokenizer st = new StringTokenizer(access," ");
+        st.nextToken();
+        access = st.nextToken();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtService.extractUsername(access));
+
+        if(!jwtService.isTokenValid(access, userDetails)){
             throw new BusinessException(ErrorCode.TOKEN_NOT_EXISTS, ErrorCode.TOKEN_NOT_EXISTS.getCode());
         }
 
-        Authentication authentication = jwtService.getAuthentication(requestToken.getAccessToken());
-
-        StringTokenizer st = new StringTokenizer(authentication.getCredentials().toString(),"=,");
-        st.nextToken();
-        String str = st.nextToken();
-
-        if(redis.getEmailCertification(str) != null){
-            redis.removeUserId(requestToken.getUserId());
+        if(redis.getEmailCertification(access) != null){
+            redis.removeUserId(userId);
         }
-        redis.changeExpired(requestToken.getAccessToken());
+        redis.changeExpired(access);
 
     }
 
