@@ -9,6 +9,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import sphabucks.domain.users.model.Role;
 
 @Configuration
@@ -25,7 +29,9 @@ public class SecurityConfig {
         http
                 .csrf()
                 .disable()
+                .cors().and()
                 .authorizeHttpRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers(
                         "/swagger-ui/**"
                         , "/swagger-ui.html"
@@ -60,5 +66,19 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
