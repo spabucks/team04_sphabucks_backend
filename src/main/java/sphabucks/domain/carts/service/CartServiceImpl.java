@@ -134,6 +134,11 @@ public class CartServiceImpl implements ICartService{
     public void updateCart(RequestUpdateCart request) {
         Cart cart = iCartRepo.findById(request.getCartId())
                 .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
+
+        if (cart.getIsDelete()) {
+            throw new BusinessException(ErrorCode.DELETED_CART, ErrorCode.DELETED_CART.getCode());
+        }
+
         cart.setAmount(request.getAmount());
     }
 

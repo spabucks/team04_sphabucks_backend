@@ -13,6 +13,7 @@ public enum ErrorCode {
 
     CART_NOT_EXISTS(404, "CART-001","해당 카트가 존재하지 않는 경우"),
     CARTS_NOT_EXISTS(404, "CART-002","카트가 하나도 존재하지 않는 경우"),
+    DELETED_CART(404,"CART-003","이미 삭제된 카트 항목의 수량을 업데이트할 경우"),
 
     NOTIFICATION_NOT_EXISTS(404, "NOTIFICATION-001", "해당 알림이 존재하지 않는 경우"),
     DUPLICATE_NOTIFICATION(404, "NOTIFICATION-002", "알림이 중복된 경우"),
