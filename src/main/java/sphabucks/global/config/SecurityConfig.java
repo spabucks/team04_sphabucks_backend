@@ -42,6 +42,7 @@ public class SecurityConfig {
                         , "/api/v1/event/**"
                         , "/api/v1/event-products/**"
                         , "/api/v1/auth/**"
+                        , "/api/v1/email/**"
                 ).permitAll()   // 설정한 리소스의 접근을 인증절차 없이 접근 가능
                 .requestMatchers(
                         "/admin/**"
