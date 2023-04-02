@@ -62,9 +62,15 @@ public class DestinationController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     @Operation(summary = "배송지 삭제")
-    public ResponseEntity<Object> deleteDestination(@RequestBody RequestDeleteDestination requestDeleteDestination) {
+    public ResponseEntity<Object> deleteDestination(
+            Authentication authentication,
+            @RequestBody RequestDeleteDestination requestDeleteDestination) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
         iDestinationService.deleteDestination(requestDeleteDestination.getId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
