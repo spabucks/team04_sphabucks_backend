@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class ResponseDestinationSummary {
 
+    private Long id;
     private String name;    // 주소 별칭
     private String recipient;   // 받는 분
     private String defaultAddress;  // 기본 주소

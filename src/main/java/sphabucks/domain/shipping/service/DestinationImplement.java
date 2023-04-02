@@ -100,12 +100,13 @@ public class DestinationImplement implements IDestinationService {
 
         destinationList.forEach(destination ->
                 return_value.add(ResponseDestinationSummary.builder()
-                    .name(destination.getName())
-                    .recipient(destination.getRecipient())
-                    .defaultAddress(destination.getDefaultAddress())
-                    .phoneNum(destination.getPhoneNum())
-                    .content(destination.getContent())
-                    .build()));
+                        .id(destination.getId())
+                        .name(destination.getName())
+                        .recipient(destination.getRecipient())
+                        .defaultAddress(destination.getDefaultAddress())
+                        .phoneNum(destination.getPhoneNum())
+                        .content(destination.getContent())
+                        .build()));
 
         return return_value;
     }

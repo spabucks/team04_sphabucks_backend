@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import sphabucks.domain.shipping.service.IDestinationService;
+import sphabucks.domain.shipping.vo.RequestDeleteDestination;
 import sphabucks.domain.shipping.vo.RequestDestination;
 import sphabucks.global.responseEntity.ResponseDTO;
 
@@ -61,10 +62,10 @@ public class DestinationController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete")
     @Operation(summary = "배송지 삭제")
-    public ResponseEntity<Object> deleteDestination(@PathVariable Long id) {
-        iDestinationService.deleteDestination(id);
+    public ResponseEntity<Object> deleteDestination(@RequestBody RequestDeleteDestination requestDeleteDestination) {
+        iDestinationService.deleteDestination(requestDeleteDestination.getId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
