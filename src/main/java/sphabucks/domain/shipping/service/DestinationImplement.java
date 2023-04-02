@@ -100,7 +100,7 @@ public class DestinationImplement implements IDestinationService {
 
         destinationList.forEach(destination ->
                 return_value.add(ResponseDestinationSummary.builder()
-                        .id(destination.getId())
+                        .shippingId(destination.getId())
                         .name(destination.getName())
                         .recipient(destination.getRecipient())
                         .defaultAddress(destination.getDefaultAddress())
