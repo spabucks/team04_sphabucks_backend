@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sphabucks.domain.users.vo.RequestLoginIdCheck;
 import sphabucks.domain.users.service.IUserService;
 import sphabucks.domain.users.vo.RequestUser;
 import sphabucks.global.responseEntity.ResponseDTO;

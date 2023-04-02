@@ -81,13 +81,13 @@ public class AuthenticationController {
 
     @PostMapping("/signup/chkemail")
     @Operation(summary = "회원가입 시 이메일 중복 체크(유무 체크)", description = "회원가입 시 중복일 경우 진행 X")
-    public ResponseEntity<Object> chkEmailWhenSignUp(@RequestBody RequestEmail requestEmail) throws Exception {
+    public ResponseEntity<Object> chkEmailWhenSignUp(@RequestBody RequestEmail requestEmail) {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, authenticationService.chkEmailWhenSignUp(requestEmail)));
     }
 
     @PostMapping("/findid/chkemail")
     @Operation(summary = "아이디 찾기 시 이메일 중복 체크(유무 체크)", description = "중복이 아닐 경우 진행 X(이메일이 DB에 있어야함)")
-    public ResponseEntity<Object> chkEmailWhenFindId(@RequestBody RequestFindId requestFindId) throws Exception {
+    public ResponseEntity<Object> chkEmailWhenFindId(@RequestBody RequestFindId requestFindId) {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, authenticationService.chkEmailWhenFindId(requestFindId)));
     }
 
