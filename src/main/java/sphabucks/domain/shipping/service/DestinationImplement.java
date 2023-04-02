@@ -34,21 +34,19 @@ public class DestinationImplement implements IDestinationService {
 
         // 새로운 배송지를 등록하는 경우
         if (newDefaultDestination) {
-            Destination originalDefaultDestination =
-                    iDestinationRepo.findByUserIdAndDefaultDestinationIsTrue(user.getId())
-                            .orElseThrow(() -> new BusinessException(ErrorCode.DESTINATION_BASIC_NOT_EXISTS, ErrorCode.DESTINATION_BASIC_NOT_EXISTS.getDescription()));
-            originalDefaultDestination.setDefaultDestination(false);
+            if (iDestinationRepo.findByUserIdAndDefaultDestinationIsTrue(user.getId()).isPresent()) {
+                Destination originalDefaultDestination =
+                        iDestinationRepo.findByUserIdAndDefaultDestinationIsTrue(user.getId()).get();
+                originalDefaultDestination.setDefaultDestination(false);
+            }
         }
 
         iDestinationRepo.save(Destination.builder()
                 .user(user)
                 .name(requestDestination.getName())
                 .recipient(requestDestination.getRecipient())
-                .zipCode(requestDestination.getZipCode())
                 .defaultAddress(requestDestination.getDefaultAddress())
-                .detailAddress(requestDestination.getDetailAddress())
                 .phoneNum(requestDestination.getPhoneNum())
-                .phoneNum2(requestDestination.getPhoneNum2())
                 .content(requestDestination.getContent())
                 .defaultDestination(newDefaultDestination)
                 .build());
@@ -75,11 +73,8 @@ public class DestinationImplement implements IDestinationService {
 
         destination.setName(requestDestination.getName());
         destination.setRecipient(requestDestination.getRecipient());
-        destination.setZipCode(requestDestination.getZipCode());
         destination.setDefaultAddress(requestDestination.getDefaultAddress());
-        destination.setDetailAddress(requestDestination.getDetailAddress());
         destination.setPhoneNum(requestDestination.getPhoneNum());
-        destination.setPhoneNum2(requestDestination.getPhoneNum2());
         destination.setContent(requestDestination.getContent());
         destination.setDefaultDestination(requestDestination.getDefaultDestination());
     }
@@ -107,11 +102,8 @@ public class DestinationImplement implements IDestinationService {
                 return_value.add(ResponseDestinationSummary.builder()
                     .name(destination.getName())
                     .recipient(destination.getRecipient())
-                    .zipCode(destination.getZipCode())
                     .defaultAddress(destination.getDefaultAddress())
-                    .detailAddress(destination.getDetailAddress())
                     .phoneNum(destination.getPhoneNum())
-                    .phoneNum2(destination.getPhoneNum2())
                     .content(destination.getContent())
                     .build()));
 
