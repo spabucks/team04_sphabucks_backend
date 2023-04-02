@@ -65,11 +65,11 @@ public class ProductTagServiceImpl implements IProductTagService {
 
         for (int i = 0; i < iTagRepository.count(); i++) {
             List<ResponseExhibitionProduct> responseExhibitionProducts = new ArrayList<>();
-            for (int j = 0; j < productTagList.size(); j++) {
-                Long productId = productTagList.get(j).getProduct().getId();
-                Long ptagId = productTagList.get(j).getTag().getId();
+            for (ProductTag productTag : productTagList) {
+                Long productId = productTag.getProduct().getId();
+                Long pTagId = productTag.getTag().getId();
 
-                if(iProductImageRepo.findAllByProductIdAndChk(productId, 1).isEmpty()){
+                if (iProductImageRepo.findAllByProductIdAndChk(productId, 1).isEmpty()) {
                     throw new BusinessException(ErrorCode.IMAGE_NOT_EXISTS, ErrorCode.IMAGES_NOT_EXISTS.getCode());
                 }
                 List<ProductImage> productImageList = iProductImageRepo.findAllByProductIdAndChk(productId, 1);
@@ -77,9 +77,9 @@ public class ProductTagServiceImpl implements IProductTagService {
                 ExhibitionProductImage exhibitionProductImage = new ExhibitionProductImage();
                 exhibitionProductImage.setImage(productImageList.get(0).getImage());
 
-                if ((ptagId - 1) == i) {
+                if ((pTagId - 1) == i) {
                     Product product = iProductRepository.findById(productId)
-                            .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
+                            .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
                     responseExhibitionProducts.add(ResponseExhibitionProduct.builder()
                             .price(product.getPrice())
                             .title(product.getName())
@@ -110,18 +110,18 @@ public class ProductTagServiceImpl implements IProductTagService {
     @Override
     public ResponseProductTag getTagId(Long tagId) {
 
-        ResponseProductTag responseProductTagList = new ResponseProductTag();
+        ResponseProductTag responseProductTagList;
         if(iProductTagRepository.findAll().isEmpty()){
             throw new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode());
         }
         List<ProductTag> productTagList = iProductTagRepository.findAll();
 
         List<ResponseExhibitionProduct> responseExhibitionProducts = new ArrayList<>();
-        for (int j = 0; j < productTagList.size(); j++) {
-            Long productId = productTagList.get(j).getProduct().getId();
-            Long ptagId = productTagList.get(j).getTag().getId();
+        for (ProductTag productTag : productTagList) {
+            Long productId = productTag.getProduct().getId();
+            Long pTagId = productTag.getTag().getId();
 
-            if(iProductImageRepo.findAllByProductIdAndChk(productId, 1).isEmpty()){
+            if (iProductImageRepo.findAllByProductIdAndChk(productId, 1).isEmpty()) {
                 throw new BusinessException(ErrorCode.IMAGE_NOT_EXISTS, ErrorCode.IMAGES_NOT_EXISTS.getCode());
             }
             List<ProductImage> productImageList = iProductImageRepo.findAllByProductIdAndChk(productId, 1);
@@ -129,9 +129,9 @@ public class ProductTagServiceImpl implements IProductTagService {
             ExhibitionProductImage exhibitionProductImage = new ExhibitionProductImage();
             exhibitionProductImage.setImage(productImageList.get(0).getImage());
 
-            if (ptagId.equals(tagId)) {
+            if (pTagId.equals(tagId)) {
                 Product product = iProductRepository.findById(productId)
-                        .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
+                        .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
                 responseExhibitionProducts.add(ResponseExhibitionProduct.builder()
                         .price(product.getPrice())
                         .title(product.getName())

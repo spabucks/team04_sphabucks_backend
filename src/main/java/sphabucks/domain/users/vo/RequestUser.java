@@ -1,12 +1,14 @@
 package sphabucks.domain.users.vo;
 
-import jakarta.persistence.Column;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RequestUser {
     private String loginId;
     private String name;

@@ -32,12 +32,10 @@ public class EmailController {
 
     @PostMapping("/check")
     @Operation(summary = "인증 번호 확인")
-    public ResponseEntity<Object> checkEmailCode(@RequestBody RequestEmailCheck requestEmailCheck) throws Exception{
+    public ResponseEntity<Object> checkEmailCode(@RequestBody RequestEmailCheck requestEmailCheck) {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(
                 HttpStatus.OK,
                 emailService.checkEmailCode(requestEmailCheck)
         ));
     }
-
-
 }

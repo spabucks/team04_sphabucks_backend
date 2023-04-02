@@ -9,7 +9,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import sphabucks.global.email.RedisService;
 import sphabucks.global.email.vo.RequestEmailCheck;
-import sphabucks.domain.users.repository.IUserRepository;
 
 import java.util.*;
 
@@ -19,7 +18,6 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final RedisService redisService;
-    private final IUserRepository iUserRepository;
 
     // 전송 메세지 생성
     private MimeMessage createMessage(String to, String code) throws Exception{
@@ -45,7 +43,7 @@ public class EmailService {
 
     // 6자리 난수 생성
     public static String createKey() {
-        StringBuffer key = new StringBuffer();
+        StringBuilder key = new StringBuilder();
         Random rnd = new Random();
 
         for (int i = 0; i < 6; i++) {

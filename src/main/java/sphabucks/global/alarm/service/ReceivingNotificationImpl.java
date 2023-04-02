@@ -27,12 +27,10 @@ public class ReceivingNotificationImpl implements IReceivingNotificationService 
     @Override
     public void addReceivingNotification(String userId, RequestReceivingNotification requestReceivingNotification) {
 
-        log.info("if 전 실행 " + userId);
         if(iReceivingNotificationRepo.findByUser_UserIdAndProductId(userId, requestReceivingNotification.getProductId()).isPresent()) {
             if (iReceivingNotificationRepo.findByUser_UserIdAndProductId(userId, requestReceivingNotification.getProductId()).get().getIsState() == 1)
                 throw new BusinessException(ErrorCode.DUPLICATE_NOTIFICATION, ErrorCode.DUPLICATE_NOTIFICATION.getCode());
         }
-        log.info("if 후 실행 " + userId);
 
         StringBuilder sb = new StringBuilder();
         ReceivingNotification receivingNotification = ReceivingNotification.builder()
