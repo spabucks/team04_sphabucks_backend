@@ -32,12 +32,10 @@ public class CartController {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userId = userDetails.getUsername();
-        log.info(userId);
 
         // 성공: ResponseEntity.status(HttpStatus.OK).build();
         // 실패: return ResponseEntity.status(HttpStatus.BAD_REQUEST).body((5 - cart.getAmount()));
-        iCartService.addCart(userId, requestCart);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return iCartService.addCart(userId, requestCart);
     }
 
     @GetMapping("/get")
