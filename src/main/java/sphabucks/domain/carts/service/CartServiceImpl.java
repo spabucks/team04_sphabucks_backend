@@ -113,7 +113,7 @@ public class CartServiceImpl implements ICartService{
                     .productName(product.getName())
                     .imgUrl(imgUrl)
                     .price(product.getPrice())
-                    .check(false)
+                    .check(true)
                     .build());
         });
 
