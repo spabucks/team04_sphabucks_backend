@@ -6,8 +6,6 @@ public interface IResponseSearchResult {
     String getPrice();
     String getSize();
     String getImage();
-    Long getEventId();
     Long getBigCategoryId();
-    Long getSmallCategoryId();
 
 }

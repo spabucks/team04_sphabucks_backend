@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @GetMapping("get/all")
-    @Operation(summary = "모든 고객 정보 조회", description = "어드민 권한 - 삭제 예정")
+    @Operation(summary = "모든 고객 정보 조회", description = "어드민 권한")
     public ResponseEntity<Object> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iUserService.getAll()));
     }

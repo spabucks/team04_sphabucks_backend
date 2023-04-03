@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findAllById(Long id);
 
     List<Product> findByNameContains(String keyword);
 

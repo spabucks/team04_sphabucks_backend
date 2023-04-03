@@ -18,7 +18,7 @@ public class ATagController {
     private final ITagService iTagService;
 
     @PostMapping("/add")
-    @Operation(summary = "태그 추가", description = "어드민 권한 - 삭제 예정?")
+    @Operation(summary = "태그 추가", description = "어드민 권한")
     public ResponseEntity<Object> addTag(@RequestBody RequestTag requestTag) {
         iTagService.addTag(requestTag);
         return ResponseEntity.status(HttpStatus.CREATED).build();

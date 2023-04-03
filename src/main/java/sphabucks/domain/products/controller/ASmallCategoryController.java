@@ -19,7 +19,7 @@ public class ASmallCategoryController {
     private final ISmallCategoryService iSmallCategoryService;
 
     @PostMapping("/add")
-    @Operation(summary = "상품에 소분류 물리기", description = "어드민 권한 - 삭제 예정?")
+    @Operation(summary = "상품에 소분류 물리기", description = "어드민 권한")
     public ResponseEntity<Object> addSmallCategory(@RequestBody RequestSmallCategory requestSmallCategory){
         iSmallCategoryService.addSmallCategory(requestSmallCategory);
         return ResponseEntity.status(HttpStatus.CREATED).build();

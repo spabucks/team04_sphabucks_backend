@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseExhibitionProduct {
 
-//    Long tagId;
     Long id;
     String title;            // 상품 이름
     Long price;

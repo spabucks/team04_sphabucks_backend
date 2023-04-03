@@ -20,10 +20,8 @@ public class RedisService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     private JwtService jwtService;
-    // 앞에는 이메일, 뒤에는 생성한 키값
 
     public void createEmailCertification(String email, String certificationNumber) {
-        // redisTemplate.opsForValue().set(email, certificationNumber);
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
         vop.set(email, certificationNumber, Duration.ofSeconds(LIMIT_TIME));
     }

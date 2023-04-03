@@ -20,7 +20,7 @@ public class AProductCategoryListController {
     private final IProductCategoryListService iProductCategoryListService;
 
     @PostMapping("/add")
-    @Operation(summary = "상품에 대-소분류 물리기", description = "어드민 권한 - 삭제 예정?")
+    @Operation(summary = "상품에 대-소분류 물리기", description = "어드민 권한")
     public ResponseEntity<Object> addProductCategoryList(@RequestBody RequestProductCategoryList requestProductCategoryList){
         iProductCategoryListService.addProductCategoryList(requestProductCategoryList);
         return ResponseEntity.status(HttpStatus.CREATED).build();

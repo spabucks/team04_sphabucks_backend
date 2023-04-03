@@ -26,7 +26,6 @@ public class UserServiceImplement implements IUserService{
     @Override
     public void adduser(RequestUser requestUser) {
 
-        // addUser는 사용하지 않는 메서드라서 에러처리 안해줬음,,
         ModelMapper modelMapper = new ModelMapper();
         User user = modelMapper.map(requestUser,User.class);
         user.setUserId(UUID.randomUUID().toString());
