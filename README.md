@@ -1,5 +1,3 @@
-# database
-
 ## RestAPI test(swagger 3.0)
 http://sphabucks.xyz/swagger-ui.html
 
