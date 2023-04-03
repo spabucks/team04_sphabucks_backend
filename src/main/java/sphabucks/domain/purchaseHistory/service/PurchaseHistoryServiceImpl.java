@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import sphabucks.domain.carts.repository.ICartRepo;
 import sphabucks.domain.purchaseHistory.model.PurchaseHistory;
+import sphabucks.domain.purchaseHistory.model.PurchaseTmp;
+import sphabucks.domain.purchaseHistory.repository.IPurchaseTmpRepository;
 import sphabucks.domain.purchaseHistory.vo.IResponsePaymentNum;
 import sphabucks.domain.purchaseHistory.vo.ResponsePurchaseHistory;
 import sphabucks.domain.purchaseHistory.vo.ResponsePurchaseHistoryList;
@@ -33,14 +36,25 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
     private final IUserRepository iUserRepository;
     private final IProductImageRepo iProductImageRepo;
     private final ICartRepo iCartRepo;
+    private final IPurchaseTmpRepository iPurchaseTmpRepository;
 
     @Override
-    public void addPurchaseHistory(List<Long> selected, String userId) {
+    @Transactional
+    public void addPurchaseHistory(String userId) {
 
         String paymentNum = createPaymentNum();
         if(iPurchaseHistoryRepository.findByPaymentNum(paymentNum).isPresent()){
             throw new BusinessException(ErrorCode.DUPLICATE_HISTORY, ErrorCode.DUPLICATE_HISTORY.getCode());
         }
+
+        if(iPurchaseTmpRepository.findAllByUserId(userId).isEmpty()) {
+            throw new BusinessException(ErrorCode.PURCHASE_TMP_NOT_EXISTS,ErrorCode.PURCHASE_TMP_NOT_EXISTS.getCode());
+        }
+        List<PurchaseTmp> list = iPurchaseTmpRepository.findAllByUserId(userId);
+        List<Long> selected = new ArrayList<>();
+        list.forEach(item -> {
+            selected.add(item.getCart().getId());
+        });
 
         for (Long aLong : selected) {
             Cart cart = iCartRepo.findById(aLong)
@@ -64,7 +78,9 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                     .build();
 
             iPurchaseHistoryRepository.save(purchaseHistory);
+            iCartRepo.deleteById(aLong);
         }
+        iPurchaseTmpRepository.deletePurchaseTmp(userId);
     }
 
     @Override
@@ -77,78 +93,77 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                         .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
                         .getId()
         );
-        if(paymentNumList.isEmpty()){
-            throw new BusinessException(ErrorCode.HISTORY_NOT_EXISTS, ErrorCode.HISTORY_NOT_EXISTS.getCode());
-        }
 
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@2 {}",paymentNumList);
+
 
         List<ResponsePurchaseHistoryList> result = new ArrayList<>();
 
-        paymentNumList.forEach(paymentNum -> {
-            List<PurchaseHistory> purchaseHistoryList = iPurchaseHistoryRepository.findAllByPaymentNum(
-                    iUserRepository.findByUserId(userId)
-                            .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
-                            .getId(), paymentNum.getPaymentNum()
-            );
+        if(!paymentNumList.isEmpty()){
+            paymentNumList.forEach(paymentNum -> {
+                List<PurchaseHistory> purchaseHistoryList = iPurchaseHistoryRepository.findAllByPaymentNum(
+                        iUserRepository.findByUserId(userId)
+                                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                                .getId(), paymentNum.getPaymentNum()
+                );
 
-            List<ResponsePurchaseHistory> tmp2 = new ArrayList<>();
+                List<ResponsePurchaseHistory> tmp2 = new ArrayList<>();
 
 
-            purchaseHistoryList.forEach(purchaseHistory -> {
-                ResponsePurchaseHistory responsePurchaseHistory = ResponsePurchaseHistory.builder()
-                        .id(purchaseHistory.getId())
-                        .productName(purchaseHistory.getProductName())
-                        .amount(purchaseHistory.getAmount())
-                        .sum(purchaseHistory.getSum())
-                        .type(purchaseHistory.getType())
-                        .paymentNum(purchaseHistory.getPaymentNum())
-                        .orderDate(purchaseHistory.getCreateDate())
-                        .sp_status(purchaseHistory.getSpStatus())
-                        .or_status(purchaseHistory.getOrStatus())
-                        .image(purchaseHistory.getImage())
-                        .build();
+                purchaseHistoryList.forEach(purchaseHistory -> {
+                    ResponsePurchaseHistory responsePurchaseHistory = ResponsePurchaseHistory.builder()
+                            .id(purchaseHistory.getId())
+                            .productName(purchaseHistory.getProductName())
+                            .amount(purchaseHistory.getAmount())
+                            .sum(purchaseHistory.getSum())
+                            .type(purchaseHistory.getType())
+                            .paymentNum(purchaseHistory.getPaymentNum())
+                            .orderDate(purchaseHistory.getCreateDate())
+                            .sp_status(purchaseHistory.getSpStatus())
+                            .or_status(purchaseHistory.getOrStatus())
+                            .image(purchaseHistory.getImage())
+                            .build();
 
-                tmp2.add(responsePurchaseHistory);
+                    tmp2.add(responsePurchaseHistory);
+
+                });
+
+                ResponsePurchaseHistoryList responsePurchaseHistoryList;
+                if (purchaseHistoryList.size() > 1) {
+                    responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
+                            .id(purchaseHistoryList.get(0).getId())
+                            .orderName(
+                                    purchaseHistoryList.get(0).getProductName() + " 외 "
+                                            + (purchaseHistoryList.size() - 1) + " 상품")
+                            .amount(paymentNum.getAmount())
+                            .sum(paymentNum.getSum())
+                            .paymentNum(purchaseHistoryList.get(0).getPaymentNum())
+                            .orderDate(purchaseHistoryList.get(0).getCreateDate())
+                            .sp_status(purchaseHistoryList.get(0).getSpStatus())
+                            .or_status(purchaseHistoryList.get(0).getOrStatus())
+                            .image(purchaseHistoryList.get(0).getImage())
+                            .list(tmp2)
+                            .build();
+
+                } else {
+                    responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
+                            .id(purchaseHistoryList.get(0).getId())
+                            .orderName(
+                                    purchaseHistoryList.get(0).getProductName())
+                            .amount(paymentNum.getAmount())
+                            .sum(paymentNum.getSum())
+                            .paymentNum(purchaseHistoryList.get(0).getPaymentNum())
+                            .orderDate(purchaseHistoryList.get(0).getCreateDate())
+                            .sp_status(purchaseHistoryList.get(0).getSpStatus())
+                            .or_status(purchaseHistoryList.get(0).getOrStatus())
+                            .image(purchaseHistoryList.get(0).getImage())
+                            .list(tmp2)
+                            .build();
+
+                }
+                result.add(responsePurchaseHistoryList);
 
             });
-
-            ResponsePurchaseHistoryList responsePurchaseHistoryList;
-            if (purchaseHistoryList.size() > 1) {
-                responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
-                        .id(purchaseHistoryList.get(0).getId())
-                        .orderName(
-                                purchaseHistoryList.get(0).getProductName() + " 외 "
-                                        + (purchaseHistoryList.size() - 1) + " 상품")
-                        .amount(paymentNum.getAmount())
-                        .sum(paymentNum.getSum())
-                        .paymentNum(purchaseHistoryList.get(0).getPaymentNum())
-                        .orderDate(purchaseHistoryList.get(0).getCreateDate())
-                        .sp_status(purchaseHistoryList.get(0).getSpStatus())
-                        .or_status(purchaseHistoryList.get(0).getOrStatus())
-                        .image(purchaseHistoryList.get(0).getImage())
-                        .list(tmp2)
-                        .build();
-
-            } else {
-                responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
-                        .id(purchaseHistoryList.get(0).getId())
-                        .orderName(
-                                purchaseHistoryList.get(0).getProductName())
-                        .amount(paymentNum.getAmount())
-                        .sum(paymentNum.getSum())
-                        .paymentNum(purchaseHistoryList.get(0).getPaymentNum())
-                        .orderDate(purchaseHistoryList.get(0).getCreateDate())
-                        .sp_status(purchaseHistoryList.get(0).getSpStatus())
-                        .or_status(purchaseHistoryList.get(0).getOrStatus())
-                        .image(purchaseHistoryList.get(0).getImage())
-                        .list(tmp2)
-                        .build();
-
-            }
-            result.add(responsePurchaseHistoryList);
-
-        });
+        }
 
         return result;
     }
