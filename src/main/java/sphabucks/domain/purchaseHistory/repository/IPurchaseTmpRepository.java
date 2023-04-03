@@ -16,7 +16,7 @@ public interface IPurchaseTmpRepository extends JpaRepository<PurchaseTmp, Long>
 
     @Modifying(clearAutomatically = true)
     @Query(value = "Delete from purchase_tmp WHERE user_id = :userId", nativeQuery = true)
-    void deletePurchaseTmp(@Param(value="userId") String UserId);
+    void deletePurchaseTmp(@Param(value="userId") String userId);
 
     List<PurchaseTmp> findByUserId(String userId);
 }
