@@ -19,13 +19,13 @@ public class ProductImageController {
     private final IProductImageService iProductImageService;
 
     @GetMapping("/get/{id}")
-    @Operation(summary = "상품 이미지 정보 확인", description = "어디 쓰이는 놈이지?")
+    @Operation(summary = "상품 이미지 정보 확인")
     public ResponseEntity<Object> getProductImage(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iProductImageService.getProductImage(id)));
     }
 
     @GetMapping("/get/all")
-    @Operation(summary = "전체 상품 이미지 확인", description = "어드민 권한 - 삭제 예정?")
+    @Operation(summary = "전체 상품 이미지 확인", description = "어드민 권한")
     public ResponseEntity<Object> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iProductImageService.getAll()));
     }

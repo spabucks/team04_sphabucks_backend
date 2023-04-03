@@ -10,9 +10,4 @@ public interface IPurchaseHistoryService {
 
     List<ResponsePurchaseHistoryList> getPurchaseHistoryList(String userId);
 
-
-    //List<ResponsePurchaseHistoryList> getPurchaseHistory(String userId);
-//
-//    List<String> getAllPaymentNum (String userId);
-//    List<PurchaseHistory> getAllByPaymentNum(String userId, String paymentNum);
 }

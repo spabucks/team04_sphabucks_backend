@@ -51,15 +51,6 @@ public class ProductRepository {
             }
             jpql += " p.product.size in :size";
         }
-//        if (requestSearchParam.getPrice() != null) {
-//            if (isFirst) {
-//                jpql += " where";
-//                isFirst = false;
-//            } else {
-//                jpql += " and";
-//            }
-//            jpql += " (p.product.price between :price and :price2)";
-//        }
         if (requestSearchParam.getPrice() != null) {
             if (isFirst) {
                 jpql += " where";

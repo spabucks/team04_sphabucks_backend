@@ -21,7 +21,7 @@ public class AProductController {
     private final IProductService iProductService;
 
     @PostMapping("/add")
-    @Operation(summary = "상품 추가", description = "어드민 권한 - 삭제 예정?")
+    @Operation(summary = "상품 추가", description = "어드민 권한")
     public ResponseEntity<Object> addProduct(@RequestBody RequestProduct requestProduct) {
         iProductService.addProduct(requestProduct);
         return ResponseEntity.status(HttpStatus.CREATED).build();

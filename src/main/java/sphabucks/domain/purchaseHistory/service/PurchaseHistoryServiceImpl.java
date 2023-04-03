@@ -36,12 +36,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
 
     @Override
     public void addPurchaseHistory(List<Long> selected, String userId) {
-        // 현재
-        // selected : 구매내역 (구매할 상품 cart id) 체크리스트 배열로 받는다고 생각하고 구현.
-        // 전체 배열 돌면서 값 저장하도록 되어있음.
-        // 후에 프론트에서 값 넘겨주는거 보고 수정할 예정
 
-        // 주문번호 생성
         String paymentNum = createPaymentNum();
         if(iPurchaseHistoryRepository.findByPaymentNum(paymentNum).isPresent()){
             throw new BusinessException(ErrorCode.DUPLICATE_HISTORY, ErrorCode.DUPLICATE_HISTORY.getCode());
@@ -77,7 +72,6 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
 
         log.info("@@@@@@@@@@@@@@@@@@@@@@@1");
 
-        // userId에 해당하는 paymentNum 모두 조회
         List<IResponsePaymentNum> paymentNumList = iPurchaseHistoryRepository.findAllPaymentNum(
                 iUserRepository.findByUserId(userId)
                         .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
@@ -89,10 +83,8 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
 
         log.info("@@@@@@@@@@@@@@@@@@@@@@@2 {}",paymentNumList);
 
-        // 리턴할 리스트
         List<ResponsePurchaseHistoryList> result = new ArrayList<>();
-        
-        // 조회한 paymentNum로 조회하면서 list에 결과 저장
+
         paymentNumList.forEach(paymentNum -> {
             List<PurchaseHistory> purchaseHistoryList = iPurchaseHistoryRepository.findAllByPaymentNum(
                     iUserRepository.findByUserId(userId)
@@ -103,8 +95,6 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
             List<ResponsePurchaseHistory> tmp2 = new ArrayList<>();
 
 
-
-            // purchaseHistory -> responsePurchaseHistory 옮겨닮기
             purchaseHistoryList.forEach(purchaseHistory -> {
                 ResponsePurchaseHistory responsePurchaseHistory = ResponsePurchaseHistory.builder()
                         .id(purchaseHistory.getId())
@@ -122,8 +112,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                 tmp2.add(responsePurchaseHistory);
 
             });
-            
-            // ResponsePurchaseHistoryList 객체 생성 후 List<ResponsePurchaseHistoryList>에 저장
+
             ResponsePurchaseHistoryList responsePurchaseHistoryList;
             if (purchaseHistoryList.size() > 1) {
                 responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
@@ -164,7 +153,6 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
         return result;
     }
 
-    // 주문번호 생성 (ex) 230315(날짜)-xxxxxx(난수 6자리)
     private String createPaymentNum() {
         StringBuilder sb = new StringBuilder();
         LocalDate currentDate = LocalDate.now();

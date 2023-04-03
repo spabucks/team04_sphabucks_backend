@@ -26,14 +26,14 @@ public class ProductTagController {
     }
 
     @GetMapping("/exhibition/get/all")
-    @Operation(summary = "기획전", description = "얘는 뭐고")
+    @Operation(summary = "기획전")
     @Tag(name = "검색")
     public ResponseEntity<Object> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iProductTagService.getAll()));
     }
 
     @GetMapping("/exhibition/get/{tagId}")
-    @Operation(summary = "기획전", description = "얘는 뭐지")
+    @Operation(summary = "기획전")
     @Tag(name = "검색")
     public ResponseEntity<Object> getTagId(@PathVariable Long tagId){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iProductTagService.getTagId(tagId)));

@@ -42,14 +42,13 @@ public class ProductController {
     }
 
     @GetMapping("/get/allProduct")
-    @Operation(summary = "전체상품조회(카테고리포함)", description = "구현 중 ")
+    @Operation(summary = "전체상품조회(카테고리포함)")
     public ResponseEntity<Object> getAllProduct(@PageableDefault(size = 10, sort = {"index"}, direction = Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(HttpStatus.OK, iProductService.getAllProducts(pageable)));
     }
 
-    // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)
     @GetMapping("/get-best/{bigCategoryId}")
     @Operation(summary = "베스트 상품 조회")
     @Tag(name = "검색")
@@ -57,7 +56,7 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iProductService.getBestBigCategory(bigCategoryId)));
     }
-    // 상품 검색 메서드 (키워드 검색)
+
     @GetMapping("/search")
     @Operation(summary = "키워드 검색", description = "돋보기 아이콘 클릭을 통해 들어간 검색창에서 키워드로 검색")
     @Tag(name = "검색")
@@ -128,7 +127,6 @@ public class ProductController {
 
 
 
-    // 상품 검색 상단 필터 메뉴 호출 (키워드 검색)
     @GetMapping("/search-menu")
     @Operation(summary = "키워드 검색 시 필터메뉴", description = "키워드로 검색할 시 필터메뉴목록 출력")
     @Tag(name = "검색")
@@ -151,29 +149,5 @@ public class ProductController {
     public ResponseEntity<Object> getSubCategoryMenu(@PathVariable Long bigCategoryId) {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iProductService.getAllSubCategory(bigCategoryId)));
     }
-
-
-
-//    @GetMapping("/test")
-//    public List<ResponseSearchResult> testSearch(
-//            @RequestParam(required = false) String keyword,
-//            @RequestParam(required = false) Long bigCategory,
-//            @RequestParam(required = false) List<String> size,
-//            @RequestParam(required = false) Long price,
-//            @RequestParam(required = false) List<Long> smallCategory,
-//            @RequestParam(required = false) List<Long> season
-//    ) {
-//
-//        RequestSearchParam requestSearchParam = RequestSearchParam.builder()
-//                .keyword(keyword)
-//                .bigCategory(bigCategory)
-//                .size(size)
-//                .price(price)
-//                .smallCategory(smallCategory)
-//                .season(season)
-//                .build();
-//
-//        return null;
-//    }
 
 }

@@ -20,7 +20,7 @@ import sphabucks.global.responseEntity.ResponseDTO;
 public class CouponListController {
     private final ICouponListService iCouponListService;
 
-    @PostMapping("/add/user")    // 사용자 id와 쿠폰 id를 이용하여 쿠폰 리스트에 정보 추가
+    @PostMapping("/add/user")
     @Operation(summary = "고객이 자신의 계정이 쿠폰 등록", description = "구현 X")
     public ResponseEntity<Object> addCoupon2User(
             Authentication authentication,
@@ -32,7 +32,7 @@ public class CouponListController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/get/user")   // 사용자별 가지고 있는 모든 쿠폰조회
+    @GetMapping("/get/user")
     @Operation(summary = "고객이 자신이 가지고 있는 모든 쿠폰 확인", description = "구현 X")
     public ResponseEntity<Object> getCoupon2User(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

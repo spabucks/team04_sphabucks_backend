@@ -19,7 +19,7 @@ public class ABigCategoryController {
     private final IBigCategoryService iBigCategoryService;
 
     @PostMapping("/add")
-    @Operation(summary = "상품에 대분류 물리기", description = "어드민 권한 - 삭제 예정?")
+    @Operation(summary = "상품에 대분류 물리기", description = "어드민 권한")
     public ResponseEntity<Object> addBigCategory(@RequestBody RequestBigCategory requestBigCategory){
         iBigCategoryService.addBigCategory(requestBigCategory);
 

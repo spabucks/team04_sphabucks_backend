@@ -47,27 +47,4 @@ public class PurchaseHistoryController {
                 .body(new ResponseDTO(HttpStatus.OK, iPurchaseHistoryService.getPurchaseHistoryList(userId)));
     }
 
-
-
-
-
-
-//    @GetMapping("/test")
-//    public List<String> test (@RequestHeader String userId) {
-//        return iPurchaseHistoryService.getAllPaymentNum(userId);
-//    }
-//
-//    @GetMapping("/test2")
-//    public List<List<PurchaseHistory>> test2 (@RequestHeader String userId) {
-//        List<String> list = iPurchaseHistoryService.getAllPaymentNum(userId);
-//        List<List<PurchaseHistory>> responsePurchaseHistoryLists = new ArrayList<>();
-//
-//        list.forEach(item -> {
-//            List<PurchaseHistory> purchaseHistoryList = iPurchaseHistoryService.getAllByPaymentNum(userId, item);
-//            responsePurchaseHistoryLists.add(purchaseHistoryList);
-//        });
-//
-//        return responsePurchaseHistoryLists;
-//    }
-
 }
