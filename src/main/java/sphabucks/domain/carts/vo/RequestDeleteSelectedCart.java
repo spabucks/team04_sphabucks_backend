@@ -12,7 +12,4 @@ import lombok.Setter;
 public class RequestDeleteSelectedCart {
 
     private Long cartId;
-    private Long count;
-    private Long price;
-    private Long bigCategoryId;
 }
