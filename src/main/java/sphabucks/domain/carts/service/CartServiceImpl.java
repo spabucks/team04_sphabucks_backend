@@ -144,9 +144,9 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     @Transactional
-    public void deleteSelectedCart(List<RequestDeleteSelectedCart> requestList) {
-        requestList.forEach(request -> {
-            Cart cart = iCartRepo.findById(request.getCartId())
+    public void deleteSelectedCart(RequestDeleteSelectedCart requestList) {
+        requestList.getCartId().forEach(request -> {
+            Cart cart = iCartRepo.findById(request)
                     .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
             cart.setAmount(0L);
             cart.setIsDelete(true);

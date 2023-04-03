@@ -73,7 +73,7 @@ public class CartController {
 
     @PutMapping("/selectedDelete")
     @Operation(summary = "장바구니에서 선택 상품 여러개 삭제")
-    public ResponseEntity<Object> selectedDeleteCart(@RequestBody List<RequestDeleteSelectedCart> request) {
+    public ResponseEntity<Object> selectedDeleteCart(@RequestBody RequestDeleteSelectedCart request) {
         iCartService.deleteSelectedCart(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

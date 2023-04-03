@@ -23,7 +23,7 @@ public interface ICartService {
 
     void deleteCart(Long id);
 
-    void deleteSelectedCart(List<RequestDeleteSelectedCart> requestList);
+    void deleteSelectedCart(RequestDeleteSelectedCart requestList);
 
     void deleteAll(String userId);
 }
