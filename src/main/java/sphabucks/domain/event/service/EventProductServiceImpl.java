@@ -54,16 +54,15 @@ public class EventProductServiceImpl implements IEventProductService{
 
     @Override
     public List<ResponseProductList> recommendMD() {
-        List<ResponseProductList> responseProductLists = new ArrayList<>();    // 최종 결과로 보내지는 리스트
-
+        List<ResponseProductList> responseProductLists = new ArrayList<>();
         if(iEventRepository.findAllByIsRecommendIsTrue().isEmpty()){
             throw new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode());
         }
 
-        List<Event> recommendEvents = iEventRepository.findAllByIsRecommendIsTrue();    // 추천MD에 해당하는 이벤트 리스트
+        List<Event> recommendEvents = iEventRepository.findAllByIsRecommendIsTrue();
         recommendEvents.forEach( event -> {
             Long eventId = event.getId();
-            responseProductLists.add(ResponseProductList.builder() // 하나의 이벤트에 대한 내용과 상품들이 모두 담길 response
+            responseProductLists.add(ResponseProductList.builder()
                     .id(eventId)
                     .name(iEventRepository.findById(eventId)
                             .orElseThrow(()-> new BusinessException(ErrorCode.EVENT_NOT_EXISTS, ErrorCode.EVENT_NOT_EXISTS.getCode()))

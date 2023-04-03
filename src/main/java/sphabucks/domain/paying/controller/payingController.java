@@ -26,9 +26,6 @@ public class payingController {
     public String reTest(Model model,@RequestParam Map<String, Object> map) {
 
         model.addAttribute("name", "지욱이");
-
-        log.info("@@@@@@@@@@@@@@@ {}", map);
-
         return "goFront.html";
     }
 

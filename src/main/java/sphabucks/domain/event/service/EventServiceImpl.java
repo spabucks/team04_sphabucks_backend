@@ -23,10 +23,7 @@ import java.util.*;
 public class EventServiceImpl implements IEventService {
 
     private final IEventRepository iEventRepository;
-    private final IEventProductListRepository iEventProductListRepository;
     private final IEventImageRepository iEventImageRepository;
-    private final IProductRepository iProductRepository;
-    private final IProductImageRepo iProductImageRepo;
 
 
     @Override

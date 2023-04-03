@@ -8,9 +8,6 @@ import java.util.Optional;
 
 public interface ICartRepo extends JpaRepository<Cart, Long> {
 
-    List<Cart> findAllByUserId(Long userId);
-
-    // 고객의 장바구니에서 남아있는 상품들에 대한 정보만 조회
     List<Cart> findAllByUserUserIdAndIsDeleteIsFalse(String userId);
 
     List<Cart> findAllByProductId(Long productId);

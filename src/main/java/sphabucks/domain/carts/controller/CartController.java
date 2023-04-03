@@ -33,8 +33,6 @@ public class CartController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userId = userDetails.getUsername();
 
-        // 성공: ResponseEntity.status(HttpStatus.OK).build();
-        // 실패: return ResponseEntity.status(HttpStatus.BAD_REQUEST).body((5 - cart.getAmount()));
         return iCartService.addCart(userId, requestCart);
     }
 
