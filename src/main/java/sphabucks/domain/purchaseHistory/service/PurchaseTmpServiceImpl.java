@@ -67,6 +67,7 @@ public class PurchaseTmpServiceImpl implements IPurchaseTmpService {
 
             ResponsePurchaseTmp responsePurchaseTmp = ResponsePurchaseTmp.builder()
                     .cartId(item.getCart().getId())
+                    .productId(product.getId())
                     .productName(product.getName())
                     .price(product.getPrice())
                     .count(item.getCart().getAmount())
