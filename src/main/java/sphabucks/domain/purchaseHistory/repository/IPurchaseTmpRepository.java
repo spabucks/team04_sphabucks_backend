@@ -19,4 +19,6 @@ public interface IPurchaseTmpRepository extends JpaRepository<PurchaseTmp, Long>
     void deletePurchaseTmp(@Param(value="userId") String userId);
 
     List<PurchaseTmp> findByUserId(String userId);
+
+    List<PurchaseTmp> findAllByUserId(String userId);
 }

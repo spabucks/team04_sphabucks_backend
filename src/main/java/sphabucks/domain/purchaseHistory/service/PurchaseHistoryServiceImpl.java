@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sphabucks.domain.carts.repository.ICartRepo;
 import sphabucks.domain.purchaseHistory.model.PurchaseHistory;
+import sphabucks.domain.purchaseHistory.model.PurchaseTmp;
 import sphabucks.domain.purchaseHistory.repository.IPurchaseTmpRepository;
 import sphabucks.domain.purchaseHistory.vo.IResponsePaymentNum;
 import sphabucks.domain.purchaseHistory.vo.ResponsePurchaseHistory;
@@ -39,12 +40,21 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
 
     @Override
     @Transactional
-    public void addPurchaseHistory(List<Long> selected, String userId) {
+    public void addPurchaseHistory(String userId) {
 
         String paymentNum = createPaymentNum();
         if(iPurchaseHistoryRepository.findByPaymentNum(paymentNum).isPresent()){
             throw new BusinessException(ErrorCode.DUPLICATE_HISTORY, ErrorCode.DUPLICATE_HISTORY.getCode());
         }
+
+        if(iPurchaseTmpRepository.findAllByUserId(userId).isEmpty()) {
+            throw new BusinessException(ErrorCode.PURCHASE_TMP_NOT_EXISTS,ErrorCode.PURCHASE_TMP_NOT_EXISTS.getCode());
+        }
+        List<PurchaseTmp> list = iPurchaseTmpRepository.findAllByUserId(userId);
+        List<Long> selected = new ArrayList<>();
+        list.forEach(item -> {
+            selected.add(item.getCart().getId());
+        });
 
         for (Long aLong : selected) {
             Cart cart = iCartRepo.findById(aLong)
