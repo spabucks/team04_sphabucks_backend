@@ -34,12 +34,10 @@ public class GiftIconServiceImpl implements IGiftIconService{
         GiftIcon giftIcon = iGiftIconRepository.findById(id)
                 .orElseThrow(()-> new BusinessException(ErrorCode.GIFTICON_NOT_EXISTS, ErrorCode.GIFTICON_NOT_EXISTS.getCode()));
 
-        ResponseGiftIcon responseGiftIcon = ResponseGiftIcon.builder()
+        return ResponseGiftIcon.builder()
                 .Id(giftIcon.getId())
                 .content(giftIcon.getContent())
                 .number(giftIcon.getNumber())
                 .build();
-
-        return responseGiftIcon;
     }
 }

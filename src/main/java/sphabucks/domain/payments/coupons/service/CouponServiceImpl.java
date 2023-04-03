@@ -36,15 +36,13 @@ public class CouponServiceImpl implements ICouponService{
         Coupon coupon = iCouponRepo.findById(id)
                 .orElseThrow(()-> new BusinessException(ErrorCode.COUPON_NOT_EXISTS, ErrorCode.COUPON_NOT_EXISTS.getCode()));
 
-        ResponseCoupon responseCoupon = ResponseCoupon.builder()
+        return ResponseCoupon.builder()
                 .Id(coupon.getId())
                 .name(coupon.getName())
                 .endDate(coupon.getEndDate())
                 .content(coupon.getContent())
                 .image(coupon.getImage())
                 .build();
-
-        return responseCoupon;
     }
 
     @Override

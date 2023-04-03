@@ -1,6 +1,5 @@
 package sphabucks.domain.payments.gifticons.vo;
 
-import jakarta.persistence.Column;
 import lombok.*;
 
 import java.util.Date;
