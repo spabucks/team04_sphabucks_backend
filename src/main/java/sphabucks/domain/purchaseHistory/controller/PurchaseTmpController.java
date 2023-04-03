@@ -28,11 +28,11 @@ public class PurchaseTmpController {
 
     @PostMapping("/add")
     @Operation(summary = "임시 저장용 구매 테이블에 값 추가", description = "결제하는 상품 담아두는 임시 테이블에 값 추가")
-    public ResponseEntity<Object> addPurchaseTmp(Authentication authentication, @RequestBody List<Long> cartList) {
+    public ResponseEntity<Object> addPurchaseTmp(Authentication authentication, @RequestBody List<Long> cartId) {
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         String userId = userDetails.getUsername();
 
-        iPurchaseTmpService.addPurchaseTmp(userId, cartList);
+        iPurchaseTmpService.addPurchaseTmp(userId, cartId);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
