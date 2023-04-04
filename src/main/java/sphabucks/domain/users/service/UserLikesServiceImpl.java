@@ -50,19 +50,11 @@ public class UserLikesServiceImpl implements IUserLikesService{
     @Override
     public List<UserLikes> getUserLikes(String userId) {
 
-        if(iUserLikesRepo.findUserLikesByUserUserId(userId).isEmpty()){
-            throw new BusinessException(ErrorCode.LIKE_NOT_EXISTS, ErrorCode.LIKE_NOT_EXISTS.getCode());
-        }
-
         return iUserLikesRepo.findUserLikesByUserUserId(userId);
     }
 
     @Override
     public List<UserLikes> getAll() {
-
-        if(iUserLikesRepo.findAll().isEmpty()){
-            throw new BusinessException(ErrorCode.LIKE_NOT_EXISTS, ErrorCode.LIKE_NOT_EXISTS.getCode());
-        }
 
         return iUserLikesRepo.findAll();
     }
