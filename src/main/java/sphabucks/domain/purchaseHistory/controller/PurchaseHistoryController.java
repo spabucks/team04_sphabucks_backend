@@ -35,8 +35,20 @@ public class PurchaseHistoryController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/get/all")
+    @Operation(summary = "구매 내역 전체 조회", description = "프론트와 테스트 후 수정 필요")
+    public ResponseEntity<Object> getPurchaseHistoryAll(Authentication authentication) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK, iPurchaseHistoryService.getPurchaseHistoryListAll(userId)));
+    }
+
     @GetMapping("/get")
-    @Operation(summary = "구매 내역 조회", description = "프론트와 테스트 후 수정 필요")
+    @Operation(summary = "가장 최근 구매 내역 조회", description = "프론트와 테스트 후 수정 필요")
     public ResponseEntity<Object> getPurchaseHistory(Authentication authentication) {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -44,7 +56,7 @@ public class PurchaseHistoryController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(HttpStatus.OK, iPurchaseHistoryService.getPurchaseHistoryList(userId)));
+                .body(new ResponseDTO(HttpStatus.OK, iPurchaseHistoryService.getPurchaseHistoryListOne(userId)));
     }
 
 }

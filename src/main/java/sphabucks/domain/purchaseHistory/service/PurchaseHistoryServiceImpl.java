@@ -87,7 +87,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
     }
 
     @Override
-    public List<ResponsePurchaseHistoryList> getPurchaseHistoryList(String userId) {
+    public List<ResponsePurchaseHistoryList> getPurchaseHistoryListAll(String userId) {
 
         log.info("@@@@@@@@@@@@@@@@@@@@@@@1");
 
@@ -166,6 +166,88 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                 result.add(responsePurchaseHistoryList);
 
             });
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<ResponsePurchaseHistoryList> getPurchaseHistoryListOne(String userId) {
+
+        log.info("@@@@@@@@@@@@@@@@@@@@@@@1");
+
+        List<IResponsePaymentNum> paymentNumList = iPurchaseHistoryRepository.findAllPaymentNum(
+                iUserRepository.findByUserId(userId)
+                        .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                        .getId()
+        );
+
+        List<ResponsePurchaseHistoryList> result = new ArrayList<>();
+
+        if(!paymentNumList.isEmpty()){
+            IResponsePaymentNum paymentNum = paymentNumList.get(0) ;
+                List<PurchaseHistory> purchaseHistoryList = iPurchaseHistoryRepository.findAllByPaymentNum(
+                        iUserRepository.findByUserId(userId)
+                                .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
+                                .getId(), paymentNum.getPaymentNum()
+                );
+
+                List<ResponsePurchaseHistory> tmp2 = new ArrayList<>();
+
+
+                purchaseHistoryList.forEach(purchaseHistory -> {
+                    ResponsePurchaseHistory responsePurchaseHistory = ResponsePurchaseHistory.builder()
+                            .id(purchaseHistory.getId())
+                            .productName(purchaseHistory.getProductName())
+                            .amount(purchaseHistory.getAmount())
+                            .sum(purchaseHistory.getSum())
+                            .type(purchaseHistory.getType())
+                            .paymentNum(purchaseHistory.getPaymentNum())
+                            .orderDate(purchaseHistory.getCreateDate())
+                            .sp_status(purchaseHistory.getSpStatus())
+                            .or_status(purchaseHistory.getOrStatus())
+                            .image(purchaseHistory.getImage())
+                            .build();
+
+                    tmp2.add(responsePurchaseHistory);
+
+                });
+
+                ResponsePurchaseHistoryList responsePurchaseHistoryList;
+                if (purchaseHistoryList.size() > 1) {
+                    responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
+                            .id(purchaseHistoryList.get(0).getId())
+                            .orderName(
+                                    purchaseHistoryList.get(0).getProductName() + " 외 "
+                                            + (purchaseHistoryList.size() - 1) + " 상품")
+                            .amount(paymentNum.getAmount())
+                            .sum(paymentNum.getSum())
+                            .paymentNum(purchaseHistoryList.get(0).getPaymentNum())
+                            .orderDate(purchaseHistoryList.get(0).getCreateDate())
+                            .sp_status(purchaseHistoryList.get(0).getSpStatus())
+                            .or_status(purchaseHistoryList.get(0).getOrStatus())
+                            .image(purchaseHistoryList.get(0).getImage())
+                            .list(tmp2)
+                            .build();
+
+                } else {
+                    responsePurchaseHistoryList = ResponsePurchaseHistoryList.builder()
+                            .id(purchaseHistoryList.get(0).getId())
+                            .orderName(
+                                    purchaseHistoryList.get(0).getProductName())
+                            .amount(paymentNum.getAmount())
+                            .sum(paymentNum.getSum())
+                            .paymentNum(purchaseHistoryList.get(0).getPaymentNum())
+                            .orderDate(purchaseHistoryList.get(0).getCreateDate())
+                            .sp_status(purchaseHistoryList.get(0).getSpStatus())
+                            .or_status(purchaseHistoryList.get(0).getOrStatus())
+                            .image(purchaseHistoryList.get(0).getImage())
+                            .list(tmp2)
+                            .build();
+
+                }
+                result.add(responsePurchaseHistoryList);
+
         }
 
         return result;
