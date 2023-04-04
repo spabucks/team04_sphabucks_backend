@@ -8,6 +8,8 @@ public interface IPurchaseHistoryService {
 
     void addPurchaseHistory(String userId);
 
-    List<ResponsePurchaseHistoryList> getPurchaseHistoryList(String userId);
+    List<ResponsePurchaseHistoryList> getPurchaseHistoryListAll(String userId);
+
+    List<ResponsePurchaseHistoryList> getPurchaseHistoryListOne(String userId);
 
 }

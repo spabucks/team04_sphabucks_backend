@@ -20,7 +20,7 @@ public interface IPurchaseHistoryRepository extends JpaRepository<PurchaseHistor
     List<IResponsePaymentNum> findAllPaymentNum(Long userId);
 
     @Query(value = "select * from purchase_history " +
-            "where user_id = ? and payment_num = ?", nativeQuery = true)
+            "where user_id = ? and payment_num = ? order by create_date desc", nativeQuery = true)
     List<PurchaseHistory> findAllByPaymentNum(Long userId, String paymentNum);
 
 
