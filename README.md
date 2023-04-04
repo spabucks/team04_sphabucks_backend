@@ -1,7 +1,7 @@
 ## RestAPI test(swagger 3.0)
 http://sphabucks.xyz/swagger-ui.html
 
-## ENV
+## 💻 ENV
 
 * Java 17 이상
 * Spring
@@ -18,9 +18,7 @@ http://sphabucks.xyz/swagger-ui.html
 * Swagger
   * springdoc-openapi-starter-webmvc-ui:2.0.3
 
-
-
-## 백엔드
+## 👨‍💻 백엔드
 * 주영민
   * 결제 API(Iamport) 적용
   * 검색 및 필터링 API 적용
@@ -31,8 +29,9 @@ http://sphabucks.xyz/swagger-ui.html
   * dockerhub와 GCP(Google Cloud Platform)을 이용한 서버 배포
   * SecurityConfig에 corsConfiguration을 추가하여 CORS에러 처리
 
+## 👇 디렉토리 구조
 <details>
-<summary>디렉토리 구조</summary>
+<summary>src</summary>
 <div>
 
 ```
@@ -59,7 +58,7 @@ http://sphabucks.xyz/swagger-ui.html
 </div>
 </details>
 
-## 핵심 기능
+## ✨ 핵심 기능
 
 1. 로그인/회원가입
    * 회원 가입 시 Redis 서버와 JavaMailSender를 이용하여 사용자인증을 구현하였습니다. 
