@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import sphabucks.domain.carts.repository.ICartRepo;
+import sphabucks.domain.carts.service.ICartService;
 import sphabucks.domain.purchaseHistory.model.PurchaseHistory;
 import sphabucks.domain.purchaseHistory.repository.IPurchaseTmpRepository;
 import sphabucks.domain.purchaseHistory.vo.IResponsePaymentNum;
@@ -36,6 +37,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
     private final IProductImageRepo iProductImageRepo;
     private final ICartRepo iCartRepo;
     private final IPurchaseTmpRepository iPurchaseTmpRepository;
+    private final ICartService iCartService;
 
     @Override
     @Transactional
@@ -68,7 +70,9 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                     .build();
 
             iPurchaseHistoryRepository.save(purchaseHistory);
-            iCartRepo.deleteById(aLong);
+            //iCartRepo.deleteById(aLong);
+            iCartService.deleteCart(aLong);
+
         }
         iPurchaseTmpRepository.deletePurchaseTmp(userId);
     }
