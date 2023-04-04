@@ -89,7 +89,6 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
     @Override
     public List<ResponsePurchaseHistoryList> getPurchaseHistoryListAll(String userId) {
 
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@1");
 
         List<IResponsePaymentNum> paymentNumList = iPurchaseHistoryRepository.findAllPaymentNum(
                 iUserRepository.findByUserId(userId)
@@ -174,18 +173,27 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
     @Override
     public List<ResponsePurchaseHistoryList> getPurchaseHistoryListOne(String userId) {
 
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@1");
+        PurchaseHistory purchaseHistoryOne = iPurchaseHistoryRepository.findAllByUserIdOrderByIdDesc(
+                iUserRepository.findByUserId(userId).get().getId()).get(0);
 
-        List<IResponsePaymentNum> paymentNumList = iPurchaseHistoryRepository.findAllPaymentNum(
+        log.info("1111111111111111111111111111111 {}", purchaseHistoryOne.getPaymentNum());
+
+        List<IResponsePaymentNum> paymentNumList = iPurchaseHistoryRepository.findRecentPaymentNum(
                 iUserRepository.findByUserId(userId)
                         .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
-                        .getId()
+                        .getId(),
+                purchaseHistoryOne.getPaymentNum()
         );
+
+        log.info("222222222222222222222222222222 {}", paymentNumList.get(0).getPaymentNum());
+        log.info("222222222222222222222222222222 {}", paymentNumList.get(0).getAmount());
+        log.info("222222222222222222222222222222 {}", paymentNumList.get(0).getSum());
+
 
         List<ResponsePurchaseHistoryList> result = new ArrayList<>();
 
         if(!paymentNumList.isEmpty()){
-            IResponsePaymentNum paymentNum = paymentNumList.get(0) ;
+            paymentNumList.forEach(paymentNum -> {
                 List<PurchaseHistory> purchaseHistoryList = iPurchaseHistoryRepository.findAllByPaymentNum(
                         iUserRepository.findByUserId(userId)
                                 .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
@@ -248,6 +256,7 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                 }
                 result.add(responsePurchaseHistoryList);
 
+            });
         }
 
         return result;
