@@ -31,7 +31,7 @@ public class PurchaseTmpServiceImpl implements IPurchaseTmpService {
 
     @Override
     @Transactional
-    public void addPurchaseTmp(String userId, List<Long> cartList) {
+    public void addPurchaseTmp(String userId, RequestPurchaseTmp requestPurchaseTmp) {
 
         if (iUserRepository.findByUserId(userId).isEmpty()){
             throw new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode());
@@ -39,7 +39,7 @@ public class PurchaseTmpServiceImpl implements IPurchaseTmpService {
 
         iPurchaseTmpRepository.deletePurchaseTmp(userId);
 
-        cartList.forEach(item -> {
+        requestPurchaseTmp.getCartId().forEach(item -> {
             if (iCartRepo.findByIdAndUserUserId(item, userId).isEmpty()) {
                 throw new BusinessException(ErrorCode.CARD_NOT_EXISTS,ErrorCode.CARTS_NOT_EXISTS.getCode());
             }
@@ -67,6 +67,7 @@ public class PurchaseTmpServiceImpl implements IPurchaseTmpService {
 
             ResponsePurchaseTmp responsePurchaseTmp = ResponsePurchaseTmp.builder()
                     .cartId(item.getCart().getId())
+                    .productId(product.getId())
                     .productName(product.getName())
                     .price(product.getPrice())
                     .count(item.getCart().getAmount())

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IPurchaseTmpService {
 
-    void addPurchaseTmp(String userId, List<Long> cartList);
+    void addPurchaseTmp(String userId, RequestPurchaseTmp requestPurchaseTmp);
 
     List<ResponsePurchaseTmp> getPurchaseTmp(String userId);
 
