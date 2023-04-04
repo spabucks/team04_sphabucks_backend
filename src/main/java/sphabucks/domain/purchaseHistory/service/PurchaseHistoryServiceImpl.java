@@ -80,7 +80,6 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                     .build();
 
             iPurchaseHistoryRepository.save(purchaseHistory);
-            //iCartRepo.deleteById(aLong);
             iCartService.deleteCart(aLong);
 
         }
