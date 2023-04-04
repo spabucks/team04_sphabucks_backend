@@ -176,19 +176,12 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
         PurchaseHistory purchaseHistoryOne = iPurchaseHistoryRepository.findAllByUserIdOrderByIdDesc(
                 iUserRepository.findByUserId(userId).get().getId()).get(0);
 
-        log.info("1111111111111111111111111111111 {}", purchaseHistoryOne.getPaymentNum());
-
         List<IResponsePaymentNum> paymentNumList = iPurchaseHistoryRepository.findRecentPaymentNum(
                 iUserRepository.findByUserId(userId)
                         .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
                         .getId(),
                 purchaseHistoryOne.getPaymentNum()
         );
-
-        log.info("222222222222222222222222222222 {}", paymentNumList.get(0).getPaymentNum());
-        log.info("222222222222222222222222222222 {}", paymentNumList.get(0).getAmount());
-        log.info("222222222222222222222222222222 {}", paymentNumList.get(0).getSum());
-
 
         List<ResponsePurchaseHistoryList> result = new ArrayList<>();
 
@@ -266,9 +259,10 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
         StringBuilder sb = new StringBuilder();
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMMdd");
+        sb.append("OR");
         sb.append(currentDate.format(dateTimeFormatter));
         sb.append("-");
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
             Random random = new Random();
             sb.append((random.nextInt(10)));
         }
