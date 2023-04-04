@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import sphabucks.domain.productimage.model.ProductImage;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IProductImageRepo extends JpaRepository<ProductImage, Long> {
     @Query(value = "select * from product_image where product_id = ? order by chk",nativeQuery = true)
