@@ -76,12 +76,8 @@ public class AuthenticationService {
         redis.createEmailByRefreshToken(user.getLoginId(), refreshToken);
 
         return AuthenticationResponse.builder()
-                .userId(userRepository.findByLoginId(authenticationRequest.getLoginId())
-                        .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()))
-                        .getUserId())
                 .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .nickName(user.getNickname())
+                .nickName(user.getNickname() == null ? user.getLoginId() : user.getNickname() )
                 .build();
     }
 
