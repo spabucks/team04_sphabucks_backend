@@ -24,7 +24,7 @@ public class ReceivingNotificationController {
     private final IReceivingNotificationService iReceivingNotificationService;
 
     @PostMapping("/add")
-    @Operation(summary = "입고 알림 추가", description = "구현 완료")
+    @Operation(summary = "입고 알림 추가")
     public ResponseEntity<Object> addReceivingNotification(
             Authentication authentication,
             @RequestBody RequestReceivingNotification requestReceivingNotification){
@@ -37,7 +37,7 @@ public class ReceivingNotificationController {
     }
 
     @GetMapping("/get")
-    @Operation(summary = "입고 알림 리스트 ", description = "구현 완료")
+    @Operation(summary = "입고 알림 리스트 ")
     public ResponseEntity<Object> getReceivingNotification(
             Authentication authentication){
 

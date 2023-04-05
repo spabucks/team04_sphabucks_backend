@@ -21,13 +21,13 @@ public class SmallCategoryController {
     private final ISmallCategoryService iSmallCategoryService;
 
     @GetMapping("/get/{smallCategoryId}")
-    @Operation(summary = "소분류 조회", description = "상품 조회도 아닌 단순한 소분류 정보 조회 - 삭제 예정?")
+    @Operation(summary = "소분류 조회", description = "상품 조회도 아닌 단순한 소분류 정보 조회")
     public ResponseEntity<Object> getSmallCategory(@PathVariable Long smallCategoryId){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iSmallCategoryService.getSmallCategory(smallCategoryId)));
     }
 
     @GetMapping("/get/all")
-    @Operation(summary = "모든 소분류 조회", description = "필요 없어 보이므로 삭제 예정?")
+    @Operation(summary = "모든 소분류 조회")
     public ResponseEntity<Object> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iSmallCategoryService.getAll()));
     }

@@ -1,17 +1,17 @@
-package sphabucks.domain.carts.vo;
+package sphabucks.domain.purchaseHistory.vo;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestDeleteSelectedCart {
+public class RequestPurchaseTmp {
 
     private List<Long> cartId;
 }

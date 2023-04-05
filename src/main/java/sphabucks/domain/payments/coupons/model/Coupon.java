@@ -25,7 +25,7 @@ public class Coupon {
     private Date startDate;    // 발행일
     private Date endDate;  // 만료일
     private String image;   // 쿠폰 이미지
-    private String qrImage;    // QR코드 이미지
+    private String qrImage;    // QR 코드 이미지
     private String content; // 쿠폰 내용
     private String number;  // 쿠폰 번호
     private String alt; // 이미지 설명

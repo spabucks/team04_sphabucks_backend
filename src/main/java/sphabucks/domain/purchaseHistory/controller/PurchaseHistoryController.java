@@ -26,17 +26,29 @@ public class PurchaseHistoryController {
 
     @PostMapping("/add")
     @Operation(summary = "구매 내역 추가", description = "폼태그로 데이터 어떻게 넘어오는지 확인 후 수정 필요할 듯")
-    public ResponseEntity<Object> addPurchaseHistory(Authentication authentication, @RequestBody List<Long> selected){
+    public ResponseEntity<Object> addPurchaseHistory(Authentication authentication){
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userId = userDetails.getUsername();
 
-        iPurchaseHistoryService.addPurchaseHistory(selected, userId);
+        iPurchaseHistoryService.addPurchaseHistory(userId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/get/all")
+    @Operation(summary = "구매 내역 전체 조회", description = "프론트와 테스트 후 수정 필요")
+    public ResponseEntity<Object> getPurchaseHistoryAll(Authentication authentication) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(HttpStatus.OK, iPurchaseHistoryService.getPurchaseHistoryListAll(userId)));
+    }
+
     @GetMapping("/get")
-    @Operation(summary = "구매 내역 조회", description = "프론트와 테스트 후 수정 필요")
+    @Operation(summary = "가장 최근 구매 내역 조회", description = "프론트와 테스트 후 수정 필요")
     public ResponseEntity<Object> getPurchaseHistory(Authentication authentication) {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -44,30 +56,8 @@ public class PurchaseHistoryController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDTO(HttpStatus.OK, iPurchaseHistoryService.getPurchaseHistoryList(userId)));
+                .body(new ResponseDTO(HttpStatus.OK, iPurchaseHistoryService.getPurchaseHistoryListOne(userId)));
     }
 
-
-
-
-
-
-//    @GetMapping("/test")
-//    public List<String> test (@RequestHeader String userId) {
-//        return iPurchaseHistoryService.getAllPaymentNum(userId);
-//    }
-//
-//    @GetMapping("/test2")
-//    public List<List<PurchaseHistory>> test2 (@RequestHeader String userId) {
-//        List<String> list = iPurchaseHistoryService.getAllPaymentNum(userId);
-//        List<List<PurchaseHistory>> responsePurchaseHistoryLists = new ArrayList<>();
-//
-//        list.forEach(item -> {
-//            List<PurchaseHistory> purchaseHistoryList = iPurchaseHistoryService.getAllByPaymentNum(userId, item);
-//            responsePurchaseHistoryLists.add(purchaseHistoryList);
-//        });
-//
-//        return responsePurchaseHistoryLists;
-//    }
 
 }

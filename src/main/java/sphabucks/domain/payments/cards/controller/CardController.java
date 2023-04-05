@@ -19,14 +19,14 @@ public class CardController {
     private final ICardService iCardService;
 
     @PostMapping("/add")
-    @Operation(summary = "스타벅스 카드 추가", description = "어드민 권한 - 삭제 예정?")
+    @Operation(summary = "스타벅스 카드 추가", description = "어드민 권한")
     public ResponseEntity<Object> addCard(@RequestBody RequestCard requestCard) {
         iCardService.addCard(requestCard);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get/{id}")
-    @Operation(summary = "스타벅스 카드 조회", description = "사용자가 등록한 카드 정보 조회?")
+    @Operation(summary = "스타벅스 카드 조회", description = "사용자가 등록한 카드 정보 조회")
     public ResponseEntity<Object> getCard(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iCardService.getCard(id)));
     }

@@ -89,8 +89,6 @@ public class ProductCategoryListServiceImpl implements IProductCategoryListServi
     @Override
     public List<ResponseProductList> getOtherProductByProductId(Long productId) {
         List<ResponseProductList> return_value = new ArrayList<>();
-        // 1. 현재 보고있는 상품과 동일한 이벤트 상품들을 검색
-        // 2. 현재 보고있는 상품과 동일한 소분류 카테고리 상품들을 검색
 
         Long currentEventId = iEventProductListRepository.findByProductId(productId)
                 .orElseThrow(()-> new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()))

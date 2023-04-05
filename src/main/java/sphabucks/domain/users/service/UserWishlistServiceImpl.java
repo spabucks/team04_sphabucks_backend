@@ -34,16 +34,14 @@ public class UserWishlistServiceImpl implements IUserWishlistService {
     @Transactional
     public void clickWishList(String userId, RequestUserWishlist request) {
 
-        // uuid 를 이용하여 조회한 user
         User user = iUserRepository.findByUserId(userId)
                 .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode()));
 
-        // 해당 유저가 상품을 위시리스트에 추가했던 내역이 있었다면
         if (iUserWishlistRepo.existsByUserUserIdAndProductId(userId, request.getProductId())) {
             log.info("db update");
             UserWishlist wishlist = iUserWishlistRepo.findByUserIdAndProductId(user.getId(), request.getProductId());
-            wishlist.setIsDeleted(!wishlist.getIsDeleted());    // 기존의 정보와 반대로 저장
-        } else { // 위시 리스트에 추가 되었던 내역이 없다면
+            wishlist.setIsDeleted(!wishlist.getIsDeleted());
+        } else {
             log.info("new data");
             iUserWishlistRepo.save(UserWishlist.builder()
                             .user(user)

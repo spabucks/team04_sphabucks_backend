@@ -29,26 +29,4 @@ public class RedisConfig {
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);
         return lettuceConnectionFactory;
     }
-    // 내 PC (Redis)에 비밀번호를 안걸면 실행된다 but , 비번을 걸고 비번세팅을 하면 되지 않는다.
-    // 비밀번호 만들고, 저장하는 객체가 작동되지 않아서 ..
-    // 사용하려면 denpendency를 reactiveredis로 설정하면 된다.
-
-//    @Bean
-//    @Primary
-//    public ReactiveRedisConnectionFactory reactiveRedisConnectionFactory(RedisConfiguration defaultRedisConfig) {
-//        LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-//                .useSsl().build();
-//        return new LettuceConnectionFactory(defaultRedisConfig, lettuceClientConfiguration);
-//    }
-//
-//    @Bean
-//    public RedisConfiguration defaultRedisConfig() {
-//        log.info("redis login information : {} {} {} ", host, password, port);
-//
-//        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
-//        config.setHostName(host);
-//        config.setPassword(RedisPassword.of(password));
-//        config.setPort(port);
-//        return config;
-//    }
 }

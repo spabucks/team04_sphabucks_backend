@@ -51,15 +51,6 @@ public class ProductRepository {
             }
             jpql += " p.product.size in :size";
         }
-//        if (requestSearchParam.getPrice() != null) {
-//            if (isFirst) {
-//                jpql += " where";
-//                isFirst = false;
-//            } else {
-//                jpql += " and";
-//            }
-//            jpql += " (p.product.price between :price and :price2)";
-//        }
         if (requestSearchParam.getPrice() != null) {
             if (isFirst) {
                 jpql += " where";
@@ -110,11 +101,9 @@ public class ProductRepository {
 
 
         TypedQuery<ProductSearch> query = em.createQuery(jpql, ProductSearch.class)
-                .setMaxResults(10);
+                .setMaxResults(1000);
 
-        if(page != null) {
-            query.setFirstResult(page.intValue()*10);
-        }
+
 
         if (requestSearchParam.getKeyword() != null) {
             query.setParameter("keyword", "%"+requestSearchParam.getKeyword()+"%");

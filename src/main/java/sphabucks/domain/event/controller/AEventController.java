@@ -21,7 +21,7 @@ public class AEventController {
     private final IEventService iEventService;
 
     @PostMapping("/add")
-    @Operation(summary = "이벤트 추가", description = "어드민 권한 - 아마 삭제될 수도?")
+    @Operation(summary = "이벤트 추가", description = "어드민 권한")
     public ResponseEntity<Object> addEvent(@RequestBody RequestEvent requestEvent){
         iEventService.addEvent(requestEvent);
 
@@ -29,7 +29,7 @@ public class AEventController {
     }
 
     @PostMapping("/addImage")
-    @Operation(summary = "이벤트 이미지 추가", description = "어드민 권한 - 아마 삭제될 수도?")
+    @Operation(summary = "이벤트 이미지 추가", description = "어드민 권한")
     public ResponseEntity<Object> addEventImage(@RequestBody RequestEventImage requestEventImage) {
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iEventService.addEventImage(requestEventImage)));

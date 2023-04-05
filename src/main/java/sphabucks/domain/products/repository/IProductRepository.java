@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findAllById(Long id);
 
     List<Product> findByNameContains(String keyword);
 
     Optional<Product> findByName(String name);
+
+
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Product p SET p.likeCount = :likeCount where p.id = :id ")

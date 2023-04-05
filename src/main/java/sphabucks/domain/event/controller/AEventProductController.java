@@ -20,7 +20,7 @@ public class AEventProductController {
     private final IEventProductService iEventProductService;
 
     @PostMapping("/addProductList")
-    @Operation(summary = "이벤트 상품 추가", description = "어드민 권한 - 아마 삭제될 수도?")
+    @Operation(summary = "이벤트 상품 추가", description = "어드민 권한")
     public ResponseEntity<Object> addEventProductList(@RequestBody RequestEventProductList requestEventProductList) {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,
                 iEventProductService.addEventProductList(requestEventProductList)));

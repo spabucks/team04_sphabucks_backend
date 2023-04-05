@@ -27,7 +27,6 @@ public class EventProductController {
     @GetMapping("/getProductList/{id}")
     @Operation(summary = "이벤트 상품 조회")
     public ResponseEntity<Object> getEventProductList(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,
-                iEventProductService.getEventProductList(id)));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, iEventProductService.getEventProductList(id)));
     }
 }

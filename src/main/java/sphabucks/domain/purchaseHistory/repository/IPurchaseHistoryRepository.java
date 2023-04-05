@@ -13,17 +13,23 @@ public interface IPurchaseHistoryRepository extends JpaRepository<PurchaseHistor
 
     Optional<PurchaseHistory> findByPaymentNum(String paymentNum);
 
-    // 거래내역 조회 1. userId에 해당하는 모든 주문번호 조회 (중복x)
-    @Query(value = "select payment_num as paymentNum, sum(sum) as sum, sum(amount) as amount " +
+    @Query(value = "select create_date, payment_num as paymentNum, sum(sum) as sum, sum(amount) as amount " +
             "from purchase_history " +
             "where user_id = ? " +
-            "group by payment_num", nativeQuery = true)
+            "group by payment_num, create_date order by create_date desc", nativeQuery = true)
     List<IResponsePaymentNum> findAllPaymentNum(Long userId);
 
+    List<PurchaseHistory> findAllByUserIdOrderByIdDesc(Long userId);
+
+    @Query(value = "select payment_num as paymentNum, sum(sum) as sum, sum(amount) as amount " +
+            "from purchase_history " +
+            "where user_id = ? and payment_num = ? " +
+            "group by payment_num", nativeQuery = true)
+    List<IResponsePaymentNum> findRecentPaymentNum(Long userId, String paymentNum);
+
     @Query(value = "select * from purchase_history " +
-            "where user_id = ? and payment_num = ?", nativeQuery = true)
+            "where user_id = ? and payment_num = ? order by create_date desc", nativeQuery = true)
     List<PurchaseHistory> findAllByPaymentNum(Long userId, String paymentNum);
 
-    //List<PurchaseHistory> findAllByPaymentNumAndUserId(Long userId, String paymentNum);
 
 }

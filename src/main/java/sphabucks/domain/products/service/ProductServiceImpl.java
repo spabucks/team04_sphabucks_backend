@@ -124,11 +124,10 @@ public class ProductServiceImpl implements IProductService{
         return responseSearchProductList;
     }
 
-    // 베스트 상품 조회 메서드 (대분류 카테고리별 조회)
     @Override
     public List<ResponseProduct> getBestBigCategory(Long bigCategoryId) {
 
-        if(bigCategoryId != 0 && iProductCategoryListRepository.findTop30ByBigCategoryId(bigCategoryId).isEmpty()){
+        if(bigCategoryId != 0 && iProductCategoryListRepository.findTop30ByBigCategoryIdOrderByProductLikeCountDesc(bigCategoryId).isEmpty()){
             throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
         }
 
@@ -136,7 +135,7 @@ public class ProductServiceImpl implements IProductService{
         if (bigCategoryId == 0) {
             productCategoryLists = iProductCategoryListRepository.findAll();
         } else {
-            productCategoryLists = iProductCategoryListRepository.findTop30ByBigCategoryId(bigCategoryId);
+            productCategoryLists = iProductCategoryListRepository.findTop30ByBigCategoryIdOrderByProductLikeCountDesc(bigCategoryId);
         }
 
 
@@ -170,7 +169,6 @@ public class ProductServiceImpl implements IProductService{
     }
 
 
-    // 상품 검색 기능
     public List<ResponseSearchProduct> searchProductKeyword(String keyword) {
 
         if(iProductRepository.findByNameContains(keyword).isEmpty()){
@@ -194,7 +192,6 @@ public class ProductServiceImpl implements IProductService{
                             .getEvent().getSeason())
                     .tag(tag)
                     .productName(product.getName())
-                    //.imgUrl(iProductImageRepo.findAllByProductId(product.getId()).get(0).getImage())
                     .imgUrl(iProductImageService.getProductImage(product.getId()).get(0).getImage())
                     .price(product.getPrice())
                     .size(product.getSize())
@@ -210,7 +207,6 @@ public class ProductServiceImpl implements IProductService{
         return responseSearchProductList;
     }
 
-    // 상품 검색시 상단 메뉴 호출 (키워드 검색)
     @Override
     public List<ResponseBigCategory> searchProductKeywordMenu(String keyword) {
         List<ResponseSearchProduct> responseSearchProductList = searchProductKeyword(keyword);
@@ -259,7 +255,6 @@ public class ProductServiceImpl implements IProductService{
         return responseBigCategoryList;
     }
 
-    // 빅카테고리 조회 (햄버거 메뉴에서 넘어갈 떄 사용)
     @Override
     public List<ResponseBigCategory> getAllBigCategory() {
 
@@ -290,17 +285,14 @@ public class ProductServiceImpl implements IProductService{
         return result;
     }
 
-    // 빅카테고리별 서브 카테고리 조회 (햄버거 메뉴때 사용)
     @Override
     public List<ResponseCategoryMenu> getAllSubCategory(Long bigCategoryId) {
 
         if ( bigCategoryId != 0 && iBigCategoryRepository.findById(bigCategoryId).isEmpty() ) {
             throw new BusinessException(ErrorCode.CATEGORY_NOT_EXISTS, ErrorCode.CATEGORY_NOT_EXISTS.getCode());
         }
-        // 리턴할 결과 리스트
         List<ResponseCategoryMenu> result = new ArrayList<>();
 
-        // 사이즈 (텀블러, 머그만)
         if (bigCategoryId == 2 || bigCategoryId == 3) {
             List<ResponseMenu> listSize = new ArrayList<>();
             ResponseMenu responseMenu1 = ResponseMenu.builder()
@@ -337,7 +329,6 @@ public class ProductServiceImpl implements IProductService{
             result.add(responseCategorySmallCategory);
         }
 
-        // 가격 (공통)
         List<ResponseMenu> listPrice = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             switch (i) {
@@ -365,7 +356,6 @@ public class ProductServiceImpl implements IProductService{
             }
         }
 
-        // 항목별로 가격 index 다르게 설정
         Long indexPrice = 1L;
         if (bigCategoryId == 2 || bigCategoryId == 3) {
             indexPrice = 2L;
@@ -378,7 +368,6 @@ public class ProductServiceImpl implements IProductService{
                 .build();
         result.add(responseCategoryPrice);
 
-        // big 카테고리별로 small 카테고리
         if (bigCategoryId == 1 || bigCategoryId == 2 || bigCategoryId == 3) {
             List<SmallCategory> listSmallCategoryDB = iSmallCategoryRepository.findAllByBigCategoryId(bigCategoryId);
             if (listSmallCategoryDB.isEmpty()) {
@@ -406,7 +395,6 @@ public class ProductServiceImpl implements IProductService{
             result.add(responseCategorySmallCategory);
         }
 
-        // 시즌 (공통) (list 사이즈별로 다르게 처리)
         List<ResponseMenu> listSeason = new ArrayList<>();
 
         List<Event> eventList = iEventRepository.findAll();
@@ -433,11 +421,6 @@ public class ProductServiceImpl implements IProductService{
 
         return result;
     }
-
-//    @Override
-//    public List<ResponseSearchResult> testSearch(RequestSearchParam requestSearchParam) {
-//        return productRepository.searchProduct(requestSearchParam);
-//    }
 
     @Override
     public List<ResponseSearchResult> searchProduct(RequestSearchParam requestSearchParam, Long page) {

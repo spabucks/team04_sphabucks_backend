@@ -26,13 +26,13 @@ public class TagController {
 
     @GetMapping("/get/{id}")
     @Tag(name = "검색")
-    @Operation(summary = "태그 조회", description = "삭제 예정")
+    @Operation(summary = "태그 조회")
     public ResponseEntity<Object> getTag(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iTagService.getTag(id)));
     }
 
     @GetMapping("/get/all")
-    @Operation(summary = "모든 태그 조회", description = "필요 있나?")
+    @Operation(summary = "모든 태그 조회")
     public ResponseEntity<Object> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK,iTagService.getAll()));
     }

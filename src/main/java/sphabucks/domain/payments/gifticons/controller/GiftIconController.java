@@ -19,7 +19,7 @@ public class GiftIconController {
     private final IGiftIconService iGiftIconService;
 
     @PostMapping("/add")
-    @Operation(summary = "기프티콘 정보 등록", description = "어드민 권한 - 삭제 예정?")
+    @Operation(summary = "기프티콘 정보 등록", description = "어드민 권한")
     public ResponseEntity<Object> addGiftIcon(@RequestBody RequestGiftIcon requestGiftIcon) {
         iGiftIconService.addGiftIcon(requestGiftIcon);
         return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -25,12 +25,6 @@ public interface IUserRepository extends JpaRepository<User, Long>{
     void resetPassword(@Param(value = "pwd") String pwd, @Param(value = "loginId") String loginId);
 
 
-
-
-
-
-
-
     Boolean existsByEmailAndName(String email, String name);
 
 }

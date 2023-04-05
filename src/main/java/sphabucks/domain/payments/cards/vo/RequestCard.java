@@ -1,8 +1,12 @@
 package sphabucks.domain.payments.cards.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RequestCard {
     private String name;    // 카드 이름
     private Long defaultMoney;   // 카드 초기금액

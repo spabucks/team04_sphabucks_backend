@@ -40,6 +40,7 @@ public enum ErrorCode {
 
     HISTORY_NOT_EXISTS(404, "HISTORY-001","해당 결제내역이 존재하지 않는 경우"),
     DUPLICATE_HISTORY(404, "HISTORY-002","주문번호가 중복된 경우"),
+    PURCHASE_TMP_NOT_EXISTS(404,"HISTORY-003", "결제할 상품이 존재하지 않는 경우"),
     IMAGE_NOT_EXISTS(404, "IMAGE-001","해당 이미지가 존재하지 않는 경우"),
     IMAGES_NOT_EXISTS(404, "IMAGE-002","이미지가 하나도 존재하지 않는 경우"),
     DESTINATION_NOT_EXISTS(404, "DESTINATION-001","해당 배송지가 존재하지 않는 경우"),

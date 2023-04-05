@@ -56,7 +56,7 @@ public class ProductTagServiceImpl implements IProductTagService {
     @Override
     public List<ResponseProductTag> getAll() {
 
-        List<ResponseProductTag> responseProductTags = new ArrayList<>();                             // 최종 반환되는 객체
+        List<ResponseProductTag> responseProductTags = new ArrayList<>();
 
         if(iProductTagRepository.findAll().isEmpty()){
             throw new BusinessException(ErrorCode.TAG_NOT_EXISTS, ErrorCode.TAG_NOT_EXISTS.getCode());

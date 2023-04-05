@@ -7,7 +7,8 @@ import sphabucks.global.utility.BaseTimeEntity;
 
 @Entity
 @Builder
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CouponList extends BaseTimeEntity {

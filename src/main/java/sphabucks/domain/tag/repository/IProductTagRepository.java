@@ -11,16 +11,9 @@ import java.util.Optional;
 
 public interface IProductTagRepository extends JpaRepository<ProductTag, Long> {
     List<ProductTag> findAllByProductId(Long productId);
-    //    List<ResponseExhibitionProduct> findAllByTagId(Long tagId);
     List<ProductTag> findAllByTagId(Long tagId);
     List<ProductTag> findAllById(Long productTagId);
 
     Optional<ProductTag> findByProductIdAndTagId(Long productId, Long tagId);
-
-
-//    List<ProductTag> findByProductIdOrderByTagId(Long tagId);
-
-//    ProductTag findByTagId(Long tagId);
-
 
 }
