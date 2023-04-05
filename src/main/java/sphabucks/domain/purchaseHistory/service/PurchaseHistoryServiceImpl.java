@@ -97,7 +97,6 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
         );
 
 
-
         List<ResponsePurchaseHistoryList> result = new ArrayList<>();
 
         if(!paymentNumList.isEmpty()){
@@ -128,6 +127,8 @@ public class PurchaseHistoryServiceImpl implements IPurchaseHistoryService{
                     tmp2.add(responsePurchaseHistory);
 
                 });
+
+
 
                 ResponsePurchaseHistoryList responsePurchaseHistoryList;
                 if (purchaseHistoryList.size() > 1) {

@@ -13,10 +13,10 @@ public interface IPurchaseHistoryRepository extends JpaRepository<PurchaseHistor
 
     Optional<PurchaseHistory> findByPaymentNum(String paymentNum);
 
-    @Query(value = "select payment_num as paymentNum, sum(sum) as sum, sum(amount) as amount " +
+    @Query(value = "select create_date, payment_num as paymentNum, sum(sum) as sum, sum(amount) as amount " +
             "from purchase_history " +
             "where user_id = ? " +
-            "group by payment_num", nativeQuery = true)
+            "group by payment_num, create_date order by create_date desc", nativeQuery = true)
     List<IResponsePaymentNum> findAllPaymentNum(Long userId);
 
     List<PurchaseHistory> findAllByUserIdOrderByIdDesc(Long userId);
