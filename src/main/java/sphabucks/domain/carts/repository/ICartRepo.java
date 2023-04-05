@@ -18,4 +18,6 @@ public interface ICartRepo extends JpaRepository<Cart, Long> {
     boolean existsByUserUserIdAndProductId(String userId, Long productId);
 
     Optional<Cart> findByIdAndUserUserId(Long id, String userId);
+
+    List<Cart> findAllByUserUserIdOrderByUpdateDateDesc(String userId);
 }

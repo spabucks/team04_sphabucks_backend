@@ -169,4 +169,46 @@ public class CartServiceImpl implements ICartService{
             cart.setAmount(0L);
         });
     }
+
+
+    @Override
+    @Transactional
+    public ResponseEntity<Object> addCartFromPurchase(String userId, RequestCart requestCart) {
+
+        if (iCartRepo.existsByUserUserIdAndProductId(userId, requestCart.getProductId())) {
+            // 해당 상품이 카트에 있으면
+
+            Cart cart = iCartRepo.findByUserUserIdAndProductId(userId, requestCart.getProductId())
+                    .orElseThrow(()-> new BusinessException(ErrorCode.CART_NOT_EXISTS, ErrorCode.CART_NOT_EXISTS.getCode()));
+
+            if (requestCart.getAmount() <= 5) {
+                cart.setAmount(requestCart.getAmount());
+                cart.setIsDelete(false);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body((5 - cart.getAmount()));
+            }
+        } else {
+            // 없으면
+
+            Product product = iProductRepository.findById(requestCart.getProductId())
+                    .orElseThrow(()->new BusinessException(ErrorCode.PRODUCT_NOT_EXISTS, ErrorCode.PRODUCT_NOT_EXISTS.getCode()));
+            iCartRepo.save(Cart.builder()
+                    .product(product)
+                    .user(iUserRepository.findByUserId(userId)
+                            .orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode())))
+                    .categoryId(iProductCategoryListRepository.findByProductId(requestCart.getProductId()).getBigCategory().getId())
+                    .amount(requestCart.getAmount())
+                    .price(product.getPrice())
+                    .name(product.getName())
+                    .isDelete(false)
+                    .build());
+        }
+
+        Long cartId = iCartRepo.findAllByUserUserIdOrderByUpdateDateDesc(userId).get(0).getId();
+
+        return ResponseEntity.status(HttpStatus.OK).body(cartId);
+    }
+
+
+
 }

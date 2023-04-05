@@ -10,6 +10,8 @@ public interface IPurchaseTmpService {
 
     void addPurchaseTmp(String userId, RequestPurchaseTmp requestPurchaseTmp);
 
+    void addPurchaseTmpOne(String userId, Long cartId);
+
     List<ResponsePurchaseTmp> getPurchaseTmp(String userId);
 
 }

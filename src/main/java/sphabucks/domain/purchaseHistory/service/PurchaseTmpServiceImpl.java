@@ -55,6 +55,29 @@ public class PurchaseTmpServiceImpl implements IPurchaseTmpService {
     }
 
     @Override
+    @Transactional
+    public void addPurchaseTmpOne(String userId, Long cartId) {
+
+        if (iUserRepository.findByUserId(userId).isEmpty()){
+            throw new BusinessException(ErrorCode.USER_NOT_EXISTS, ErrorCode.USER_NOT_EXISTS.getCode());
+        };
+
+        iPurchaseTmpRepository.deletePurchaseTmp(userId);
+
+            if (iCartRepo.findByIdAndUserUserId(cartId, userId).isEmpty()) {
+                throw new BusinessException(ErrorCode.CARD_NOT_EXISTS,ErrorCode.CARTS_NOT_EXISTS.getCode());
+            }
+            if (iPurchaseTmpRepository.findByCartIdAndUserId(cartId, userId).isEmpty()) {
+                PurchaseTmp purchaseTmp = PurchaseTmp.builder()
+                        .cart(iCartRepo.findByIdAndUserUserId(cartId, userId).get())
+                        .userId(userId)
+                        .build();
+                iPurchaseTmpRepository.save(purchaseTmp);
+            }
+
+    }
+
+    @Override
     public List<ResponsePurchaseTmp> getPurchaseTmp(String userId) {
 
         List<PurchaseTmp> tmpList = iPurchaseTmpRepository.findByUserId(userId);

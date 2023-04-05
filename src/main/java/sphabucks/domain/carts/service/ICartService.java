@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import sphabucks.domain.carts.vo.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ICartService {
 
@@ -26,4 +27,7 @@ public interface ICartService {
     void deleteSelectedCart(RequestDeleteSelectedCart requestList);
 
     void deleteAll(String userId);
+
+    ResponseEntity<Object> addCartFromPurchase(String userId, RequestCart requestCart);
+
 }
