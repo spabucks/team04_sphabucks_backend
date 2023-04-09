@@ -25,6 +25,7 @@ http://sphabucks.xyz/swagger-ui.html
 * 정승훈
   * Spring Security 적용 및 커스터마이징
 * 김지욱
+  * Cart APi, Destination APi
   * CI를 위한 Dockerfile 및 git action workflow yaml파일 제작
   * dockerhub와 GCP(Google Cloud Platform)을 이용한 서버 배포
   * SecurityConfig에 corsConfiguration을 추가하여 CORS에러 처리
