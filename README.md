@@ -1,6 +1,3 @@
-## RestAPI test(swagger 3.0)
-http://sphabucks.xyz/swagger-ui.html
-
 ## 💻 ENV
 
 * Java 17 이상
